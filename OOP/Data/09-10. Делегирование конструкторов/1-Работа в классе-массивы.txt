@@ -1,0 +1,46 @@
+#include <iostream>
+#include <string>    // std::string
+using namespace std;
+
+
+int main()
+{
+  int size;
+  cin >> size;
+  // создание динамического массива длиной size
+  int* mas1 = new int[size];
+  // пересоздание динамического массва с новой длиной
+  delete[] mas1; // удаление массива, освобождение зан€той пам€ти
+  size *= 2;
+  mas1 = new int[size];
+  //mas1 = new int[0];
+
+  //size_t == unsigned long long
+
+  const int size2 = 10;
+  int mas2[size2]; // —татический массив
+#define SIZE3 12
+  int mas3[SIZE3]{ 1,2,3,4 }; // —татический массив
+  //delete[]mas2; - ошибка, статические массивы 
+  //  удал€ть Ќ≈Ћ№«я!!!
+
+  // —татический массив "неопределнного" размера
+  double mas4[] = { 2,3,4,4,5,6,7,2,3,4,4,5,6,
+    7,2,3,4,4,5,6,7,2,3,4,4,5,6,7,2,3,4,4,5,
+    6,7,2,3,4,4,5,6,7,2,3,4,4,5,6,7, };
+  int size4 = sizeof(mas4) / sizeof(mas4[0]); // OK
+  //int size4 = sizeof(mas4) / sizeof(*mas4); // OK
+  //int size4 = sizeof(mas4) / sizeof(int); // No use
+  //int size4 = sizeof(mas4) / sizeof(mas4[-12345]); // OK ???
+
+  delete[] mas1; // удаление массива, освобождение зан€той пам€ти
+
+  // примеры статических массивов
+  int   mas5 [12]; // [int ][int ][int ][int ] ...
+  int*  mas5 [12]; // [int*][int*][int*][int*] ...
+
+  // динамический массив указателей типа int*
+  int* *mas6 = new int* [size2];
+
+
+}

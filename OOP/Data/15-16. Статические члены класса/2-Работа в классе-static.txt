@@ -1,0 +1,43 @@
+// включить доступ к математическим константам из <math.h>
+#define _USE_MATH_DEFINES
+#include <iostream>
+#include <math.h>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+Создайте класс для подсчета площади геометрических
+фигур.
+Класс должен предоставлять функциональность
+для подсчета площади треугольника по разным
+формулам, площади прямоугольника, площади
+квадрата, площади ромба.
+Функции-члены для подсчета площади должны быть
+реализованы с помощью статических функций-членов.
+Также класс должен считать количество подсчетов
+площади и возвращать это значение с помощью
+статической функции-члена.
+*/
+
+class Area {
+private:
+  float S; // площадь последней посчитанной фигуры
+public:
+  float Circle(float R) {
+    S = M_PI * R * R;
+    return S;
+  }
+  float Square(float A) {
+    return S = A * A;
+  }
+  void Print() {
+    cout << "S = " << S << endl;
+  }
+
+}; // class Area
+
+int main()
+{
+}

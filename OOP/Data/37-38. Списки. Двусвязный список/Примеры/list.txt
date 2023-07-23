@@ -1,0 +1,20 @@
+#include <iostream>
+#include <list>
+using namespace std;
+
+int main() {
+	list<int> lst;
+	lst.push_back(1);
+	lst.push_front(2);
+	lst.push_back(3);
+	lst.push_front(4);
+
+	int size = lst.size();
+	for (int i = 0; i < size; i++) {
+		cout << lst.front() << "\t";
+		lst.pop_front();
+	}
+	cout << endl;
+
+	cin.get();
+}

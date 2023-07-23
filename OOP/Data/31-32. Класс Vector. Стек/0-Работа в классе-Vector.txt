@@ -1,0 +1,212 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+//
+template< class T >
+class Vector {
+  T * Data; // указатель на рабочий массив
+  int Size; // размер массива
+public:
+  Vector() : Data(), Size() {} // ==> Vector() : Data(nullptr), Size(0) {}
+  // конструктор копировани€
+  // Vector< int > V;
+  // Vector< int > B(V);
+  // Vector< int > B = V;
+  Vector( const Vector<T>& V )
+  {
+    this->Data = new T[V.Size]; // создаем массив дл€ текущ. объекта
+    this->Size = V.Size; // копируем размер
+    // цикл копировани€ данных из V в текущ. объект (*this)
+    for (int i = 0; i < V.Size; i++) {
+      this->Data[i] = V.Data[i];
+    }
+  }
+  // деструктор объекта - дл€ этого класса об€зателен!!!
+  ~Vector() { delete[]this->Data; }
+
+  // ”становка размера массива
+  void SetSize(int size);
+
+  // ”становка данных массива из Arr[]
+  void SetData(const T * arr, int size);
+
+  // A = B = C;  *this = B;
+  Vector<T> & operator=(const Vector<T> & B)
+  {
+    if ( this == &B ) { // A = A;
+      cout << "Error: самокопирование!\n";
+      return *this;
+    }
+    /*delete[]this->Data;
+    this->Data = new T[B.Size];
+    for (int i = 0; i < B.Size; i++) {
+      this->Data[i] = B.Data[i];
+    }
+    this->Size = B.Size;*/
+    SetData(B.Data, B.Size);
+    return *this;
+  }
+
+  // A + B ==> *this + B
+  //operator+(Vector<>& B)
+
+  // перегруженный оператор вывода
+  friend ostream& operator << (ostream& os,
+                       const Vector<T>& vec)
+  { // [4]: 1 2 3 4
+    os << "[" << vec.Size << "]: ";
+    for (int i = 0; i < vec.Size; i++)
+    {
+      os << vec.Data[i] << " ";
+    }
+    return os << endl;
+  }
+
+  // перегруженный оператор ввода
+  // cin >> vec
+  friend istream& operator>>(istream& is,
+                             Vector<T>& vec)
+  {
+    cout << "Enter Size: ";
+    int temp; // получить размер
+    is >> temp; // is >> vec.Size - неверно
+    vec.SetSize(temp); // изменить размер объекта vec
+    // поэлементное чтение из потока
+    for (int i = 0; i < vec.Size; i++) {
+      cout << i + 1 << "->"; // дл€ пользовател€
+      is >> vec.Data[i];
+    }
+    return is; // is.ignore() ?
+  }
+
+  // оператор []
+  //  t = V[index] ==>  *this = &V
+  //  t = V.operator[]( index );
+  //  V[i] = t;
+  // 
+  // константный вариант оператора []
+  // cout << vec[i]
+  T operator[](int index) const { return Data[index]; }
+
+  // не константный вариант оператора []
+  // vec[i] = 123;
+  T& operator[](int index) { return Data[index]; }
+
+  int      getSize() const { return Size; }
+  const T* getData() const { return Data; }
+
+  //
+  // Vector<float> V;
+  // float sum = V();
+
+  // вычислить сумму всех элементов
+  T operator() () const
+  {
+    T Summa = 0;
+    for (int i = 0; i < this->Size; i++) {
+      Summa += this->Data[i];
+    }
+    return Summa;
+  }
+
+  // »нициализаци€ Vector случ. числами
+  // Vector<int> V;
+  // V.SetSize(10);
+  // V(1,12); RAND[1;12]
+  void operator() (T min, T max)
+  {
+    for (int i = 0; i < this->Size; i++) {
+      this->Data[i] = RAND(min, max);
+    }
+  }
+
+}; // class Vector<>;
+
+// ”становка размера массива
+template<class T>
+void Vector<T>::SetSize(int newSize)
+{
+  T* temp = new T[newSize]; // новый массив
+  // минимальный размер дл€ копировани€
+  int MinSize = (Size < newSize) ? Size : newSize;
+  // копирование данных из массива this->Data в
+  //  новый массив, на который указывает temp
+  for (int i = 0; i < MinSize; i++) {
+    temp[i] = this->Data[i];
+  }
+  delete[] this->Data; // удалить старый массив
+  // обновление переменных класса
+  this->Data = temp; // копирование указателей
+  this->Size = newSize;
+}
+
+// ”становка данных массива из Arr[]
+template <class T>
+void Vector<T>::SetData(const T* arr, int size)
+{
+  delete[]this->Data; // удал€ем старые данные
+  this->Data = new T[size]; // новый массив
+  for (int i = 0; i < size; i++) { // копирование
+    this->Data[i] = arr[i];
+  }
+  this->Size = size; // запоминаем новый размер
+}
+
+int main()
+{
+  Vector<string> A;
+  cin >> A; // is >> vec.Data[i];
+  cin.ignore(); // т.к. в операторе >> нет вызова ignore()
+  cout << A << endl;
+  // добавление 2-х элементов и их заполнение с консоли
+  A.SetSize( A.getSize() + 2 );
+  cout << "Enter 2 string:\n";
+  for (int i = 2; i > 0; i--) {
+    string temp;
+    getline(cin, temp);
+    //cin >> A[A.getSize() - i];
+    A[A.getSize() - i] = temp;
+  }
+  cout << A << endl;
+  //A("1", "10");
+}
+
+
+void main_int()
+{
+  Vector<int> A;     // int    * Data;
+  Vector<string> B;  // string * Data;
+  A.SetSize(5);
+  cin >> A;
+  cout << A; // [10]: 3 4 5 6 7 ....
+  //A.getSize();
+  const int * temp = A.getData();
+  //temp[0] = 123; // ошибка, т.к. массив temp константный
+  // вывод содержимого объекта A через указатель temp
+  for (int i = 0; i < A.getSize(); i++) {
+    cout << temp[i] << " ";
+  }
+  cout << endl;
+  // вывод содержимого объекта A с помощью оператора[]
+  A[0] = 123; // неконстантный вариант оператора[]
+  for (int i = 0; i < A.getSize(); i++) {
+    // константный вариант оператора[]
+    cout << A[i] << " ";
+  }
+  cout << endl;
+  cout << "------------\n";
+  Vector<int> A2 = A; // конструктор копировани€
+  //A2 = A; // оператор копировани€
+  cout << A2;
+  A2.SetSize(12);
+  A2(-5, 8); // вызов оператора() с двум€ параметрами 
+  cout << "A2 = " << A2 << endl;
+  int Summa = A2(); // вызов оператора() с одним параметром
+  cout << "Summa = " << Summa << endl;
+  cout << "Summa = " << A2() << endl;
+}

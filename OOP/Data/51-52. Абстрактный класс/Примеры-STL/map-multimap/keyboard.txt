@@ -1,0 +1,100 @@
+#include <iostream>
+#include <string>
+#include <map>
+#include <vector>
+#include <Windows.h>
+#include <conio.h>
+#include <ctime>
+using namespace std;
+
+
+class Timer {
+	clock_t start_time;
+public:
+	Timer() {
+		StartTime();
+	}
+	clock_t getStartTime() {
+		return start_time;
+	}
+	// Устанавливаем начальное время
+	void StartTime() {
+		start_time = clock();
+	}
+	clock_t GetTime()const {
+		return clock() - start_time;
+	}
+	int operator-(const Timer&obj) {
+		return start_time - obj.start_time;
+	}
+};
+
+class keyboard {
+	int key;
+	int duration;
+	Timer currentTime, oldTime;
+public:
+	keyboard() {
+		key = 0;
+		duration = 0;
+	}
+	int getDuration()const { return duration; }
+	int getKey()const { return key; }
+
+	operator bool() {
+		bool statePush = kbhit();
+		if (statePush) {	// Если нажата клавиша
+			oldTime = currentTime;
+			int tmpkey = getch();
+			if (key == 0) {	// Если нажата клавиша в первый раз
+				oldTime.StartTime();
+				key = tmpkey;
+				return true;
+			}
+			if (tmpkey == key) {	// Если повторно нажата клавиша
+				return true;
+			}
+			//Зафиксирована попытка смены нажатой клавиши
+			duration = currentTime - oldTime;
+			return true;
+		}
+		int temp = Timer().getStartTime();
+		if (temp - oldTime.getStartTime() > 1500 && key) {
+			duration = currentTime - oldTime;
+			return false;
+		}
+		currentTime.StartTime();
+		return false;
+	}
+};
+
+int main(){
+	keyboard kb;
+	for (;;) {
+		if (kb) {
+
+		}
+		else {
+			//cout << (char)kb.getKey() << endl;
+			//cout << kb.getDuration() << endl;
+		}
+	}
+
+
+
+
+
+	//map<string, vector<int>> Tones;
+	//Tones["C"] = { 0,33,65,131,262,523,1047,2093,4186 };
+	//Tones["C#"] = { 0,35,69,139,277,554,1109,2217,4435 };
+	//for (auto it = Tones.begin(); it != Tones.end(); it++){
+	//	for (auto pb = it->second.begin(); pb != it->second.end(); pb++) {
+	//		cout << it->first << " " << *pb << endl;
+	//		Beep(*pb, 200); // Частота, Длительность
+	//		Sleep(300);		// Длительность задержки
+	//	}
+	//}
+
+
+	cin.get(); cin.get();
+}

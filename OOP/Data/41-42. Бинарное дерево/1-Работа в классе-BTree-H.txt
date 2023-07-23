@@ -1,0 +1,217 @@
+/*
+  BTree.h
+  template<class T>
+  class Tree;
+*/
+#pragma once
+
+// Ўаблон структуры/класса узла бинарного дерева
+template<class T>
+struct Node
+{
+  T Key;    // ѕолезные данные
+  int cnt;  // счетчик повторений
+            // ”казатели на родител€, левого и правого потомков
+  Node<T>* pParent;
+  Node<T>* pLeft, * pRight;
+
+  // конструкторы узла
+  Node() : Key(), cnt(),
+    pParent(), pLeft(), pRight() {}
+
+  Node(T key, Node<T>* parent)
+    : Key(key), cnt(), pParent(parent),
+    pLeft(), pRight() {}
+
+}; // struct Node<>
+
+
+// Ўаблон класса бинарного дерева
+template<class T>
+class Tree
+{
+  Node<T>* pRoot;    //  орень
+public:
+  //  онструктор по умолчанию
+  Tree() : pRoot() {} // пустое дерево
+
+  //  онструктор принимающий массив элементов
+  Tree(T* mas, size_t size) : Tree()
+  {
+    for (size_t i = 0; i < size; i++) {
+      push(mas[i]);
+    }
+  }
+
+  // ƒеструктор
+  //~Tree();
+
+  // ѕолучить корень дерева
+  Node<T>* GetRoot() { return pRoot; }
+
+  // ƒобавление элемента - add();
+  void push(const T& val)
+  {
+    Node<T>* temp = pRoot;
+    Node<T>* parent = nullptr;
+    while (temp) // while (temp != nullptr)
+    {
+      parent = temp;
+      if (temp->Key < val) {
+        temp = temp->pRight; // шаг вправо
+      }
+      else if (temp->Key > val) {
+        temp = temp->pLeft; // шаг влево
+      }
+      else // if (temp->Key == val)
+      {
+        cout << "Dublicate\n";
+        temp->cnt++; // дубликат
+        return; // break;
+      }
+    }
+    // добавл€ем новый узел
+    temp = new Node<T>(val, parent);
+    if (parent == nullptr) { pRoot = temp; } // корень
+    else {
+      if (parent->Key < val) {
+        parent->pRight = temp;
+      }
+      else {
+        parent->pLeft = temp;
+      }
+    }
+  } // push()
+
+  // ќтображение всего дерева
+  void Print() { Print(pRoot); }
+  // ќтображение дерева с начального узла
+  void Print(Node<T>* pNode)
+  {
+    if (pNode == nullptr) { return; }
+    Print(pNode->pLeft); // уходим влево
+    // обработка узла, после возврата слева
+    cout << pNode->cnt << ": "
+         << pNode->Key << endl;
+    Print(pNode->pRight); // один шаг вправо
+  }
+
+  // ѕоиск данных в узле 
+  Node<T>* Search(T key) { // поиск по всему дереву
+    return Search(pRoot, key);
+  }
+
+  Node<T>* Search(Node<T>* pNode, const T& key)
+  {
+    Node<T>* temp = pNode;
+    if (!temp) { return nullptr; }
+    while (temp) {
+      if (temp->Key < key) {
+        temp = temp->pRight;
+      }
+      else if (temp->Key > key) {
+        temp = temp->pLeft;
+      }
+      else { // if(temp->Key == key)
+        //return temp; // найдено
+        break;
+      }
+    }
+    //return nullptr; // не найдено
+    return temp;
+  }
+
+  // ѕоиск минимума
+  // √лобальный поиск по всему дереву
+  Node<T>* Min() { return Min(pRoot); }
+  // поиск начина€ с узла pNode - локальный поиск
+  Node<T>* Min(Node<T>* pNode) {
+    Node<T>* temp = pNode;
+    if (!temp) { return nullptr; } // деверо пустое
+    while (temp->pLeft) // пока слева, что-то есть
+    {
+      temp = temp->pLeft; // двигаемс€ влево
+    }
+    return temp; // возвращаем указатель на узел
+                 // с мин. значением
+  }
+
+  // ѕоиск максимума
+  Node<T>* Max() { return Max(pRoot); } // по всему дереву
+  // рекурсивный поиск начина€ с узла pNode - локальный поиск
+  Node<T>* Max(Node<T>* pNode)
+  {
+    if(!pNode)        { return nullptr; }
+    if(pNode->pRight) { return Max(pNode->pRight); }
+    return pNode; // найденный максимум
+  }
+
+  // ”даление узла/ветки
+  //  (nullptr удаление всего дерева)
+  //void Del(Node<T>* pNode = nullptr);
+  //void Del(); // удаление всего дерева
+
+}; // class Tree<>
+
+
+/*
+//  онструктор принимающий массив элементов
+template<class T>
+Tree<T>::Tree(T * mas, size_t size)
+{
+}
+
+// ƒобавление элемента
+template<class T>
+void Tree<T>::push(const T& val)
+{
+}
+
+// ќтображение дерева с начального узла
+// –екурсивный вариант печати всего дерева
+template<class T>
+void Tree<T>::Print(Node<T>* pNode)
+{
+}
+
+// ќтображение всего дерева
+template<class T>
+void Tree<T>::Print()
+{
+}
+
+// ѕоиск данных в узле
+// Search(GetRoot(), key)
+template<class T>
+Node<T>* Tree<T>::Search(Node<T>* pNode, const T& key)
+{
+}
+
+// ѕоиск минимума - самый левый узел
+// ¬ариант с циклом
+template<class T>
+Node<T>* Tree<T>::Min(Node<T>* pNode)
+{
+}
+
+// ѕоиск максимума - крайний правый узел
+// –екурсивный вариант
+template<class T>
+Node<T>* Tree<T>::Max(Node<T>* pNode)
+{
+}
+*/
+
+// ”даление узла/ветки (nullptr удаление всего дерева)
+//template<class T>
+//void Tree<T>::Del(Node<T>* Node) {
+//}
+
+
+/*
+// перегруженный оператор дл€ объекта бинарное дерево Tree<T>
+template<class T>
+ostream& operator << (ostream& os, const Tree<T>& obj)
+{
+}
+*/

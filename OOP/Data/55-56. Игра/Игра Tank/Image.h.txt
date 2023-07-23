@@ -1,0 +1,84 @@
+//
+// Image.h
+//
+#pragma once
+#include <iostream>
+#include <string>
+#include <vector>
+#include "Win10.h"
+using namespace std;
+
+#define TANK_HEIGHT   3
+#define TANK_WIDTH    3
+
+// для класса Image
+enum Direction { Up, Right, Bottom, Left, MaxDirect };
+
+// класс изображений танчиков
+class Image // final - запрет на дальнейшее наследование
+{
+private:
+  // трехмерный массив для хранения видов объектов (танчики, пульки и пр.)
+  vector< vector<string> > Img; // Img[Dir][Row][Col]
+  Direction Dir; // текущее направление объекта
+  int Row, Col;  // текущие координаты объекта
+  int OldRow, OldCol; // старые координаты объекта
+public:
+  Image() : Img(), Dir(Up),
+    Row(), Col(), OldRow(), OldCol() {}
+
+  Image(char img[MaxDirect][TANK_HEIGHT][TANK_WIDTH + 1])
+    : Image()
+  {
+    SetImg(img);
+  }
+  // для Dir
+  Direction GetDir() const { return Dir; }
+  void SetDir(Direction dir) { Dir = dir; }
+  // для Row, Col
+  int GetRow() const { return Row; }
+  int GetCol() const { return Col; }
+  void SetRowCol(int row, int col) {
+    Row = row, Col = col;
+  }
+  // для OldRow, OldCol
+  int GetOldRow()const { return OldRow; }
+  int GetOldCol()const { return OldCol; }
+  void SetOldRowCol(int row, int col) {
+    OldRow = row, OldCol = col;
+  }
+  // для Img: img ==> Img
+  void SetImg(
+    char img[MaxDirect][TANK_HEIGHT][TANK_WIDTH + 1])
+  {
+    Img.clear(); // удалить старое изображение ==> Img[0][0][0]
+    Img.resize(MaxDirect); // ==> Img[4][0][0]
+    for (int i = 0; i < Img.size(); ++i) {
+      Img[i].resize(TANK_HEIGHT); // ==> Img[4][3][0]
+      for (int j = 0; j < Img[i].size(); ++j) {
+        Img[i][j] = img[i][j]; // копирование строк
+      }
+    }
+  }
+  vector<vector<string>>& GetImg() { return Img; }
+  // перегрузка оператора []
+  //  неконстантный оператор - для изменений
+  vector<string>& operator[](Direction dir) {
+    return Img[dir];
+  }
+  //  константный оператор - для чтения, вывода
+  const vector<string>& operator[](Direction dir) const
+  {
+    return Img[dir];
+  }
+  // перегруженные операторы для текущего изображения
+  //  неконстантный оператор - для изменений
+  string& operator[](int row) {
+    return Img[Dir][row];
+  }
+  //  константный оператор - для чтения, вывода
+  const string& operator[](int row) const {
+    return Img[Dir][row];
+  }
+}; // class Image
+

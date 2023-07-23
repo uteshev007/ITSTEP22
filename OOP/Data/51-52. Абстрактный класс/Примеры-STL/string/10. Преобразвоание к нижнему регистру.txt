@@ -1,0 +1,17 @@
+#include <string>
+#include <iostream>
+#include <exception>
+using namespace std;
+int main()
+{
+	string s("ABCDE");
+	cout << s << endl;
+	//генерация исключения при выходе за пределы строки
+	for (int i = 0; i < s.length(); i++) {
+		if(s[i]>='A' && s[i]<='Z')
+			s[i] -= 'A' - 'a';
+	}
+	cout << s << endl;
+
+	cin.get(); cin.get();
+}

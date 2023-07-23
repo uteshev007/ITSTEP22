@@ -1,0 +1,29 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <time.h>
+using namespace std;
+class LC {
+public: LC() { system("chcp 1251 > nul"); srand(time(0)); }
+        ~LC() { cin.get(); cin.get(); } }lc;
+
+int fun(const int& a) {
+  cout << "int fun(int& a)" << endl;
+  return a + a;
+}
+// && - R-value, универсальный указатель
+inline int fun(const int&& b) {
+  cout << "int fun(int&& b)" << endl;
+  //return b + b;
+  return fun(b);
+}
+
+void main() {
+  int A = 1;
+  int r1, r2;
+
+  r1 = fun(A); // func(int& a)
+  r2 = fun(A+10+30);// func(int&& a)
+
+  cout << "r1= " << r1 << endl;
+  cout << "r2= " << r2 << endl;
+}

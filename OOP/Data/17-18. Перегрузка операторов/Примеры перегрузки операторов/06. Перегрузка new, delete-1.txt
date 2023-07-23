@@ -1,0 +1,38 @@
+#include <iostream>
+using namespace std;
+
+class Array {
+public:
+	void* operator new(size_t size) {
+		cout << "Создание одного экземпляра!\n";
+		void *p = malloc(size);
+		return p;
+	}
+	void operator delete(void* p) {
+		cout << "Удаление одного экземпляра!\n";
+		free(p);
+	}
+
+	void* operator new[](size_t size) {
+		cout << "Создание массива!\n";
+		void *p = malloc(size);
+		return p;
+	}
+	void operator delete[](void* p) {
+		cout << "Удаление массива!\n";
+		free(p);
+	}
+};
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+
+	Array *mas = new Array(0);
+	delete mas;
+
+	mas = new Array[111];
+	delete[] mas;
+
+
+	cin.get(); cin.get();
+}

@@ -1,0 +1,72 @@
+#include <iostream>
+#include <initializer_list>
+#include <time.h>
+using namespace std;
+
+#define RAND(Min,Max) (rand()%((Max)-(Min)+1) + (Min))
+
+/*
+  Пример использования класса инициализационного списка
+  std::initializer_list<>
+*/
+
+class Test
+{
+private:
+  int   size;
+  int * mas;
+public:
+
+  // делегирование к конструкторам переменных класса
+  Test() : size(), mas() {}
+
+  // конструктор принимающий иниц-ный список
+  Test(initializer_list<int> data)
+    : size( data.size() ), mas( new int[ data.size() ] ) // настраиваем переменные класса
+  {
+    // 1 вариант
+    int i = 0;
+    // цикл обхода инициализационного списка - переменная data
+    for(int a : data)
+    {
+      mas[i++] = a;
+    }
+    /*// 2 вариант
+    int* p = mas; // int * p = &mas[0];
+    for (int a : data)
+    {
+      *p++ = a;
+    }*/
+  }
+
+  // Деструктор
+  ~Test()
+  {
+    if(mas) delete[] mas;
+  }
+
+  void Print()
+  {
+    cout << "size = " << size << endl;
+    for (int i = 0; i < size; i++) {
+      cout << mas[i] << " ";
+    }
+    cout << endl;
+  }
+}; // class Test;
+
+
+int main()
+{
+  system("chcp 1251 > nul");
+  srand(time(nullptr));
+
+  // объявление переменной t1 с иниц-цией списком
+  Test t1({1,2,3,4,5,6,7,});
+  t1.Print();
+
+  Test t2{10,20,30,40};
+  t2.Print();
+
+  cin.get(); cin.get();
+}

@@ -1,0 +1,170 @@
+#include <iostream>
+#include <string>
+#include <time.h>
+using namespace std;
+
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { system("pause > nul"); } } _;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+
+/*
+3) —оздайте класс Array.
+ ласс Array - это класс динамического массива.
+–азмер массива может быть передан в качестве параметра или задан с помощью вызова функции-члена.
+ ласс должен позвол€ть заполн€ть массив значени€ми, отображать содержимое массива, измен€ть размер массива, сортировать массив, определ€ть минимальное и максимальное значение.
+ ласс должен содержать набор конструкторов (конструктор копировани€ об€зателен), деструктор
+*/
+class Array
+{
+private:
+  int   Size;
+  int* Data; // динамический массив класса Array
+public:
+  // конструктор по умочанию
+  Array() : Size(0), Data(nullptr)
+  {
+    //Size = 0;
+    //Data = nullptr;
+  }
+
+  // конструкторы с параметрами
+  Array(int sz): Size(sz), Data(new int [sz])
+  {
+ /*   Data = new int[sz];
+    Size = sz;*/
+  }
+
+  Array(int* mas, int sz):Array()
+  {
+    setData(mas, sz);
+  }
+
+  // конструктор копировани€
+  Array(const Array& obj):Array(obj.Data, obj.Size){}
+
+
+
+  //Array(const Array& obj): Array()
+  //{
+  //  //Size = obj.Size;
+  //  //Data = new int[obj.Size];
+  //  //for (int i = 0; i < Size; i++)
+  //  //{
+  //  //  Data[i] = obj.Data[i];
+  //  //}
+  //  setData(obj.Data, obj.Size);
+  //}
+
+  // оператор копировани€
+  Array& operator=(const Array& obj) 
+  {
+    if (&obj == this)
+    {
+      cout << "—амокопирование" << endl;
+      return *this;
+    }
+    delete[] Data;
+    Data = new int[obj.Size];
+    Size = obj.Size;
+    for (int i = 0; i < Size; i++)
+    {
+      Data[i] = obj.Data[i];
+    }
+    return *this;
+  }
+
+  // деструктор
+  ~Array() 
+  {
+    delete[] Data;
+  }
+
+  // аксессоры
+  //  setters - сеттеры
+  void setSize(int sz) 
+  {
+    int* Arr = new int[sz];
+    int minsz;
+    if (Size < sz)
+    {
+      minsz = Size;
+    }
+    else
+    {
+      minsz = sz;
+    }
+    for (int i = 0; i < minsz; i++)
+    {
+      Arr[i] = Data[i];
+    }
+    delete[] Data;
+    this->Data = Arr;
+    this->Size = sz;
+  }
+  void setData(int* mas, int sz)
+  {
+    delete[] Data;
+    Data = new int[sz];
+    for (int i = 0; i < sz; i++)
+    {
+      Data[i] = mas[i];
+    }
+    Size = sz;
+  }
+
+  //  getters - геттеры, константные методы
+  int  getSize() const { return Size; }
+  const int* getData() const { return Data; }
+
+  // рандомна€ инициализаци€
+  void init(int min = 0, int max = 20) 
+  {
+    for (int i = 0; i < Size; i++)
+    {
+      Data[i] = RAND(min, max);
+    }
+  }
+
+  // печать массива на экран
+  void print() const 
+  {
+    cout << "[" << Size << "]: ";
+    for (int i = 0; i < Size; i++)
+    {
+      cout << Data[i] << " ";
+    }
+    cout << endl;
+  }
+
+};
+
+
+int main()
+{
+  Array A;
+  int size;
+  cout << "¬ведите размер массива: " << endl;
+  cin >> size;
+  A.setSize(size);
+  A.init();
+  A.print();
+
+  // ѕроверка конструктора копировани€
+  Array B(A);   // €вный вызов конструктора копировани€
+  Array C = A;  // не€вный вызов конструктора копировани€
+  B.print();
+  C.print();
+
+  // ѕроверка оператора копировани€
+  Array D;
+  D = A; // обращение к оператору копировани€:
+         //  D.operator = ( A );
+  A.print();
+  D.print();
+
+  // —оздать объект Array через конструктор с одним параметром типа int
+  //Array D(20);  // €вный вызов конструктора одним параметром типа int
+  //Array D = 20; // не€вное преобразование типа:
+  //              //   Array D = Array(20);  ==>  Array D( Array(20) );
+  //              // оператор explicit запретит такое не€вное преобразование
+
+}

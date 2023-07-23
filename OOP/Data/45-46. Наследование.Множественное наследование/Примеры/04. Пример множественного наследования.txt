@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+
+class BASE {
+public:
+	int a;
+};
+
+class q :BASE {
+public:
+	int b;
+};
+
+class w :BASE {
+public:
+	int c;
+};
+
+class S : q, w {
+public:
+	int d;
+};
+
+int main() {
+
+	S tmp;
+	tmp.d = 1;
+	tmp.c = 2;
+	tmp.b = 3;
+	tmp.a = 4;
+
+	cin.get();
+}

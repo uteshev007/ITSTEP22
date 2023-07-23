@@ -1,0 +1,73 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+#include <fstream>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+
+//class Family {
+//  static int budget;
+//  int raschod;
+//public:
+//  Family() /*: budget(10000)*/ {}
+//  // Family mama;
+//  // Family temp = ++mama;
+//  // cout << mama ...
+//  Family& operator++() {
+//    ++this->raschod;
+//    return *this;
+//  }
+//  // temp = mama++;
+//  Family operator++(int) {
+//    Family Old = *this;
+//    //this->raschod++;
+//    ++(*this); // - ОК
+//    //(*this)++; - рекрсивный вызов этого же оператора
+//    return Old;
+//  } // Old.~Family()
+//};
+//int Family::budget = 100000;
+
+/*
+  Шаблоны функций, классов
+Написать шаблон функции для поиска среднего
+арифметического значений массива.
+*/
+
+//double Average(long long* mas, size_t size);
+
+template< class T >
+double Average(T * mas, size_t size)
+{
+  T Sum = 0;
+  for (size_t i = 0; i < size; i++) {
+    Sum += mas[i];
+  }
+  double aver = double(Sum) / double(size);
+  return aver;
+}
+
+#define SIZE 10
+int main()
+{
+  int mas[SIZE];
+  for (size_t i = 0; i < SIZE; i++) {
+    //mas[i] = RAND(1, 10);
+    //cout << mas[i] << " ";
+    cout << ( mas[i] = RAND(1, 10) ) << " ";
+  }
+  cout << endl;
+  cout << "Average = " << Average(mas, SIZE) << endl;
+  //
+  float mas2[SIZE];
+  for (size_t i = 0; i < SIZE; i++) {
+    // int / float  ==>  float
+    mas2[i] = RAND(100, 1000) / 100.0f;
+    cout << mas2[i] << " ";
+  }
+  cout << endl;
+  cout << "Agerage = " << Average(mas2, SIZE) << endl;
+}

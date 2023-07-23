@@ -1,0 +1,67 @@
+#include <iostream>
+using namespace std;
+
+class Weapon
+{
+public:
+
+	//тут будут данные-члены, которыми может описываться, например, как 
+	//толщина дубины, так и количество гранат в гранатомете
+	//эта часть для нас не важна
+
+	virtual void Use1() { cout << "ЛКМ общее\n"; }//обычно - левая кнопка мыши
+	virtual void Use2() { cout << "ПКМ общее\n"; }//обычно - правая кнопка мыши
+
+												  //тут будут еще какие-то данные-члены и методы
+};
+class knife : public Weapon
+{
+public:
+	void Use1() { cout << "ЛКМ для ножа\n"; }//обычно - левая кнопка мыши
+	void Use2() { cout << "ПКМ для ножа\n"; }//обычно - правая кнопка мыши
+	void Show() { cout << "Вызвана функция отображения knife\n"; }
+};
+class club : public Weapon
+{
+public:
+	void Use1() { cout << "ЛКМ для дубины\n"; }//обычно - левая кнопка мыши
+	void Use2() { cout << "ПКМ для дубины\n"; }//обычно - правая кнопка мыши
+	virtual void Show() { cout << "Вызвана функция отображения club\n"; }
+};
+
+class super_club : public club
+{
+public:
+	void Use1() { cout << "ЛКМ для супер дубины\n"; }//обычно - левая кнопка мыши
+	void Use2() { cout << "ПКМ для супер дубины\n"; }//обычно - правая кнопка мыши
+	void Show() { cout << "Вызвана функция отображения super_club\n"; }
+};
+
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+
+	Weapon *Arms[10]; //массив указателей на объекты типа Weapon
+	Arms[0] = new knife;
+	Arms[1] = new club;
+	Arms[2] = new super_club;
+	int TypeOfWeapon = 2;
+
+	if ("нажата левая кнопка мыши") Arms[TypeOfWeapon]->Use1();
+	else Arms[TypeOfWeapon]->Use2();
+	//Arms[TypeOfWeapon]->Show();
+
+	delete Arms[0];
+	delete Arms[1];
+	delete Arms[2];
+
+	club *Arms2[10];
+	Arms2[0] = new club;
+	Arms2[1] = new super_club;
+	Arms2[1]->Use1();
+	Arms2[1]->Show();
+
+	delete Arms2[0];
+	delete Arms2[1];
+	cin.get();
+}

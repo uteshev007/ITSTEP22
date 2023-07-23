@@ -1,0 +1,266 @@
+#include <iostream>
+#include <string>
+#include <time.h>
+using namespace std;
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cout << "Good bye...\n"; system("pause > nul"); } }_;
+
+// Макрофункция для генерации случ. числа в
+//  диапазоне [Min, Max]
+#define RND(Min,Max) ( rand()%((Max)-(Min)+1)+(Min) )
+
+
+/*
+  Конструкторы, деструкторы
+
+2) Создайте класс Book
+Необходимо хранить данные:
+Автор, Название, Издательство,
+Год, Количество страниц.
+
+Создать массив объектов - класс Library. Вывести:
+- список книг заданного автора;
+- список книг, выпущенных заданным издательством;
+- список книг, выпущенных после заданного года.
+Используйте explicit конструктор и константные
+функции-члены (например, для отображения данных
+о книге и т.д.)
+*/
+
+// СТАТИЧЕСКИЙ массив авторов - список
+//  авторов для случ. выбора в InitRand()
+string AutorArr[] {
+  "Абай",
+  "Лавкрафт",
+  "Ауэзов",
+  "Пушкин",
+  "Пратчет",
+  "Толкиен",
+  "Толстой",
+};
+
+// Вычисление длины СТАТИЧЕСКОГО массива AutorArr[]
+//  с помощью оператора sizeof()
+int sizeAutorArr = 
+  sizeof(AutorArr) / sizeof(AutorArr[0]);
+
+// Класс книги
+class Book {
+  string Autor;
+  string Name;
+  string Issue;
+  int Year;
+  int Pages;
+
+public:
+  void setAutor(string newAutor) { Autor = newAutor; }
+  void setName(string newName) { Name = newName; }
+  void setIssue(string newIssue) { Issue = newIssue; }
+  void setYear(int newYear) { Year = newYear;}
+  void setPages(int newPages) { Pages = newPages; }
+
+  string getAutor() { return Autor; }
+  string getName() { return Name; }
+  string getIssue() { return Issue; }
+  int getYear() { return Year; }
+  int getPages() { return Pages; }
+
+  Book() {
+    setAutor("Unknown");
+    setName("Noname");
+    setIssue("");
+    setYear(1648);
+    setPages(0);
+  }
+
+  Book(string newAutor, string newName) {
+    setAutor(newAutor);
+    setName(newName);
+    setIssue("");
+    setYear(1648);
+    setPages(0);
+  }
+
+  Book(string newAutor, string newName, int newYear,
+    int newPages)
+  {
+    setAutor(newAutor);
+    setName(newName);
+    setIssue("");
+    setYear(newYear);
+    setPages(newPages);
+  }
+
+  void Print() {
+    cout << "Автор - " << getAutor() << endl;
+    cout << "Название - " << getName() << endl;
+    cout << "Издательство - " << getIssue() << endl;
+    cout << "Год издания - " << getYear() << endl;
+    cout << "Кол-во страниц - " << getPages() << endl;
+  }
+
+  // Метод для заполнения объекта Book случайными
+  //  значениями
+  void InitRand() {
+    // Случайный выбор автора из списка авторов AutorArr[]
+    //int i = rand() % sizeAutorArr;
+    //Autor = AutorArr[i];
+    setAutor(AutorArr[rand() % sizeAutorArr]);
+
+    // Заполнение строки случайными символами
+    //int size = 5 + rand() % 12;
+    int size = RND(5, 16);
+    string temp;
+    temp = RND('A', 'Z'); // первая буква заглавная
+    for (int i = 1; i < size; i++) {
+      char symbol = RND('a', 'z');
+      temp += symbol; // наращивание строки символами
+    }
+    //tolower()
+    setName(temp); // случ. название книги
+
+    size = RND(4, 12);
+    temp = ""; // повторное использование переменной temp
+               // очищаем temp
+    temp = RND('A', 'Z'); // первая буква заглавная
+    for (int i = 0; i < size-1; i++) {
+      temp += RND('a', 'z');
+    }
+    setIssue(temp); // случ. название издательства
+
+    // 
+    Year = RND(1638, 2023); // setYear( RND(1638, 2023) );
+    Pages = RND(1, 3000);
+  } // InitRand()
+
+}; // class Book;
+
+// Интерфейс класса Библиотека Library
+class Library
+{
+private:
+  Book * Mas;  // указатель на динамический массив Книг
+  size_t Size; // размер массива книг
+public:
+  // Конструкторы
+  Library();
+  Library(size_t size); // 
+  Library(Book* books, size_t count);
+  Library(Book book) : Library(&book, 1){}
+
+  // конструктор копирования
+  //Library( const Library & lib );
+  // set
+  void SetSize(size_t newSize); // задать новый размер библиотеки
+  void SetMas(Book* newBooks, size_t newSize);
+  // get
+  size_t GetSize() { return Size; }
+  Book * GetMas()  { return Mas; }
+  // Остальны методы
+  void Sort(); // сортировка
+  // Добавить книгу в конец библиотеки
+  void Add(Book book);
+  // Вставка книги - добавить книгу в заданную
+  //  позицию Index
+  void Insert(Book book, size_t Index);
+  // Удалить книгу из позиции Index
+  void Delete(size_t Index);
+  // Удалить из библиотеки все книги с автором Autor
+  void Delete(string Autor);
+  // Удалить из библиотеки все книги с названием Name
+  void DeleteName(string Name);
+  // Поиск
+  Book SearchName(string Name);
+  Book SearchAutor(string Autor);
+  Book SearchYear(int Year);
+
+  // Получить книгу по заданной позиции
+  Book GetAt(int Index);
+  // Заменить книгу по заданной позиции
+  void SetAt(int index, Book newBook);
+
+  // Деструткор - удаляем динамический массив Mas,
+  //  освобождаем занятые ресурсы
+  ~Library() { delete[]Mas; }
+
+}; // class Library
+
+//
+void Library::SetSize(size_t newSize)
+{
+  Book* temp = new Book[newSize];
+  int MinSize = (Size < newSize) ? Size : newSize;
+  //if (Size < newSize) { MinSize = Size; }
+  //else                { MinSize = newSize; }
+  for (size_t i = 0; i < MinSize; i++)
+  {
+    temp[i] = Mas[i];
+  }
+  //for (size_t i = 0; (i < Size) && (i < newSize); i++)
+  //{
+  //  temp[i] = Mas[i];
+  //}
+  delete[]Mas;
+  Mas = temp;
+  Size = newSize;
+}
+
+//
+void Library::SetMas(Book * arr, size_t size)
+{
+  //delete[] nullptr;
+  delete[] Mas; // удаляем старый массив
+  Mas = new Book[size]; // создаем новый массив
+                        // необходимого размера 
+  for (size_t i = 0; i < size; i++)
+  {
+    Mas[i] = arr[i];
+  }
+  Size = size; //
+}
+
+//
+/*//Library::Library() : Mas(nullptr), Size(0)
+Library::Library() : Mas(), Size()
+{
+  // nullptr - ключевое слово C++ - нулвой, пустой адрес
+  Mas  = nullptr; // нет книг
+  Size = 0;       // нулевой размер
+}*/
+Library::Library() : Mas(), Size() {}
+
+Library::Library(size_t newSize)
+  : Mas(new Book[newSize]), Size(newSize)
+{
+  //Mas = new Book[newSize];
+  //Size = newSize;
+  //SetSize(newSize);
+}
+
+Library::Library(Book* mas, size_t size) : Library()
+  //: Mas(), Size()
+{
+  SetMas(mas, size);
+}
+
+
+int main()
+{
+  /*Library Lib1(10);
+  Book book[10];
+  Library B(book, 10);
+  B.SetMas(book, 10);
+  Library temp = Lib1;*/
+
+  //Book A("autor", "name");
+  //Book A(); - ошибка ?
+  Book A;
+  A.InitRand();
+  A.Print();
+  cout << "---------\n";
+  A.setAutor("Голдинг");
+  A.setName ("Повелитель мух");
+  A.setIssue("Алматы");
+  A.setPages(120);
+  A.setYear(2020);
+  A.Print();
+}

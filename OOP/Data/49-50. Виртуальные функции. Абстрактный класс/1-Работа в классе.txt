@@ -1,0 +1,227 @@
+#include <iostream>
+#include <fstream>  // файловые потоки
+#include <sstream>  // строковый поток
+#include <iomanip>  // манипуляторы
+// контейнеры
+#include <string>
+#include <vector> // std::vector<> - динамический массив
+#include <array>  // std::array<> - аналог статического массива
+#include <list>   // std::list<> - двусвязанный список
+#include <set>    // std::set<> - бинарное дерево
+
+#include <iterator>  // итераторы
+#include <algorithm> // алгоритмические ф-ции STL
+
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+  Виртуальные функции. Абстрактный класс
+Задание 4
+Создать базовый класс Employer (служащий) с методом Print().
+Создайте три производных класса: President, Manager, Worker.
+Переопределите функцию Print() для вывода информации,
+соответствующей каждому типу служащего.
+
+*/
+
+class Employer
+{
+private:
+  string Type;
+protected:
+  string FIO;
+  int Salary;
+public:
+  Employer() = delete;
+  Employer(string type) :Type(type), Salary() {}
+  Employer(string type, string fio)
+    : Type(type), FIO(fio), Salary() {}
+  // 
+  virtual ~Employer() {}
+
+  virtual string GetType()const { return Type; }
+  virtual void Input()
+  {
+    cout << "Введите данные для "
+         << typeid(*this).name() << endl;
+    cout << "Type: ";   getline(cin, Type);
+    cout << "FIO:  ";   getline(cin, FIO);
+    cout << "Salary: "; (cin >> Salary).ignore();
+  }
+  // empl.Print();
+  virtual void Print() const
+  {
+    cout << "Данные для " << typeid(*this).name() << endl;
+    cout << "Type: " << Type << endl
+         << "FIO:  " << FIO << endl
+         << "Salary: " << Salary << endl;
+  }
+  // cout << empl; file << empl;
+  friend ostream& operator << (ostream& os,
+                         const Employer& obj)
+  {
+    os << "Данные для " << typeid(obj).name() << endl;
+    os << "Type: " << obj.Type << endl
+       << "FIO:  " << obj.FIO << endl
+       << "Salary: " << obj.Salary << endl;
+    return os;
+  }
+  // cin >> empl;
+  friend istream& operator>>(istream& is, Employer& obj)
+  {
+    cout << "Введите данные для: "
+      << typeid(obj).name() << endl;
+    cout << "Type: ";   getline(is, obj.Type);
+    cout << "FIO:  ";   getline(is, obj.FIO);
+    cout << "Salary: "; (is >> obj.Salary).ignore();
+    return is;
+  }
+}; // class Employer;
+
+
+class President : virtual public Employer
+{ // + body Employer
+private:
+  //const string _type = "Президент";
+  #define _type   "Президент"
+protected:
+  string Company;
+public:
+  President() : Employer(_type) {}
+  President(string fio) : Employer(_type, fio) {}
+  virtual void Input() override
+  {
+    cout << "Введите данные для "
+         << typeid(*this).name() << endl;
+    Employer::Input(); // вызов метода базового класса
+    // далее ввод для индив. данных President
+    cout << "Company: ";
+    getline(cin, Company);
+  }
+  virtual void Print() const override
+  {
+    cout << "Данные для " << typeid(*this).name() << endl;
+    Employer::Print(); // вызов метода базового класса
+    // далее вывод индив. данных President
+    cout << "Company: " << Company << endl;
+  }
+  virtual ~President() override {}
+}; // class President;
+
+
+class Manager : virtual public Employer
+{
+private:
+  //const string _type = "Менеджер";
+  #define _type  "Менеджер"
+protected:
+public:
+  Manager() : Employer(_type) {}
+  Manager(string fio) : Employer(_type, fio) {}
+  virtual ~Manager() override {}
+
+  virtual void Input() override
+  {
+    cout << "Введите данные для "
+      << typeid(*this).name() << endl;
+    Employer::Input(); // вызов метода базового класса
+    // далее ввод для индив. данных President
+  }
+  virtual void Print() const override
+  {
+    cout << "Данные для " << typeid(*this).name() << endl;
+    Employer::Print(); // вызов метода базового класса
+    // далее вывод индив. данных President
+  }
+}; // class Manager;
+
+
+// Ф-ция фабрики классов
+Employer * CreateEmployer()
+{
+  cout << "Выберите тип работника\n";
+  cout << "1 - President\n"
+       << "2 - Manager\n"
+       << "3 - Worker\n"
+       << "0 - Exit" << endl;
+  int choice;
+  (cin >> choice).ignore(); // cin.ignore();
+  // указатель на базовый класс
+  Employer * pEmpl = nullptr;
+  switch (choice)
+  {
+    case 1: pEmpl = new President; break;
+    case 2: pEmpl = new Manager;   break;
+    //case 3: pEmpl = new Worker; break;
+    case 0: pEmpl = nullptr; break; // сигнал выхода
+    default:
+      cout << "Ошибка - неверный выбор\n";
+      break;
+  } // switch(choise)
+  return pEmpl; // возвращаем указатель на новый объект
+                // через указатель на базовый класс
+}
+
+
+int main()
+{
+  President A;
+  // статический массив укзателей
+  Employer* mas[] = {
+    new Manager, new President, &A, new Manager,
+    new Manager, new President, &A, new Manager,
+  };
+  int mas_size = sizeof(mas) / sizeof(mas[0]);
+
+  // динамический массив укзателей
+  Employer* *arr = new Employer* [10];
+  arr[0] = new President;
+  arr[1] = &A;
+  delete[] arr;
+
+  // массив-вектор указаталей на базовый класс Employer
+  vector<Employer*> vEmpl;
+
+  while (true)
+  {
+    Employer *pEm = CreateEmployer();
+    if (pEm != nullptr) {
+      pEm->Input();
+      cout << "------------\n";
+      pEm->Print();
+      cout << "------------\n";
+      delete pEm; // удаляем динамический объект
+    }
+    else {
+      break; // выход из цикла
+    }
+  }
+  cout << "Good by..." << endl;
+}
+
+
+int main_old()
+{
+  //Employer E("Директор");
+  President P; // Employer + President
+  Manager M;   // Employer + Manager
+
+  //E.Input();  E.Print(); cout << "--------------\n";
+  //P.Input();  P.Print(); cout << "--------------\n";
+  //M.Input();  M.Print(); cout << "--------------\n";
+  
+  // указатель на базовый класс
+  Employer* pEmpl = &M; // указывает на Manager
+  pEmpl->Input();
+  pEmpl->Print();
+  cout << "---------\n";
+  
+  pEmpl = &P; // указывает на President
+  pEmpl->Input();
+  pEmpl->Print();
+  cout << "---------\n";
+  return 0;
+} // main()

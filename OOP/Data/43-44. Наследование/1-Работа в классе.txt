@@ -1,0 +1,86 @@
+#include <iostream>
+#include <iomanip>  // манипуляторы
+#include <string>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+  Наследование
+*/
+// Person - базовый, родительский класс
+class Person {
+private:
+  string Name;
+protected: // защищенная область, доступна из
+           // дочерних объектов
+  int Age;
+public:
+  void SetName(string newName) {
+    Name = newName; // OK
+  }
+public:
+  Person() :Name("Vasya"), Age(20) {
+    //Name = "Vasya", Age = 20;
+  }
+  // if(left == right)
+  // этот метод-оператор будет наследоваться
+  //  производнями, дочерними классами
+  bool operator ==(const Person& right) {
+    return this->Name == right.Name;
+  }
+};
+
+// Student - производный, дочерний класс от Person
+class Student : public Person
+{
+  // + тело всего Person
+  //  Person::Name, Person::Age
+  //  Person::Person(), ....
+private:
+  // переменная Name тут не нужна
+  //string Name; // Student::Name
+protected:
+  string Spec; // специальность для студента
+public:
+  Student()
+  {
+    //Name = "Dima"; // Student::Name = "Dima";
+    //Person::Name = "Dima";
+    Age = 22;  // == Person::Age = 22;
+    Person::Age = 22;
+  }
+  /*void SetName(string newName) {
+    // private: string Person::Name;
+    //Name = newName;
+    Person::SetName(newName);
+    //SetName(newName); - рекурсия 
+  }*/
+
+};
+
+class Pupil : public Person
+{
+  // + тело всего Person
+  //  Person::Name, Person::Age
+  //  Person::Person(), ....
+
+
+};
+
+int main()
+{
+  Person A;
+  Student B;
+  Pupil C;
+  B.SetName("Tanya"); // B.Person::SetName("Tanya");
+  C.SetName("Misha");
+
+
+  /*A.Name = "Tanya";
+  A.Age = 12;
+  B.Name = "Misha";
+  B.Age = 13;
+  B.Spec = "Programer";*/
+}

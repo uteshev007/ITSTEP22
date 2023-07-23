@@ -1,0 +1,149 @@
+#include <iostream>
+#include <Windows.h>
+#include <time.h>
+#include "win10.h"
+#include <conio.h>	// _getch(), _kbhit()
+using namespace std;
+
+const int row = 15, column=36;
+char pole[row][column]{
+	"###################################",
+	"#   #*##      @          @        #",
+	"# # @  #@############## ######### #",
+	"# ###### #   #*#3  @  # ##@##   # #",
+	"#  @       # # ###### # #@4   #@# #",
+	"###### # ### #      # # ##@##   # #",
+	"##  @# # # # #### # #   ##### # # #",
+	"#* #   # # @    # ##*######*#   # #",
+	"######## # ####         #   # # #@#",
+	"#  2#    #      ####### # # #   # #",
+	"# ### #### ######       # #   #   #",
+	"#  @       #      ####### #########",
+	"############ ######   #1# # @ #   #",
+	"#&                  #   #   #@  #B#",
+	"#################################?#"
+};
+
+int main()
+{
+	//setlocale(LC_ALL, "RUSSIAN");
+	start();
+
+	int posX=8, posY=5;
+	int posHeroX = 1, posHeroY = 13;
+	int posFinishX = 33, posFinishY = 14;
+	const int maxHealtHero = 500, maxHealthEnemy = 100, maxHealthBoss = 5000;
+	int healthHero = maxHealtHero, healthEnemy = maxHealthEnemy, healthBoss = maxHealthBoss;
+	int weapon = 0;
+	/*
+		0 - Отсутствует. 10 урона
+		1 - Дубина. 15 урона
+		2 - Кинжал. 25 урона
+		3 - Одноручный меч. 50 урона
+		4 - Двуручный меч. 200 урона
+
+	Враг вооружен дубиной.
+	Босс вооружен одноручным мечом.
+	*/
+
+	do {
+		if(_kbhit()) { //Если нажата клавиша
+			int key = _getch();
+			/*
+				72 - вверх
+				80 - вниз
+				75 - влево
+				77 - вправо
+			*/
+			if(key == 72 && pole[posHeroY-1][posHeroX]!='#') {//Вверх
+				if(pole[posHeroY - 1][posHeroX] >= '1' && pole[posHeroY - 1][posHeroX] <= '4') {
+					if(pole[posHeroY - 1][posHeroX] - '0' > weapon) {
+						weapon = pole[posHeroY - 1][posHeroX] - '0';
+					}
+				}
+				pole[posHeroY][posHeroX]=' ';
+				posHeroY--;
+				pole[posHeroY][posHeroX] = '&';
+				if(healthHero < maxHealtHero) { healthHero++; }
+			}
+			else if(key == 80 && pole[posHeroY + 1][posHeroX] != '#') {//Вниз
+				if(pole[posHeroY + 1][posHeroX] >= '1' && pole[posHeroY + 1][posHeroX] <= '4') {
+					if(pole[posHeroY + 1][posHeroX] - '0' > weapon) {
+						weapon = pole[posHeroY + 1][posHeroX] - '0';
+					}
+				}
+				pole[posHeroY][posHeroX] = ' ';
+				posHeroY++;
+				pole[posHeroY][posHeroX] = '&';
+				if(healthHero < maxHealtHero) { healthHero++; }
+			}
+			else if(key == 75 && pole[posHeroY][posHeroX-1] != '#') {//Влево
+				if(pole[posHeroY][posHeroX - 1] >= '1' && pole[posHeroY][posHeroX - 1] <= '4') {
+					if(pole[posHeroY][posHeroX - 1] - '0' > weapon) {
+						weapon = pole[posHeroY][posHeroX - 1] - '0';
+					}
+				}
+				pole[posHeroY][posHeroX] = ' ';
+				posHeroX--;
+				pole[posHeroY][posHeroX] = '&';
+				if(healthHero < maxHealtHero) { healthHero++; }
+			}
+			else if(key == 77 && pole[posHeroY][posHeroX + 1] != '#') {//Вправо
+				if(pole[posHeroY][posHeroX + 1] >= '1' && pole[posHeroY][posHeroX + 1] <= '4') {
+					if(pole[posHeroY][posHeroX + 1] - '0' > weapon) {
+						weapon = pole[posHeroY][posHeroX + 1] - '0';
+					}
+				}
+				pole[posHeroY][posHeroX] = ' ';
+				posHeroX++;
+				pole[posHeroY][posHeroX] = '&';
+				if(healthHero < maxHealtHero) { healthHero++; }
+			}
+			if(posHeroX == posFinishX && posHeroY == posFinishY) {
+				// Уровень пройден
+				setlocale(LC_ALL, "RUSSIAN");
+				SetPos(3, 10);
+				SetColor(0xC);
+				cout << "Победа!                                  ";
+				setlocale(LC_ALL, "C");
+			}
+		}
+
+		{
+			setlocale(LC_ALL, "RUSSIAN");
+			SetPos(1, 15);
+			SetColor(0xA);
+			cout << "Жизни: " << healthHero<<"/"<< maxHealtHero << "         ";
+			SetPos(3, 15);
+			cout << "Урон: ";
+			if(weapon == 0) { cout << 10; }
+			else if(weapon == 1) { cout << 15; }
+			else if(weapon == 2) { cout << 25; }
+			else if(weapon == 3) { cout << 50; }
+			else if(weapon == 4) { cout << 200; }
+			setlocale(LC_ALL, "C");
+		}
+
+		for(int i = 0; i < row; i++) {
+			SetPos(posY+i, posX);
+			for(int j = 0; j < column; j++) {
+				if(pole[i][j] == '#') { SetColor(0xA); cout << char(177); }
+
+				else if(pole[i][j] == '?') { SetColor(0xE); cout << char(178); }
+				else if(pole[i][j] == '1') { SetColor(0xD); cout << '/'; }
+				else if(pole[i][j] == '2') { SetColor(0xD); cout << '!'; }
+				else if(pole[i][j] == '3') { SetColor(0xD); cout << char(24); }
+				else if(pole[i][j] == '4') { SetColor(0xD); cout << 'l'; }
+				else if(pole[i][j] == '@') { SetColor(0xB); cout << char(2); }
+				else if(pole[i][j] == 'B') { SetColor(0xF); cout << char(1); }
+				else if(pole[i][j] == '*') { SetColor(0xC); cout << char(3); }
+				else if(pole[i][j] == ' ')	cout << ' ';
+
+				else if(pole[i][j] == '&') { SetColor(0xE); cout << char(2); }
+				else cout << pole[i][j];
+			}
+		}
+	} while(true);
+
+	cin.get(); cin.get();
+}

@@ -1,0 +1,51 @@
+/*
+ DataBase.h
+*/
+#pragma once
+#include <iostream>
+#include <string>
+using namespace std;
+
+// базовый класс для работы с СУБД
+class DataBase {
+private:
+  string  typeDB; // тип СУБД - имя класса
+protected:
+  bool    bIsOpen; // =true, если БД открыта
+public:
+  DataBase();
+  virtual void init();
+  virtual void open(string& user, string& pass);
+  virtual bool IsOpen() const;
+
+  // Обнуление метода - чисто виртуальный метод
+  virtual void Execute(string& reqSql) = 0;
+  virtual string Result() = 0;
+  virtual void close();
+  string getTypeBD() const;
+  ~DataBase() {}
+}; // class DataBase
+
+
+// производные классы
+class MsSQL {
+public:
+  MsSQL();
+  virtual void init();
+  virtual void open(string& user, string& pass);
+  virtual bool IsOpen() const;
+  virtual void Execute(string& reqSql);
+  virtual string Result();
+  virtual void close();
+private:
+  string resTable; // результат запроса
+}; // class MsSQL
+
+
+
+class ORACLE
+{
+public:
+  ORACLE();
+  virtual string Result();
+};

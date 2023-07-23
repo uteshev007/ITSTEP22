@@ -1,0 +1,94 @@
+#include <iostream>
+#include <string>
+#include <time.h>
+using namespace std;
+
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { system("pause > nul"); } } _;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+
+class Test {
+private:
+  int   size;
+  int * mas; // указатель на динамический массив
+public:
+  Test() : size(10), mas(new int[size]) {
+    for (int i = 0; i < size; i++) {
+      mas[i] = RAND(1, 10);
+    }
+  }
+
+  // Конструктор копирование
+  // Test obj;
+  // Test A(obj);  явное обращение к конструктору копирования
+  // Test B = obj; неявное обращение к конструктору копирования
+  Test(const Test& obj)
+  {
+    cout << "Конструктор копирование\n";
+    mas = new int[obj.size]; // создать новый массив для текущего объекта
+    size = obj.size; // размер берем из obj
+    // копирование элементов массива
+    for (int i = 0; i < size; i++) {
+      mas[i] = obj.mas[i];
+    }
+  }
+
+  // Оператор копирования
+  // Test A, obj;
+  // A = obj; - вызов оператора копирования
+  // A.operator= ( obj ) - вызов оператора копирования
+  Test& operator = (const Test& obj)
+  {
+    cout << "Оператор копирования\n";
+    delete[] mas; // удаляем старый массив текущего объекта
+    mas = new int[obj.size]; // создать новый массив для текущего объекта
+    size = obj.size; // размер берем из obj
+    // копирование элементов массива
+    for (int i = 0; i < size; i++) {
+      mas[i] = obj.mas[i];
+    }
+    // возвращаем ссылку на текущий объект
+    return *this;
+  }
+
+  ~Test() { delete[]mas; } // деструктор - ОБЯЗАТЕЛЬНО!
+
+  void SetAt(int index, int val) { mas[index] = val; }
+
+  void Print(string Title = "") {
+    cout << Title << " : "; // заголовок
+    cout << mas << " : "; // адрес массива
+    for (int i = 0; i < size; i++) {
+      cout << mas[i] << " ";
+    }
+    cout << endl;
+  }
+}; // class Test
+
+int main()
+{
+  Test A;
+  A.Print("A");
+
+  Test B(A); // работает конструктор копирования
+  B.Print("B");
+
+  Test C = A; // работает конструктор копирования
+  C.Print("C");
+
+  cout << "-----------\n";
+  A.SetAt(1, 123);
+
+  A.Print("A");
+  B.Print("B");
+  C.Print("C");
+
+  cout << "-----------\n";
+  Test D;
+  D = A; // работает оператор копирования
+  //D.operator=(A); // можно и так вызвать оператор копирования
+
+  A.SetAt(2, 123);
+
+  A.Print("A");
+  D.Print("D");
+}

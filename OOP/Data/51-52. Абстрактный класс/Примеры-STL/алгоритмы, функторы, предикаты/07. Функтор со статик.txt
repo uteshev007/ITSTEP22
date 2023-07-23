@@ -1,0 +1,66 @@
+// библиотека дл€ работы алгоритмов
+// мы  еще будем рассматривать еЄ более подробно сегодн€ 
+#include <algorithm> 
+#include <iostream>
+#include <iterator>
+// библиотека контейнера списка
+#include <list>
+#include <time.h>
+using namespace std;
+
+/*
+‘ункциональный объект, содержащий два пол€:
+1. дл€ хранени€ значени€ приращени€ (delta)
+2. дл€ текущего значени€ генерируемого числа (current)
+*/
+
+class addNumberFrom
+{
+	static int count;
+	static bool even;
+	int current;
+	/*
+	 онструктор класса инициализирует значение приращени€ и текущее значение.
+	ѕоследнее может быть опущено, и тогда оно будет считатьс€ равным 0
+	*/
+public:
+	addNumberFrom(int number=0) : current(number) {
+	}
+
+	/*
+	ќснова функтора - перегруженный оператор вызова функции
+	- прибавл€ет значение приращени€ к текущему генерируемому числу
+	*/
+
+	int operator()()
+	{
+		if (count == current) {
+			count = 0;
+			even = !even;
+		}
+		count++;
+		return even ? (rand() * 2) % 10 + 2 : (rand() * 2) % 10 + 1;
+	}
+};
+
+int addNumberFrom::count = 0;
+bool addNumberFrom::even = true;
+// ¬ывод заголовка дл€ таблицы умножени€.
+
+int main()
+{
+	srand(time(0));
+	cout << "TABLE:" << "\n\n";
+	cout << "----------" << "\n\n";
+
+	for (int i = 1; i <= 10; i++)
+	{
+		// Cоздание контейнера-списка.
+		list<int> l(10);
+
+		generate_n(l.begin(), l.size(), addNumberFrom(10));
+
+		copy(l.begin(), l.end(), ostream_iterator<int>(cout, "\t"));
+		cout << endl;
+	}
+}

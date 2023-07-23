@@ -1,0 +1,31 @@
+#include <iostream>
+#include <string>
+#include <map>
+#include <vector>
+using namespace std;
+
+struct Note
+{
+	int note[9];
+};
+
+int main()
+{
+	//карта в качестве ключей используются названия нот, в качестве значений их частоты
+	map<string, Note> Tones;
+	Note tmp;
+	tmp.note[0] = 0;
+	tmp.note[1] = 33;
+	Tones["C"] = tmp;
+	
+
+	map<string, vector<int>> Tones2;
+	vector<int> tmp2 = {0,33};
+	Tones2["C"] = tmp2;
+
+	multimap<string, int> Tones3;
+	Tones3.insert(multimap<string, int>::value_type("C", 0));
+	Tones3.insert(multimap<string, int>::value_type("C", 33));
+
+	cin.get(); cin.get();
+}

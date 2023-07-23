@@ -1,0 +1,88 @@
+//
+// FileObj.h
+//
+#pragma once
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+// абстрактный базовый класс дл€ обработки файлов
+class FileObj
+{
+private:
+protected:
+  string  FileName; // им€ рабочего файла
+  string  FileType; // "Text", "MsWord", "Excel"
+  fstream File;     // файловый объект дл€ чтени€-записи в файл
+  long long FileSize; // размер файла в байтах
+public:
+  FileObj()
+  FileObj(string fileName, string Type);
+  // виртуальные методы get
+  virtual string GetName() const;
+  virtual string GetType() const;
+  virtual long long GetSize();
+  // виртуальные методы set
+  virtual void SetName(string newName);
+
+  // виртуальные методы
+  // метод - открыть рабочий файл
+  virtual bool Open();
+
+  // проверить - файл открыт или нет?
+  virtual bool IsOpen() const;
+
+  // закрыть файл, если он открыт
+  virtual void Close();
+
+  // рабочие ф-ции
+  virtual void PrintInfo();
+
+  // обработка файла - чисто виртуальна€ ф-ци€, метод
+  virtual void Processing() = 0;
+
+  //virtual ~FileObj() {}
+  // чисто-виртуальный деструтктор
+  virtual ~FileObj() = 0;
+
+}; // class FileObj;
+
+// ќЅя«ј“≈Ћ№Ќќ деструктор за телом класса - дл€
+//  чисто-виртуального деструктора
+inline FileObj::~FileObj() {}
+
+
+// класс производный, дочерний от FileObj
+//  дл€ работы с текстовыми файлами: .TXT
+class File_Text : virtual public FileObj
+{
+protected:
+public:
+  File_Text();
+  File_Text(string fileName);
+
+  // перекрытый, виртуальный метод обработки файла
+  virtual void Processing() override;
+  virtual ~File_Text() override {} // здесь нужен
+
+}; // class File_Text;
+
+// обработка текстовых файлов типа C++
+class File_CPP : virtual public FileObj
+{
+}; // class File_CPP;
+
+
+inline int CheckFileType(string fileName)
+{
+  return -1; // расширение не найдено
+}
+
+
+inline FileObj * CreatFileObject(string fileName)
+{
+  return nullptr;
+}
+

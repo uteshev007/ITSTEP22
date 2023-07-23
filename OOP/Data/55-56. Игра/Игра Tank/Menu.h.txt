@@ -1,0 +1,81 @@
+//
+// Menu.h
+//
+#pragma once
+#include <iostream> // cout
+#include <string>
+#include <vector>
+#include <iterator>
+#include <conio.h>
+#include "Win10.h"
+using namespace std; // std::cout
+
+// цвета для меню
+struct MColor {
+  int Sym, Fon; // цвет для символа и для фона
+};
+// class Menu
+
+class Menu {
+private:
+  vector<string>  m_vItems;     // массив пунктов меню
+  int             m_nSelect;    // индекс активного пункта меню
+  // цвета
+  MColor          m_ColSel;     // набор цветов для активного пункта меню
+  MColor          m_ColUnSel;   // набор цветов для не активного пункта меню
+  MColor          m_ColDefault; // цвет по умолчанию 0,7
+  // экранные координаты меню
+  int     m_nRow, m_nCol;
+public:
+  Menu() : m_vItems(), m_nSelect(),
+    m_ColSel({ COLOR::_LIGHT_YELLOW, COLOR::_GREEN }),
+    m_ColUnSel({ COLOR::_GRAY, COLOR::_BLACK }),
+    m_ColDefault({ COLOR::_WHITE, COLOR::_BLACK }), // цвет по умолчанию
+    m_nRow(2), m_nCol(5) {}
+  Menu(const vector<string>& vMenuItems) :Menu() { Set(vMenuItems); }
+  void Set(const vector<string>& vMenuItems) {
+    m_vItems = vMenuItems;
+  }
+  // метод - вывести меню на экран
+  int Show(int select = 0) {
+    m_nSelect = select;
+    while (true) {
+      int row = m_nRow;
+      // цикл вывода пунктов меню
+      for (auto item : m_vItems) { // сокращенный for для vector<>
+        SetPos(row++, m_nCol); // коорд. пункта меню
+        if (m_nSelect == row - m_nRow - 1) {
+          SetColor(m_ColSel.Fon, m_ColSel.Sym); // активный
+        }
+        else {
+          SetColor(m_ColUnSel.Fon, m_ColUnSel.Sym); // неактивный
+        }
+        cout << item; // вывод пункта меню
+      }
+      // восстановить цвет консоли по умолчанию
+      SetColor(m_ColDefault.Fon, m_ColDefault.Sym);
+      // обработка нажатий клавиш
+      int key = _getch(); // <conio.h>
+      switch (key) {
+        case KEY::UP: case KEY::LEFT: case 'w': case 'a': // вверх
+          if (m_nSelect > 0) { m_nSelect--; }
+          else               { m_nSelect = m_vItems.size() - 1; }
+          break;
+        case KEY::DOWN: case KEY::RIGHT: case 's': case 'd': // вниз
+          if (m_nSelect < m_vItems.size() - 1) { m_nSelect++; }
+          else                                 { m_nSelect = 0; }
+          break;
+        case KEY::ENTER:
+          return m_nSelect; // выход из метода Show() и возвращаем текущий Select
+        case KEY::ESC:
+          return -1; // отказ от выбора меню - выход из метода Show()
+      }
+    } // while (true)
+  } // int Show(int select = 0)
+
+  int Show(int row, int col, int select = 0) {
+    m_nRow = row;
+    m_nCol = col;
+    return Show(select);
+  }
+};

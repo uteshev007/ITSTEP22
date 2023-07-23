@@ -1,0 +1,64 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <array>     // std::array<> - аналог статического масива
+#include <vector>    // std::vector<>- аналог динамического масива
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/* std::vector<> */
+
+// cout << vector<int>
+ostream& operator<<( ostream& os,
+                     const vector<int>& obj)
+{ // size: 2 3 4 5 6
+  os << obj.size() << ": ";
+  for (size_t i = 0; i < obj.size(); i++) {
+    os << obj[i] << " ";
+  }
+  return os << endl;
+}
+
+int main()
+{
+  array<int, 10> arr1; // int arr1[10];
+  vector<int>    arr2; // int *arr2 = new int[0];
+  // arr1.size() - получить текущий размер массива
+  for (int i = 0; i < arr1.size(); i++) {
+    arr1[i] = RAND(1, 10);
+    cout << arr1[i] << " ";
+  }
+  cout << endl;
+  //arr1 - размер массива типа array<> изменить нельзя
+
+  // пример работы с arr2
+  arr2.resize(10); // A.SetSize(10);
+  for (int i = 0; i < arr2.size(); i++) {
+    arr2[i] = RAND(10, 20);
+    cout << arr2[i] << " ";
+  }
+  cout << endl;
+  arr2.clear(); // -удалить все данные из массива
+                // теперь массив arr2 нулевой длины
+  // 2
+  cout << "Enter size: ";
+  int Size;
+  cin >> Size;
+  for (int i = 0; i < Size; i++) {
+    int temp = RAND(5, 12);
+    // добавить новый элемент в конец массива
+    arr2.push_back(temp);
+    //cout << arr2[i] << " ";
+  }
+  for (int i = 0; i < arr2.size(); i++) {
+    cout << arr2[i] << " ";
+  }
+  cout << endl;
+  vector<int> copy_arr2 = arr2;
+
+  cout << arr2 << endl;
+  cout << copy_arr2 << endl;
+
+}

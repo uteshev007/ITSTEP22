@@ -1,0 +1,26 @@
+#include <iostream>
+using namespace std;
+
+class tmp {
+	static int counter;
+public:
+	tmp() { counter++; cout << "tmp()\n"; }
+	tmp(const tmp &t){
+		counter++;
+	}
+	void show() {
+		cout << "counter=" << counter << endl;
+	}
+};
+
+int tmp::counter=0;
+
+int main() {
+	{
+		tmp t;
+		tmp t2;
+
+		t2.show();
+	}
+	cin.get();
+}

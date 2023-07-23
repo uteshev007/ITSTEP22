@@ -1,0 +1,54 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+class Vector {
+  Data;
+  Size;
+public:
+  Vector();
+  Vector(const Vector& V);
+  ~Vector();
+  // Установка размера массива
+  void SetSize(int size);
+  // Установка данных массива из Arr[]
+  void Set(int *Arr, int size);
+  // A = B = C;  *this = B;
+  Vector& operator=(const Vector& B);
+
+  // A + B ==> *this + B
+  //operator+(Vector& B)
+  operator<<(ostream& os, const Vector& vec);
+  operator>>(istream& is, Vector& vec);
+
+  // t = V[index] ==>  *this = &V
+  // t = V.operator[]( index );
+  // V[i] = t;
+  // int  = int(t);
+  operator[](int index);
+  getSize();
+
+  // Vector V; V()
+
+  // Нахождение мин/макс значений
+  // int vMin, vMax;
+  // V(vMin, vMax);
+  operator();
+  // Инициализация Vector случ. числами
+  // Vector V; V(15) ==> V(15, 0, 10);
+  //  V(15, -10);
+  void operator()(int min, int max);
+
+}; // class Vector;
+
+
+// перегруженный опереатор вывода
+int main()
+{
+}
+
+

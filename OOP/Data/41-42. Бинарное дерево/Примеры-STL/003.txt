@@ -1,0 +1,129 @@
+#include <iterator>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+//Обобщенный класс динамического массива
+template <class T>
+class DynArray
+{
+public:
+	//класс итератора
+	class iterator : public std::iterator<std::forward_iterator_tag,T>
+   {
+		private:
+			//ссылка на контейнер
+			DynArray& da;
+			//текущая позиция в контейнере
+			T* pos;
+		public: 
+			//конструктор: принимает контейнер и текущую позицию
+			iterator(DynArray& da1, T* pos1): da(da1),pos(pos1)
+			{
+			}
+	//оператор инкремента: перемещает итератор на следующий элемент контейнера
+	//префиксная форма инкремента
+			iterator& operator ++( )
+			{
+				pos++;
+				return *this;
+			}
+			//постфиксная форма инкремента: 
+			iterator& operator ++(int )
+			{
+				iterator* tmp = this;
+				pos++;
+				return *tmp;
+			}
+			//опертор присвоения
+			iterator& operator =(const iterator& it)
+			{
+				da = it.da;
+				pos = it.pos;
+				return *this;
+			}
+			//опертор сравнения на равенство
+			bool operator ==(const iterator& it)
+			{
+				return (pos == it.pos);
+			}
+			//опертор сравнения на равенство
+			bool operator !=(const iterator& it)
+			{
+				return (pos != it.pos);
+			}
+		//опертор разыменования: возвращает ссылку на текущий элемент контейнера
+			T& operator *()
+			{
+				return *pos;
+			}
+	 };
+
+	private:
+		T* a; //динамический массив
+		int size; //текущий размер массива
+		int capacity; //емкость массива
+	public:
+		//конструктор: создание массива заданной емкости
+	DynArray(int capacity = 1)
+	{
+		this->capacity = capacity;
+		a = new T[capacity];
+		size = 0;
+	}
+	~DynArray()
+	{
+		delete [] a;
+	}
+	//помещение нового элемента в конец массива,
+    //при нехватке места массив расширяется
+   void push_back(const T& val)
+   {
+		if (size >= capacity)
+		{
+			T* a1 = new T[capacity + 10];
+			for(int i = 0; i < capacity; i++) a1[i] = a[i];
+			delete[] a;
+			a = a1;
+		}
+		a[size] = val;
+		size++;
+   }
+
+   //определение текущего размера массива
+   int getSize()
+   {
+	   return size;
+   }
+
+   //возвращает итератор, указывающий на начало массива
+   iterator begin()
+   {
+	   iterator b(*this,&a[0]);
+	   return b;
+   }
+  //возвращает итератор, указывающий элемент, следующий за концом массива
+  iterator end()
+   {
+	  iterator e(*this,&a[size]);
+	   return e;
+   }
+};
+
+int main()
+{
+	//создание динамического массива с начальной емкостью 10 элементов
+	DynArray<int> da(10);
+	//добавление 3 элементов
+	da.push_back(0);
+	da.push_back(1);
+	da.push_back(2);
+
+	//объявление итератора
+	DynArray<int>::iterator it;
+	//вывод массива с использованием итератора
+	for(it = da.begin(); it != da.end(); it++) cout << *it << " ";
+
+	return 0;
+}

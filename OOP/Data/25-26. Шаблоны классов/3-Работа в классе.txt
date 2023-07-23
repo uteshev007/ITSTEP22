@@ -1,0 +1,40 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+#include <fstream>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/* примеры работы с сылкой и указателем */
+
+int main()
+{
+  int a = 123, b = 100;
+  int* pa; // указатель на тип int, без иниц-ции
+           // "висячий" указатель
+  pa = &a; // указатель на переменную a
+  *pa = 1; // изменение перемнной a через указатель
+           // a = 1;
+  pa = &b; // в указателе адрес переменной b
+  *pa = 2; // b = 2;
+  pa[0] = 2; // тоже самое, что и *pa = 2
+
+  int mas[10] = { 1,2,3,4,8,5,6,7, };
+  for (int i = 0; i < 10; i++) {
+    //cout << mas[i] << " ";
+    //cout << *(mas + i) << " ";
+    //cout << *(i + mas) << " ";
+    cout << i[mas] << " "; // не очень хорошо
+  }
+  cout << endl;
+  // pmas - указатель на начало массива
+  int* pmas = mas; // == int* pmas = &mas[0];
+  for (int i = 0; i < 10; i++) {
+    cout << *pmas << " ";
+    pmas++; // сдвиг адреса в указателе на +1
+  }
+  cout << endl;
+}
+

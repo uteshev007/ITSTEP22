@@ -1,0 +1,58 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+#include <fstream>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+  Шаблоны функций, классов
+*/
+
+template<typename T>
+T Sum(T a, T b)
+{
+  T Result = a + b;
+  return Result;
+}
+
+/*string Sum(string a, string b)
+{
+  string Result = a + b;
+  return Result;
+}*/
+
+/*
+int Sum(int a, int b)
+{
+  int Result = a + b;
+  return Result;
+}
+float Sum(float a, float b)
+{
+  float Result = a + b;
+  return Result;
+}
+long long Sum(long long a, long long b)
+{
+  long long Result = a + b;
+  return Result;
+}
+*/
+
+int main()
+{
+  int t1 = 1, t2 = 2;
+  cout << "Sum(1,2) = " << Sum(t1, t2) << endl;
+  double d1 = 1.1, d2 = 2.2;
+  cout << "Sum(1.1,2.2) = " << Sum(d1, d2) << endl;
+  string s1 = "Hello ", s2 = "World!";
+  cout << "Sum(string) = " << Sum(s1, s2) << endl;
+
+  cout << "Sum(1, 2.2) = " 
+    << Sum <int> (1, 2.2) << endl;
+  cout << "Sum(1, 2.2) = " 
+    << Sum <float> (1, 2.2) << endl;
+}

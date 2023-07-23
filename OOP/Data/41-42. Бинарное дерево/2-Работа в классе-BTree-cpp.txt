@@ -1,0 +1,90 @@
+#include <iostream>
+#include <fstream>
+#include <string>  // STL C++ ==> class string
+#include <time.h>
+using namespace std;
+#include "BTree.h"  // class tree
+
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+class Bus
+{
+private:
+public:
+  string Number;  // номер автобуса
+  string Driver;  // водитель
+  int    Line;    // маршрут
+  int    Seats;   // кол-во мест
+public:
+  Bus() : Number()
+  { // XXX-123
+    Number += char(RAND('A', 'Z'));
+    Number += char(RAND('A', 'Z'));
+    Number += char(RAND('A', 'Z'));
+    Number += '-';
+    Number += char(RAND('0', '9'));
+    Number += char(RAND('0', '9'));
+    Number += char(RAND('0', '9'));
+    // водитель
+    int size = RAND(5, 8); // длина имени водителя
+    for (int i = 0; i < size; i++) {
+      Driver += char(RAND('A', 'Z'));
+    }
+    // номер маршрута
+    Line = RAND(1, 100);
+    // кол-во мест
+    Seats = RAND(20, 120);
+  }
+  //void Print()
+  friend ostream& operator << (ostream& os,
+    const Bus& obj)
+  {
+    os << obj.Number << " | "
+      << obj.Driver << " | "
+      << obj.Line << " | "
+      << obj.Seats << " | ";
+       
+    return os;
+  }
+  // операторы для работы с деревом
+  bool operator < (const Bus& right)const {
+    return this->Number < right.Number;
+  }
+  bool operator > (const Bus& right)const {
+    return this->Number > right.Number;
+  }
+  bool operator == (const Bus& right)const {
+    return this->Number == right.Number;
+  }
+
+};
+int main()
+{
+  Tree<Bus> BusPark; // автопарк
+  cout << "Enter bus count: ";
+  int size;
+  cin >> size;
+  cin.ignore();
+  for (int i = 0; i < size; i++) {
+    Bus temp; // новый временный автобус,
+              // с случайными значениями
+    BusPark.push(temp);
+  }
+  cout << "-----------\n";
+  cout << "Number | Driver | Line | Seats |\n";
+  BusPark.Print();
+  cout << "-----------\n";
+  string str;
+  cout << "Enter bus number: ";
+  getline(cin, str);
+  Bus forSearch; // автобус для поиска
+  forSearch.Number = str;
+  Node<Bus>* res = BusPark.Search(forSearch);
+  if (res) {
+    cout << res->Key << endl;
+  }
+  else {
+    cout << "Not found!\n";
+  }
+}

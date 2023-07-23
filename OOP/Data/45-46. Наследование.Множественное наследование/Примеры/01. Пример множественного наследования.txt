@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+
+class A {
+protected:
+	int a;
+};
+
+class B {
+public:
+	int b;
+};
+
+class C {
+	int c;
+};
+
+class ALL :private A, protected B, C {
+	void function() {
+		cout << a << b << c << endl;
+	}
+};
+
+int main() {
+	
+	cin.get();
+}

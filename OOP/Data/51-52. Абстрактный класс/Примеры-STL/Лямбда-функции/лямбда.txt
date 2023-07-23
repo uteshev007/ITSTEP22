@@ -1,0 +1,75 @@
+#include <vector>
+#include <list>
+#include <string>
+#include <iterator>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+
+void main(){
+	int count = 10;
+	vector<vector<int>> v(count);
+	int i = 0;
+	for_each(begin(v), end(v), [&i, count](vector<int>&mas){
+		i++;
+		mas.resize(count);
+		int cur = 0;
+		generate_n(begin(mas), count, [&i, &cur](){
+			cur++;
+			cout << i*cur << "\t";
+			return i*cur;
+		});
+		cout << endl;
+	});
+	cin.get();
+}
+
+//
+////второй вариант
+//
+//#include <algorithm>
+//#include <iostream>
+//#include <vector>
+//#include <iterator>
+//using namespace std;
+//
+//void main()
+//{
+//	//размерность таблицы умножения
+//	int c = 10;
+//	vector <vector<int>> m(c);
+//	int i = 0;
+//	//для всех векторов из m выполнится код
+//	for_each(begin(m), end(m), [&i, c](vector<int>&v)
+//	{
+//		//вот этот код
+//		i++;
+//		//выделяем память под с элементов для очередного вектора
+//		v.resize(c);
+//		int j = 0;
+//		/*
+//		генерируем зеначения для таблицы умножения
+//		--
+//		в квадратные скобки ([&j,i]) передаются переменные,
+//		которые мы хотим использовать внутри лямбда выражения
+//		теперь значение i и ссылка на j досступны внутри лямбды
+//		*/
+//		generate_n(begin(v), c, [&j, i](){
+//			//j - шаг приращения
+//			j++;
+//			return i*j;
+//		});
+//	}
+//	);
+//
+//	ostream_iterator<int> os(cout, "\t");
+//
+//	//вывод таблицы умножения на экран
+//	for_each(begin(m), end(m), [&os](vector<int> &v){
+//		//каждый вектор чисел копируем в выходной итератор
+//		copy(begin(v), end(v), os);
+//		cout << endl;
+//	});
+//	cin.get();
+//}

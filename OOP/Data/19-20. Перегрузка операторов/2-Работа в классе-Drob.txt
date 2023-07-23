@@ -1,0 +1,226 @@
+#include <iostream>
+#include <iomanip> // cout << setw(10) << hex << fill('#')
+#include <fstream> // ofstream, ifstream, fstream
+#include <string>
+#include <time.h>
+#include <sstream>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+ ѕерегрузка операторов
+
+—оздайте класс ƒробь (или используйте уже ранее
+созданный вами). »спользу€ перегрузку операторов
+реализуйте дл€ него арифметические операции дл€
+работы с дроб€ми (операции +, -, *, /).
+*/
+
+// глобальна€ перегрузка операторов
+class Drob
+{
+private:
+  int a, b;
+public:
+  Drob():a(0), b(1) {
+    //a = 0;
+    //b = 1;
+  }
+  Drob(int a, int b = 1) {
+    this->a = a;
+    if (b != 0)
+    {
+      this->b = b;
+    }
+    else
+    {
+      this->b = 1;
+      cout << "Error!b = 0" << endl;
+    }
+  }
+  void SetDrob(int newa, int newb = 1)
+  {
+    a = newa;
+    if (newb != 0)
+    {
+      b = newb;
+    }
+    else
+    {
+      cout << "Error!newb = 0" << endl;
+    }
+  }
+  int GetA()  const
+  {
+    return a;
+  }
+  int GetB() const
+  {
+    return b;
+  }
+  // A + B
+  Drob operator + (const Drob& B) const
+  {
+    Drob result;
+    result.a = this->a * B.b + B.a * this->b;
+    result.b = this->b * B.b;
+    return result;
+  }
+  Drob operator - (const Drob& B) const
+  {
+    Drob result;
+    result.a = this->a * B.b - B.a * this->b;
+    result.b = this->b * B.b;
+    return result;
+  }
+  Drob operator * (const Drob& B) const
+  {
+    Drob result;
+    result.a = this->a * B.a;
+    result.b = this->b * B.b;
+    return result;
+  }
+  Drob operator / (const Drob& B) const
+  {
+    Drob result;
+    result.a = this->a * B.b;
+    result.b = this->b * B.a;
+    return result;
+  }
+  friend ostream& operator << (ostream& os, const Drob& A);
+  friend istream& operator >> (istream& is, Drob& A);
+  //friend int main();
+  // операторы приведени€ типов, преобразовани€ типов
+  operator int()   const { return a / b; }
+  operator float() const { return (float)a / (float)b; }
+  operator double() const{ return (double)a / (double)b; }
+
+  operator string() const
+  {
+    string temp;
+    /* 1 - вариант
+    temp = to_string(a) + "/" + to_string(b);
+    return temp;*/
+    // 2 - вариант
+    stringstream ss;
+    ss << a << "/" << b; // "1/2" >> int >> char >> int
+    temp = ss.str();
+    return temp;
+  }
+  bool operator == (const Drob& B) const
+  {
+    int t1, t2;
+    t1 = this->a * B.b;
+    t2 = this->b * B.a;
+    /*if (t1 == t2){return true;}
+    else{return false;}*/
+    return t1 == t2;
+  }
+  bool operator != (const Drob& B) const
+  {
+    return !(*this == B);
+    //return !this->operator ==(B);
+  }
+  bool operator < (const Drob& B) const
+  {
+    if (this->a * B.b < this->b * B.a){return true;}
+    else{return false;}
+  }
+  bool operator <= (const Drob& B) const
+  {
+    return (*this < B) || (*this == B);
+  }
+  bool operator > (const Drob& B) const
+  {
+    return !(*this <= B);
+  }
+  bool operator >= (const Drob& B) const
+  {
+    return !(*this < B);
+  }
+  int operator [](int index)   const
+  {
+    if (index == 0) { return a; }
+    if (index == 1) { return b; }
+    cout << "Error index!" << endl;
+  }
+  int operator [](const string& name)  const
+  {
+    if (name == "numerator") { return a; }
+    if (name == "denumerator") { return b; }
+    cout << "Error invalid name!" << endl;
+  }
+};
+
+// оператор вывода в поток
+ostream& operator << (ostream& os,const Drob& A)
+{
+  if (&os == &cout) { // если вывод в консоль
+    //os << A.GetA() << "/" << A.GetB();
+    os << A.a << "/" << A.b;
+  }
+  else { // если выводим в файл
+    os << A.a << " " << A.b;
+  }
+  return os;
+}
+// оператор чтени€ из потока
+istream& operator >> (istream& is, Drob& A)
+{
+  if (&cin == &is) { // если is консоль
+    cout << "Enter A: ";
+    is >> A.a;
+    cout << "Enter B: ";
+    is >> A.b;
+  }
+  else { // если чтение из файла
+    is >> A.a >> A.b;
+  }
+  return is;
+}
+
+
+int main()
+{
+  Drob A(1, 2);
+  //cout << A.a;
+  Drob B(2, 3);
+  Drob  C;
+  C = A + B;
+  cout << "A = " << A << "\n";
+  cout << "B = " << B << "\n";
+  cout << "C = " << C << "\n";
+  cout << "Enter A and B fractions: ";
+  cin >> A >> B;
+  C = A * B;
+  cout << "C = " << C << "\n";
+  cout << (int)C << endl;
+  cout << (float)C << endl;
+  cout << (string)C << endl;
+
+  if (A < C)
+    cout << "A < C" << endl;
+  else
+    cout << "!(A < C)" << endl;
+
+  if (A == C)
+    cout << "A == C" << endl;
+  else
+    cout << "A != C" << endl;
+
+  cout << A[0] << "/" << A[1] << endl;
+  cout << C["numerator"] << "/" << C["denumerator"] << endl;
+
+  // запись в файл через оператор <<
+  ofstream ofile("Drob1.txt");
+  ofile << C << endl;
+  ofile.close();
+
+  // чтение из файлового потока с помощтью оператора >>
+  ifstream ifile("Drob1.txt");
+  Drob Temp;
+  ifile >> Temp;
+  ifile.close();
+  cout << "Temp = " << Temp << endl;
+}

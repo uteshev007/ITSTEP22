@@ -1,0 +1,34 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+ ѕерегрузка операторов
+
+—оздайте класс ƒробь (или используйте уже ранее
+созданный вами). »спользу€ перегрузку операторов
+реализуйте дл€ него арифметические операции дл€
+работы с дроб€ми (операции +, -, *, /).
+*/
+
+// глобальна€ перегрузка операторов
+
+
+int main()
+{
+  Drob A(1,2);
+  Drob B(2,3);
+  Drob  C;
+  C = A + B;
+  cout << "A = " << A << "\n";
+  cout << "B = " << B << "\n";
+  cout << "C = " << C << "\n";
+  cout << "Enter A and B fractions: ";
+  cin >> A >> B;
+  C = A * B;
+  cout << "C = " << C << "\n";
+}

@@ -1,0 +1,157 @@
+//
+// Game.cpp
+//
+
+#include "Game.h"
+
+// массив строк пунктов главного меню игры
+vector< string > MainMenuItems
+{
+  "Start New Game",
+  "Continue Game",
+  "Settings",
+  "Save to File",
+  "Load from File",
+  "About",
+  "TOP 5",
+  "Exit",
+};
+
+// метод запуска программы игры BattleCity
+void Game::Start()
+{
+  /*
+  // класс меню
+  // mainMenu - экземпляр главного меню игры
+  Menu mainMenu(MainMenuItems, menuRow, menuCol);
+
+  while (true) {
+    // показать меню на экране
+    // ожидание выбора от пользователя
+    int select = mainMenu.Show();
+    switch (select)
+    {
+      case 0: // "Start New Game"
+        StartNewGame();
+        break;
+      case 1: // "Continue Game"
+        ContinueGame();
+        break;
+      case 2: // "Settings"
+        Settings();
+        break;
+      case 3: // "Save to File"
+        SaveToFile();
+        break;
+      case 4: // "Load from File"
+        LoadFromFile();
+        break;
+      case 5: // "About"
+        About();
+        break;
+      case 6: // "TOP 5"
+        ShowTop();
+        break;
+      case 7:  // "Exit"
+      case -1: // ESC
+        // вопрос к пользователю: выйти из программы?
+        break;
+    } // switch(select)
+  } // while (true)
+  */
+
+  // для проверки - запускаем новый сеанс игры
+  StartNewGame();
+
+} // void Game::Start()
+
+void Game::Init()
+{
+  // 1) подготовка поля к новой игре
+  //pole.Clear();
+  pole.Create(poleHeight, poleWidth); // пересоздать поле
+  // 2) заполение массива игроков
+  arrPlayrs.clear(); // удаляем старых игроков
+  // 2.1) добавление игроков-людей
+  for(int i=0; i<cntPlayer; ++i){
+    arrPlayrs.push_back( new TankPlayer );
+  }
+  // 2.2) Добавление противников
+  for (int i = 0; i < cntEnemyHeavy; ++i) {
+    arrPlayrs.push_back( new TankHeavy ); // тяжелые
+  }
+  for (int i = 0; i < cntEnemyMiddle; ++i) {
+    arrPlayrs.push_back( new TankMiddle ); // средние
+  }
+  for (int i = 0; i < cntEnemyLight; ++i) {
+    arrPlayrs.push_back( new TankLight ); // легкие
+  }
+  // 3) очищаем список пулек
+  lstBullet.clear();
+  // 4) сбрасываем флаги состояния игры
+  IsStartGame = IsPause = false;
+  IsGameOver = IsWinPlayer = false;
+} // Init();
+
+void Game::StartNewGame()
+{
+  Init();
+  IsStartGame = true;
+  ContinueGame();
+} // void Game::StartNewGame()
+
+// логика игры
+void Game::ContinueGame()
+{
+  if (IsStartGame == false) { return; }
+  IsPause = false; // пауза закончилась
+  // принудительная перепрорисовка первого кадра игры
+  pole.ReDraw();
+  //
+  while (IsGameOver == false)
+  {
+    // один шаг цикла - один кадр игры
+    // цикл для всех танчиков
+    for (int i = 0; i < arrPlayrs.size(); ++i)
+    {
+      BaseTank * p = arrPlayrs[i];
+      p->Move(pole);  // одно движение танчика
+      // выстрел танчика
+      BaseBullet * b = p->Shoot(pole);
+      if (b != nullptr) {
+        lstBullet.push_back(b);
+      }
+      p->Draw(pole);  // вывод изображения танчика на поле
+      // проверка на паузу
+      if (p->IsPause() == true) {
+        // время паузы
+        IsPause = true;
+        return; // выход из игры в главное меню
+      }
+    }
+    // обработка пулек
+    for (BaseBullet * b : lstBullet)
+    { // сокращенный for для кониейнеров STL
+      b->Move(pole); // движение очередной пульки
+      b->Draw(pole); // прорисовка пульки на поле
+    }
+    // удаление пулек
+    list< BaseBullet* >::iterator it; // итератор для списка пулек
+    it = lstBullet.begin(); // итератор на начало списка пулек
+    while (it != lstBullet.end()) // до конца списка
+    {
+      // получить элемент из списка
+      // - указатель на базовый класс пульки
+      BaseBullet * b = *it;
+      if( b->IsAlive() == false ){
+        it = lstBullet.erase(it);
+      }
+      else {
+        ++it;
+      }
+    }
+
+    pole.Draw(); // вывод поля на консоль, экран
+
+  } // while (IsGameOver == false)
+} // ContinueGame()

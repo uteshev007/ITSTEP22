@@ -1,0 +1,170 @@
+#include <iostream>
+using namespace std;
+
+class number;
+class real;
+
+class real{
+	float num;
+public:
+	real() { num = 0; }
+	real(float x) { num = x; }			//Базовый->Абстрактный
+	operator float() { return num; }	//Абстрактный->Базовый
+	float getReal()const { return num; }
+
+	// Перегрузка сложения абстрактного+абстрактного типов
+	real operator+(const real& tmp)const {
+		real res = num + tmp.num;
+		return res;
+	}
+
+	// Перегрузка сложения абстрактного+базового типов
+	template<typename type>
+	real operator+(const type& tmp)const {
+		real res = num + tmp;
+		return res;
+	}
+
+	// Перегрузка вычитания абстрактного+абстрактного типов
+	real operator-(const real& tmp)const {
+		real res = num - tmp.num;
+		return res;
+	}
+
+	// Перегрузка вычитания абстрактного+базового типов
+	template<typename type>
+	real operator-(const type& tmp)const {
+		real res = num - tmp;
+		return res;
+	}
+
+	// Перегрузка деления абстрактного+абстрактного типов
+	real operator/(const real& tmp)const {
+		real res = num / tmp.num;
+		return res;
+	}
+
+	// Перегрузка деления абстрактного+базового типов
+	template<typename type>
+	real operator/(const type& tmp)const {
+		real res = num / tmp;
+		return res;
+	}
+
+	// Перегрузка умножения абстрактного+абстрактного типов
+	real operator*(const real& tmp)const {
+		real res = num * tmp.num;
+		return res;
+	}
+
+	// Перегрузка умножения абстрактного+базового типов
+	template<typename type>
+	real operator*(const type& tmp)const {
+		real res = num * tmp;
+		return res;
+	}
+};
+
+class number{
+	int num;
+public:
+	number() { num = 0; }
+	number(int x) {num = x;}		//Базовый->Абстрактный
+	operator int() { return num; }	//Абстрактный->Базовый
+	operator real() { 	//Абстрактный->Абстрактный
+		real res((float)num);
+		return res; 
+	}
+	int getNum()const { return num; }
+
+	// Перегрузка сложения абстрактного+абстрактного типов
+	number operator+(const number& tmp)const {
+		number res=num + tmp.num;
+		return res;
+	}
+	// Перегрузка сложения абстрактного+базового типов
+	template<typename type>
+	number operator+(const type& tmp)const {
+		number res = num + tmp;
+		return res;
+	}
+
+	// Перегрузка сложения абстрактного+абстрактного типов
+	real operator+(const real& tmp)const {
+		real res = num + tmp.getReal();
+		return res;
+	}
+
+	// Перегрузка вычитания абстрактного+абстрактного типов
+	number operator-(const number& tmp)const {
+		number res = num - tmp.num;
+		return res;
+	}
+
+	// Перегрузка вычитания абстрактного+базового типов
+	template<typename type>
+	number operator-(const type& tmp)const {
+		number res = num - tmp;
+		return res;
+	}
+
+	// Перегрузка деления абстрактного+абстрактного типов
+	number operator/(const number& tmp)const {
+		number res;
+		if (tmp.num != 0)
+			res = num / tmp.num;
+		return res;
+	}
+
+	// Перегрузка деления абстрактного+базового типов
+	template<typename type>
+	number operator/(const type& tmp)const {
+		number res;
+		if(tmp!=0)
+			res = num / tmp;
+		return res;
+	}
+
+	// Перегрузка умножения абстрактного+абстрактного типов
+	number operator*(const number& tmp)const {
+		number res = num * tmp.num;
+		return res;
+	}
+
+	// Перегрузка умножения абстрактного+базового типов
+	template<typename type>
+	number operator*(const type& tmp)const {
+		number res = num * tmp;
+		return res;
+	}
+	
+};
+/*
+	Явные->Неявные
+
+	Базового->Базовый
+	Абстрактный->Абстрактный
+	Базовый->Абстрактный
+	Абстрактный->Базовый
+*/
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+
+	number num = 5;
+	real rl = 3.14f;
+
+	real res = rl.operator+(5);
+	cout << res << endl;
+	
+	res = rl + 2;
+	cout << res << endl;
+
+	res = 3 + rl;
+	cout << res << endl;
+
+	res = num + rl;
+	cout << res << endl;
+
+	cin.get(); cin.get();
+}

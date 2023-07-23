@@ -1,0 +1,97 @@
+#include <iostream>
+#include <iomanip>
+#include <string>  // STL C++ ==> class string
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } }_;
+
+/*
+  ћножественное наследование
+»спользу€ пон€тие множественного наследовани€,
+разработайте класс "ќкружность, вписанна€ в квадрат".
+*/
+
+class Shape {
+private:
+  string name;
+public:
+  Shape() = delete;
+  Shape(string newName):name(newName){}
+  void print() {
+    cout << typeid(*this).name() << endl;
+    cout << "Name:" << name << endl;
+  }
+};
+
+class Circle : virtual public Shape{
+protected:
+  double r;
+public:
+  /*Circle():r(),Shape("Circle") {}*/
+  Circle():Circle(0) {}
+  Circle(double a): r(a),Shape("Circle") {}
+
+  void print() {
+    Shape::print();
+    cout << typeid(*this).name() << endl;
+    cout << "R circle: " << r << endl;
+  }
+};
+
+class Square : virtual public Shape {
+protected:
+  double a;
+//private:
+  //const string _name = "Square";
+#define _name "Square"
+public:
+  Square():a(),Shape(_name){}
+  Square(double a):a(a),Shape(_name){}
+  void print() {
+    Shape::print();
+    cout << typeid(*this).name() << endl;
+    cout << "Side of square: " << a << endl;
+  }
+};
+
+class CircleINSquare : virtual public Circle,
+                       virtual public Square
+                       //virtual public Shape
+{
+//private:
+  //const string _name = "Circle in Square";
+  #define _name "Circle in Square"
+public:
+  CircleINSquare():Shape(_name){}
+  CircleINSquare(double r):Circle(r),
+    Square(2*r),
+    Shape(_name) {}
+  CircleINSquare( Square sq)
+    :/*Circle(sq.a/2),*/Square(sq), Shape(_name) {
+    //r = sq.a / 2;
+    r = a / 2;
+  }
+  CircleINSquare(Square sq,Circle c)
+  : Square(sq),Circle(c), Shape(_name) {
+    if (a != 2 * r) {
+      cout << "Wrong!" << endl;
+    }
+  }
+
+  void print() {
+    Shape::print();
+    cout << typeid(*this).name() << endl;
+    Square::print();
+    Circle::print();
+  }
+};
+
+
+int main()
+{
+  Circle a(5);
+  Square s(8);
+  CircleINSquare CinS(s, a);
+  CinS.print();
+}

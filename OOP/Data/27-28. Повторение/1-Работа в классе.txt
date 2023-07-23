@@ -1,0 +1,29 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+#include <fstream>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/* примеры работы с сылкой и указателем */
+
+int main()
+{
+  int a1, b1, c1;
+  //cout << "b1 = " << b1 << endl; // ERROR
+  int &a = a1, &b = b1, &c = c1;
+  //cout << "b1 = " << b1 << endl; // OK
+  //int &a = a1  ==>  int *a = &a1;
+  a = 123; // a1 <= 123
+  cout << "a  = " << a << endl; // << *a << endl;
+  cout << "a1 = " << a1 << endl;
+  a1 = 0;
+  cout << "a  = " << a << endl;
+  cout << "a1 = " << a1 << endl;
+  a  = b1;    // a1 = b1
+  cout << "a  = " << a << endl;  // 100
+  cout << "a1 = " << a1 << endl; // 0
+  cout << "b1 = " << b1 << endl; // 100
+}

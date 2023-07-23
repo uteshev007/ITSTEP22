@@ -1,0 +1,19 @@
+#include <iostream>
+#include <time.h>
+using namespace std;
+
+// указатели на различные объекты в программе
+
+int main()
+{
+  system("chcp 1251 > nul");
+  srand(time(nullptr));
+
+  cout << "Адрес ф-ции main  : " << main  << endl;
+  cout << "Адрес ф-ции system: " << system << endl;
+  cout << "Адрес ф-ции time  : " << time  << endl;
+  cout << "Адрес объекта cout: " << &cout << endl;
+  cout << "Адрес объекта cin : " << &cin  << endl;
+
+  system("pause > nul");
+}

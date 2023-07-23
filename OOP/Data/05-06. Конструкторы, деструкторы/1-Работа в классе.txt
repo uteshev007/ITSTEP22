@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+#include <time.h>
+using namespace std;
+
+/*
+  Конструкторы, деструкторы
+
+a) Класс LC
+b) #define RAND()
+c) random_device, mt19937, mt19937_64
+
+*/
+
+
+int main()
+{
+  system("chcp 1251 > nul");
+  srand(time(0));
+
+
+  cin.get(); cin.get();
+}

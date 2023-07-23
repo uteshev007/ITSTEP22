@@ -1,0 +1,18 @@
+http://alenacpp.blogspot.com/
+
+Хорошие книги по С++11
+http://alenacpp.blogspot.com/2015/05/11.html
+
+Самая лучшая книга по C++11 и C++14 вышла на русском языке:
+Эффективный и современный С++. 42 рекомендации по использованию C++11 и C++14.
+http://www.ozon.ru/context/detail/id/34747131/?partner=alenacpp
+
+
+Effective Modern C++ : 42 Specific Ways to Improve Your Use of C++11 and C++14 by Scott Meyers
+Самая лучшая книга по C++11 и C++14.
+Просто, понятно с примерами. Для тех, кто знает С++ и хочет использовать фичи нового стандарта.
+На русский, похоже, не переведена
+http://www.amazon.com/gp/product/1491903996/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1491903996&linkCode=as2&tag=alec-20&linkId=A25GB3T56BHXYT3M
+
+Эффективный и современный С++. 42 рекомендации по использованию C++11 и C++14
+http://www.ozon.ru/context/detail/id/34747131/?partner=alenacpp

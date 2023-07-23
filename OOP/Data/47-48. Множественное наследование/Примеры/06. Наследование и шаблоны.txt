@@ -1,0 +1,24 @@
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class first
+{
+public:
+	T value;
+};
+
+template <typename T>
+class second : public first<T>
+{
+public:
+	void SetValue(const T & val) { value = val; }
+};
+
+int main()
+{
+	second<int> x;
+	x.SetValue(10);
+	cout << x.value << endl;
+	cin.get();
+}
