@@ -1,0 +1,213 @@
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+#include <stack>  // std::stack<>
+#include <time.h>
+using namespace std;
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); } ~LC() { cin.get(); cin.get(); } } _;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+
+/*
+  Шаблоны классов. Класса Стек
+*/
+
+template <class T>
+class Stack
+{
+private:
+  T* Data;
+  int Depth;
+  int SP;
+public:
+  Stack() : Data(), Depth(), SP() {}
+  Stack(int depth)
+    :Data(new T[depth]), Depth(depth), SP()
+  {
+    /* Data = new T[depth];
+     Depth = depth;
+     SP = 0;*/
+  }
+  //
+  Stack(const Stack<T>& obj) :Stack() { *this = obj; }
+  /*Stack(const Stack<T>& obj)
+  {
+    Data = new T[obj.Depth];
+    Depth = obj.Depth;
+    SP = obj.SP;
+    for (int i = 0; i < SP; i++)
+    {
+      Data[i] = obj.Data[i];
+    }
+  }*/
+  Stack<T>& operator=(const Stack<T>& obj)
+  {
+    if (this == &obj)
+    {
+      return *this;
+    }
+    delete[]Data;
+    Data = new T[obj.Depth];
+    Depth = obj.Depth;
+    SP = obj.SP;
+    for (int i = 0; i < SP; i++)
+    {
+      Data[i] = obj.Data[i];
+    }
+    return *this;
+  }
+  //
+  ~Stack() { delete[]Data; }
+
+  int GetCount()const { return SP; }
+  int GetDepth()const { return Depth; }
+
+  bool IsEmpty()const {
+    if (SP == 0)
+      return true;
+    else
+      return false;
+  }
+  bool IsFull()const
+  {
+    if (SP == Depth)
+      return true;
+    else
+      return false;
+  }
+
+  void SetDepth(int newDepth) {
+    T* mas = new T[newDepth];
+    int mincount;
+    if (this->SP < newDepth)
+      mincount = this->SP;
+    else
+      mincount = newDepth;
+    for (int i = 0; i < mincount; i++)
+    {
+      mas[i] = this->Data[i];
+    }
+    delete[]Data;
+    Data = mas;
+    Depth = newDepth;
+    SP = mincount;
+  }
+
+  void push(T val) {
+    if (IsFull()) {
+      cout << "Error, Stack is Full!" << endl;
+      SetDepth(Depth * 1.5 + 1);
+    }
+    Data[SP] = val;
+    SP++;
+
+  }
+  T pop() {
+    if (IsEmpty())
+    {
+      cout << "Error,Stack is Empty!" << endl;
+      // сгенерировать исключение по типу const char*
+      throw "Stack is Empty!"; // throw const char*;
+      //throw 121; // исключение по типу int
+    }
+    SP--;
+    return Data[SP];
+  }
+  T top() const {             
+    if (IsEmpty())
+    {
+      cout << "Error,Stack is Empty!" << endl;
+      throw string("Stack is Empty!");
+      // throw string;
+    }
+    return Data[SP - 1];
+  }
+  T& top() {
+    if (IsEmpty())
+    {
+      cout << "Error,Stack is Empty!" << endl;
+      throw string("Stack is Empty!");
+    }
+    return Data[SP - 1];
+  }
+
+  friend ostream& operator << (ostream& os, 
+                        const Stack<T>& obj)
+  {
+    os << "Depth = " << obj.Depth << endl;
+    os << "SP = " << obj.SP << endl;
+    for (int i = 0; i < obj.SP; i++)
+    {
+      os << obj.Data[i] << endl;
+    }
+    return os;
+  }
+
+}; // class Stack<>;
+
+int main()
+{
+  // стек из станлартной библиотеки C++/ STL C++
+  stack<string> A;
+  // заполнение стека
+  for (size_t i = 0; i < 5; i++)
+  {
+    cout << "Enter string: ";
+    string str;
+    getline(cin, str);
+    A.push(str);
+  }
+  cout << "-------------\n";
+  cout << "Count = " << A.size() << endl;
+  while (!A.empty()) // while(A.empty() == false)
+  {
+    // вывести верхний элемент
+    cout << A.top() << endl;
+    A.pop(); // выкинуть из стека верхний элемент
+  }
+}
+
+
+void main_1()
+{
+  Stack<int> A;
+  for (int i = 0; i < 10; i++)
+  {
+    int temp = RAND(1, 10);
+    cout << temp << " ";
+    A.push(temp);
+  }
+  cout << "\n-----------------" << endl;
+  cout << A;
+  cout << "\n-----------------" << endl;
+  /*for (int i = 0; i < 10; i++)
+  {
+    int temp = A.pop();
+    cout << temp << " ";
+  }*/
+  try // оператор перехвата исключений throw
+  { // ожидание возможного исключения throw
+    while (!A.IsEmpty()) // while(A.IsEmpty() == false)
+    {
+      //cout << A.pop() << " ";
+      cout << A.top() << " ";
+      A.pop();
+    }
+    //A.pop(); // исключение, т.к. стек пустой!
+    cout << A.top(); // исключение string, т.к. стек пустой!
+
+    cout << string("OK!") << endl;
+  }
+  catch(const char * message)
+  { // ловушка исключения по типу строки const char*
+    cout << "Exception: " << message << endl;
+  }
+  catch (string msg)
+  { // ловушка исключения по типу строки string
+    cout << "Exception (string): " << msg << endl;
+  }
+
+  cout << "\n-----------------" << endl;
+  cout << A;
+  cout << "\n-----------------" << endl;
+}

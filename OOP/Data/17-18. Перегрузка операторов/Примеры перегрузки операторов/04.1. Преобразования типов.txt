@@ -1,0 +1,53 @@
+#include <iostream>
+using namespace std;
+
+/*
+  Преобразования типов:
+
+	Явные->Неявные
+
+	Базового->Базовый
+	Абстрактный->Абстрактный
+	Базовый->Абстрактный
+	Абстрактный->Базовый
+*/
+
+class a{
+	float num;
+public:
+
+};
+
+class b{
+	int num;
+public:
+	b() { num = 0; }
+	b(int x) {num = x;}				//Базовый->Абстрактный
+	operator int() { return num; }	//Абстрактный->Базовый
+
+	b operator+(const b& tmp)const {
+		b res=num + tmp.num;
+		return res;
+	}
+	template<typename type>
+	b operator+(const type& tmp)const {
+		b res = num + tmp;
+		return res;
+	}
+	
+	void show() { cout << num << endl; }
+};
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+
+	a r;
+
+	b q = 1;
+
+	b res = q + r;
+
+	cout << res;
+
+	cin.get(); cin.get();
+}

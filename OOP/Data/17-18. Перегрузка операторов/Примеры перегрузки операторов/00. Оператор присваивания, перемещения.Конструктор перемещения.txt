@@ -1,0 +1,66 @@
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class String {
+	char *str;
+public:
+	// Конструктор со списком инициализации и телом
+	String(const char *str) :str(new char[strlen(str) + 1]) {
+		cout << "String(const char *str)\n";
+		strcpy(this->str, str);
+	}
+	// Деструктор
+	~String() { delete[]str; cout << "~String()\n"; }
+	// Конструктор копирования
+	String(const String& other) {
+		cout << "String(const String& other)\n";
+		str = new char[strlen(other.str) + 1];
+		strcpy(str, other.str);
+	}
+	// Конструктор перемещения
+	String(String&& other) : str(other.str) {
+		cout << "String(String&& other)\n";
+		other.str = nullptr;
+	}
+	// Оператор присваивания копированием (copy assignment)
+	String& operator=(const String& other) {
+		cout << "String& operator=(const String& other)\n";
+		char* tmp_cstring = new char[strlen(other.str) + 1];
+		strcpy(tmp_cstring, other.str);
+		delete[] str;
+
+		str = tmp_cstring;
+		return *this;
+	}
+	// Оператор присваивания перемещением (move assignment)
+	String& operator=(String&& other) {
+		cout << "String& operator=(String&& other)\n";
+		delete[] str;
+		str = other.str;
+
+		other.str = nullptr;
+		return *this;
+	}
+};
+
+String CreateString() {
+	const size_t _1MB = 1 * 1024 * 1024;
+	char *STR = new char[_1MB];
+	for (size_t i = 0; i < _1MB; i++) {
+		STR[i] = '!';
+	}
+	STR[_1MB - 1] = '\0';
+	String res(STR);
+	delete[] STR;
+	return res;
+}
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+	{
+		String tmp = CreateString();
+		String tmp2 = move(tmp);
+	}
+	cin.get(); cin.get();
+}

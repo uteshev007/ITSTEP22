@@ -1,0 +1,21 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+  Перегрузка операторов
+
+    CatDog = Cat + Dog
+    ? = Dog + Cat
+
+*/
+
+// Прототипы классов
+
+class CatDog;
+class Dog;
+class Cat;

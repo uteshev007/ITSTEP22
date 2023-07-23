@@ -1,0 +1,32 @@
+//
+// MainGame.cpp
+//
+#include <iostream>
+#include <string>
+#include "Win10.h"
+#include "Game.h"  // class Game;
+// другие include проекта
+using namespace std;
+
+// начальная заставка 
+void TitleStart(int timeWait)
+{
+  // DO TO
+}
+
+// завершающая заствака
+void TitleEnd(int timeWait)
+{
+  // DO TO
+}
+
+int main()
+{
+  TitleStart(5000); // начальная заставка на 5 сек = 5000мс
+
+  Game game; // класс игры BattleCity
+  game.Start(); // запуск программы для игры BattleCity
+                // game.Run(); - как пример
+
+  TitleEnd(6000); // завершающая заствака
+}

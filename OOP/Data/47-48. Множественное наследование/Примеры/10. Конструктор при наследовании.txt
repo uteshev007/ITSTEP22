@@ -1,0 +1,21 @@
+#include <iostream>
+using namespace std;
+
+class A {
+public:
+	//A() { cout << "A();\n"; }
+	A(int a):a(a) { cout << "A(" << a << ");\n"; }
+	int a;
+};
+
+class B:public A {
+public:
+	B() :A::A(5) {}
+	int b;
+};
+
+
+int main() {
+	B qwerty;
+	cin.get();
+}

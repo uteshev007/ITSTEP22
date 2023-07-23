@@ -1,0 +1,238 @@
+#include <iostream>
+#include <fstream>   // ifstream, ofstream, fstream
+#include <string>    // std::string
+using namespace std;
+
+/*
+Реализуйте класс Дробь.
+a / b
+Необходимо хранить числитель и знаменатель
+в качестве переменных-членов.
+Реализуйте функции-члены для ввода данных
+в переменные-члены, для выполнения арифметических
+операций (сложение, вычитание, умножение,
+деление, и т.д.).
+*/
+
+class Drob
+{
+private:
+  // неявная иниц-ция переменных класса
+  int a = 10, b = 21; // a / b
+  string Name = "Noname"; // A: 1/2
+  // 5/2 = 2+1/2 * 2/5
+public:
+  // конструктор по умолчанию, конструктор без параметров
+  Drob()
+  {
+    cout << "Сработал конструктор по умолчанию" << endl;
+    a = 0;
+    b = 1;
+    Name = "Unknown";
+  }
+  // конструктор с двумя параметрами
+  Drob(int newA, int newB)
+  {
+    cout << "Сработал конструктор с двумя параметрами\n";
+    SetA(newA);           // a = newA;
+    SetB(newB);           // b = newB;
+    SetName("Unknown");   // Name = "Unknown";
+  }
+  // конструктор с тремя параметрами
+  Drob(int _A, int _B, string _Name)
+  {
+    cout << "Сработал конструктор с тремя параметрами\n";
+    SetA(_A);
+    SetB(_B);
+    SetName(_Name);
+  }
+
+  // setters
+  void SetA(int newA) { a = newA; }
+  bool SetB(int newB) {
+    if (newB != 0) {
+      b = newB;
+      return true; // OK
+    }
+    else {
+      cout << "Ошибка: знаменатель должен != 0!" << endl;
+      return false; // ERROR
+    }
+  }
+  void SetName(string newName) { Name = newName; }
+  // Общий сеттер - не обязательно
+  void Set(int newA, int newB, string newName)
+  {
+    SetA(newA); // a = newA;
+    SetB(newB); // b = newB; ???
+    SetName(newName); // Name = newName;
+  }
+  // getters
+  int GetA() { return a; }
+  int GetB() { return b; }
+  string GetName() { return Name; }
+
+  // Вычисляемые геттеры
+  // 5/2 ==> 2
+  int GetInteger() { return a / b; }
+  // 5/2 ==> 2.5
+  double GetDecimal() { return (double)a / (double)b; }
+  // double / (double * int) ==> double / double
+  // int / int
+  // double / int ==> double
+  // int / double ==> double
+  // int * long long ==> long long
+  // float + long long ==> float
+  //
+  void Print()
+  { // A: 5/2
+    cout << Name << ": " << a << "/" << b << endl;
+  }
+  void Input()
+  {
+    cout << "Введите имя дроби: ";
+    string temp;
+    getline(cin, temp);
+    SetName(temp);
+
+    cout << "Введите числитель: ";
+    int temp2;
+    cin >> temp2;
+    SetA(temp2);
+
+    // ФЛК - форматно-логический контроль
+    cout << "Введите знаменатель: ";
+    while (true) {
+      cin >> temp2; // 0
+      //cin.ignore();
+      if (SetB(temp2) == true) { break; }
+      cout << "Повторите ввод!" << endl;
+    }
+    cin.ignore(); // убрать <ENTER>
+  }
+  // Запись, чтение файлов
+  // Запись дроби в файл
+  void SaveToFile(string FileName)
+  {
+    // Output File STREAM
+    ofstream file; // файловый объект для записи
+    file.open(FileName); // открыть файл для записи -
+    // создание/пересоздание нового файла
+    if ( file.is_open() == true )
+    { // OK - файл открыт для записи
+      // Name\n
+      // a\n
+      // b\n
+      file << GetName() << endl; // file << Name << endl;
+      file << GetA() << endl;    // file << a << endl;
+      file << GetB() << endl;    // file << b << endl;
+      //file.close(); - принудительное закрытие файла,
+      // здесь не обязательно
+    }
+    else {
+      cout << "ОШИБКА: файл для записи не создан!" << endl;
+    }
+  } // file.close();
+
+  // Чтение из дроби из файла
+  void LoadFromFile(string FileName)
+  {
+    // Input File STREAM
+    ifstream file(FileName); // file.open(FileName)
+    if (file.is_open()) // if( file.is_open() == true )
+    { // OK
+      // 1 чтение имени Дроби
+      string temp;
+      getline(file, temp); // чтение строки из файла
+      SetName(temp);
+      // 2 чтение числителя
+      int temp2;
+      file >> temp2; // чтение числа из файла
+      SetA(temp2);
+      // 3 чтение знаменателя
+      file >> temp2; // чтение числа из файла
+      SetB(temp2); // ?????
+    }
+    else
+    { // ERROR
+      cout << "ОШИБКА: Файл не найден!" << endl;
+    }
+  }
+}; // class Drob
+
+
+// Ф-ция для корректировки расширения имени файла
+// для ".txt"
+string CorrectFileName(string FileName)
+{ // FileName    ==>  return CorrectFileName;
+  // "file1.txt" ==> "file1.txt"
+  // "file1"     ==> + ".txt" ==> "file1.txt"
+  // "file.doc"  ==> "file.txt"
+  // 1 ищем символ '.' FileName справа-налево
+  // size_t string::size(){ return Size; }
+  int dot_index = -1; // позиция точки в имени файла
+  for(int i = FileName.size()-1; i >= 0; i--)
+  {
+    if (FileName[i] == '.') {
+      dot_index = i; // запоминаем позиц. точки
+      break;
+    }
+  }
+  string Result; // для нового имени файла
+  if (dot_index == -1) { // точка в FileName не найдена
+    Result = FileName + ".txt"; // "file1" + ".txt"
+  }
+  else {
+    // "file1.txt", "file1.docx" ==> "file1.txt"
+    // вырезать расширение файла из FileName
+    string ext = FileName.substr(dot_index);
+    if (ext == ".txt") {
+      Result = FileName; // имя файла не изменяем
+    }
+    else {
+      // заменяем расширение в имени файла
+      Result = FileName.substr(0, dot_index);
+      Result += ".txt";
+    }
+  } // if() else
+  return Result; // возвращаем новое имя файла
+} // 
+
+int main()
+{
+  system("chcp 1251 > nul");
+  // Создание переменных типа Drob через различные
+  //  перегруженные конструкторы
+  Drob A;                 // A.Drob();
+  Drob B(1, 2);           // B.Drob(1,2)
+  Drob C(3, 5, "Drob C"); // C.Drob(3,5,"Drob C")
+  A.Print();
+  B.Print();
+  C.Print();
+}
+
+void main_old()
+{
+  system("chcp 1251 > nul");
+  Drob A; // экземпляр объекта типа Drob, автоиатически
+  // сработает конструктор по умолчанию
+  //A.Drob();
+  //A.Input();
+  A.Print();
+  cout << "Целая часть = "      << A.GetInteger() << endl;
+  cout << "Десятичная дробь = " << A.GetDecimal() << endl;
+  string file_name;
+  cout << "Введите имя файла: ";
+  // Мой первый файл для дроби 1.txt
+  getline(cin, file_name);
+
+  // проверить и скорректироваит имя файла
+  //   для расширения ".txt"
+  file_name = CorrectFileName(file_name);
+  cout << "File Name: " << file_name << endl;
+
+  A.SaveToFile(file_name); // запись в файл
+  Drob B;
+  B.LoadFromFile(file_name); // чтение из файла в объект B
+  B.Print();
+}

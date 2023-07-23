@@ -1,0 +1,27 @@
+#include <list>
+#include <iterator>
+#include <iostream>
+
+using namespace std;
+int main()
+{
+	list<int> b;
+
+	for (int i = 0; i < 10; i++) b.push_back(i);
+
+	for (auto pb = b.begin(); pb != b.end(); pb++) cout << *pb << " ";
+
+	list<int>::iterator pb = b.begin();
+
+	//вывод первого элемента
+	cout << "\nFirst element: " << *pb << endl;
+
+	//перемещение на 3 элемента вперед
+	advance(pb, 3);
+	cout << "Move forward on 3 elements: " << *pb << endl;
+
+	//перемещение на 1 элемент назад
+	advance(pb, -1);
+	cout << "Move backword on 1 element: " << *pb << endl;
+	cin.get();
+}

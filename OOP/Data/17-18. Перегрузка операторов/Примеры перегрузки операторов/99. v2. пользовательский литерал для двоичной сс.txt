@@ -1,0 +1,47 @@
+#include <iostream> 
+using namespace std;
+
+//#define ERROR_NOT_BIN -1
+
+int operator "" b2d(const char* str, size_t size) {
+	const static int ERROR_NOT_BIN = -1;
+	int num = 0;
+	for (size_t i = size - 1, j = 0; i >= 0 && i<size; i--, j++) {
+		if (str[i] == '0')
+			num &= ~(1 << j);
+		else if (str[i] == '1')
+			num |= (1 << j);
+		else if (str[i] != ' ' && str[i] != '\'')
+			return ERROR_NOT_BIN;
+		else
+			j--;
+	}
+	return num;
+}
+
+int operator "" b2dv2(const char* str, size_t size) {
+	const static int ERROR_NOT_BIN = -1;
+	int num = 0;
+	for (size_t i = 0; i<size; i++) {
+		if (str[i] == '0') {
+			num <<= 1;
+		}
+		else if (str[i] == '1') {
+			++num <<= 1;
+		}
+		else if (str[i] != ' ' && str[i] != '\'')
+			return ERROR_NOT_BIN;
+	}
+	num >>= 1;
+	return num;
+}
+
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+
+	cout << "1001 1110"b2d << endl;
+	cout << "1001'1110"b2dv2 << endl;
+
+	cin.get(); cin.get();
+}

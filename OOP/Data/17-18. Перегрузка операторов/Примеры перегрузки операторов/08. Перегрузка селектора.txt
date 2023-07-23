@@ -1,0 +1,48 @@
+#include <iostream>
+using namespace std;
+
+class point
+{
+	int x, y;
+public:
+	point() :x(0), y(0) {}
+	point(int x, int y) :x(x), y(y) {}
+	void init(int x, int y) { this->x = x; this->y = y; }
+	int GetX()const { return x; }
+	int GetY()const { return y; }
+	void show() {
+		cout << "x=" << x << "\ny=" << y << endl;
+	}
+};
+
+class rectangle {
+	point pt;
+	int width, height;
+public:
+	rectangle() :width(3), height(2) {}
+	rectangle(int height, int width) :width(width), height(height) {}
+	void init(int height, int width) { this->width = width; this->height = height; }
+
+	void show() {
+		cout << "width=" << width << "\nheight=" << height << endl;
+	}
+
+	point* operator->() {
+		return &pt;
+	}
+};
+
+int main()
+{
+	rectangle rc(1, 2);
+	rc.show();
+	rc->show();
+
+	rc.init(10, 12);
+	rc->init(2, 9);
+	cout << endl;
+	rc.show();
+	rc->show();
+
+	cin.get();
+}

@@ -1,0 +1,45 @@
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+#include <stack>  // std::stack<>
+#include <time.h>
+using namespace std;
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); } ~LC() { cin.get(); cin.get(); } } _;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+
+void func1(int a)
+{
+  cout << "func1: a = " << a << endl;
+  return;
+}
+
+int func2(int a, int b)
+{
+  int c = a + b;
+  func1(a);
+  func1(b);
+  func1(c);
+  return c;
+}
+
+void func3() {
+  int a, b;
+  cout << "Enter a: ";
+  cin >> a;
+  cout << "Enter b: ";
+  cin >> b;
+  int c = func2(a, b);
+  cout << "a + b = " << c << endl;
+  func1(c);
+}
+// F5      - Запуск с отладкой
+// Ctrl+F5 - Запуск без отладки
+// F10     - Пошаговый запуск с отладкой
+// F11     - Пошаговый запуск с заходом в ф-ции отладкой
+// Shift+F5 - Остановить текущую отладку
+int main()
+{
+  func3();
+  return 0;
+}

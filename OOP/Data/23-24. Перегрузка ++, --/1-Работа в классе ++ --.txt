@@ -1,0 +1,101 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+  ѕерегрузка операторов ++/--
+*/
+class CInt {
+private:
+  int Data;
+public:
+  CInt() :Data() {}
+  // a = 1;
+  // a + 10
+  CInt & operator = (int val){
+    Data = val;
+    return *this;
+  }
+  CInt operator + (const CInt& right) const {
+    CInt res;
+    res.Data = this->Data + right.Data;
+    return res;
+  } // res.~CInt();
+
+  // перегруженный оператор префиксного инкремента
+  // ++a; ++(*this)
+  CInt& operator++ () {
+    ++(this->Data); //++Data;
+    return *this; // возвращаю текущий объект
+  }
+
+  // перегруженный оператор префиксного декремента
+  // b = --a;
+  CInt& operator-- () {
+    --(this->Data); //--Data;
+    return *this; // возвращаю текущий объект по ссылке
+  }
+  // ѕостфиксный оператор ++ - возвращает предыдущее значение
+  //  класса
+  // b = a++;
+  // b = a++   +  a++;
+  //     1 (2)    2 (3)
+  CInt operator++ (int k) {
+    //cout << "k = " << k << endl; - k всегда равна 0
+    // временна€ переменна€ дл€ старого значени€
+    //CInt oldVal = *this;
+    CInt oldVal;
+    oldVal.Data = this->Data;
+    this->Data++;
+    return oldVal; // возвращаем старое значение, как копию
+  } // oldVal.~CInt();
+
+  // перегруженный постфиксный декремент
+  CInt operator-- (int) {
+    // временна€ переменна€ дл€ старого значени€
+    CInt oldVal = *this;
+    this->Data--;
+    return oldVal; // возвращаем старое значение, как копию
+  }
+  // глобальный перегруженный, дружественный оператор
+  //  вывода в поток ostream
+  friend ostream& operator<<(ostream& os, const CInt& obj)
+  {
+    return os << obj.Data;
+  }
+};
+
+int main()
+{
+  //int a, b;
+  CInt a, b;
+  a = 1;
+  b = a++; // постфиксный инкремент
+  cout << "a = " << a << endl;
+  cout << "b = " << b << endl;
+
+  a = 1;
+  b = a++ + a++;
+  //b = ( a.operator++(0) ).operator + ( a.operator++(0) );
+  //b = ( oldVal(1) ).operator+ ( a(2).operator++(0) );
+  //b = ( oldVal(1) ).operator+ ( oldVal(2) ) ==> 3;
+  //a==>3
+
+  cout << "a = " << a << endl;
+  cout << "b = " << b << endl;
+
+  a = 1;
+  b = ++a; // префиксный инкремент
+  cout << "a = " << a << endl;
+  cout << "b = " << b << endl;
+
+  a = 1;
+  b = ++a + ++a;
+  cout << "a = " << a << endl;
+  cout << "b = " << b << endl;
+
+}

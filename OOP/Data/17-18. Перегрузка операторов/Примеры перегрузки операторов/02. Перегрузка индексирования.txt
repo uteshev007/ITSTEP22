@@ -1,0 +1,20 @@
+#include <iostream> 
+using namespace std;
+
+class TMP {
+public:
+	TMP() {
+		cout << "TMP();\n";
+	}
+	~TMP() {
+		cout << "~TMP();\n";
+	}
+	void operator[](size_t pos){}
+};
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+	TMP t;
+	t[5];
+	cin.get();
+}

@@ -1,0 +1,26 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+#include <fstream>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/* примеры работы с сылкой и указателем */
+
+int main()
+{
+  //int * pa = (int*)0x1234567;
+  int a = 100;
+  int * pa = &a;
+  int & sa = *pa;
+  cout << "sa = " << sa << endl;
+  cout << "&a = " << &a << endl; // address
+  cout << "pa = " << pa << endl; // address
+  cout << "*pa = " << *pa << endl; // value
+  cout << "&sa = " << &sa << endl;
+  cout << "address of main = "
+       << main << endl; // адрес ф-ции main
+  //cout << main() << endl; // вызов main() - рекурсия
+}

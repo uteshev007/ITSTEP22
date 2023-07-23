@@ -1,0 +1,73 @@
+//
+// Vector.h
+//
+#pragma once
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector> // std::vector<>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+
+// класс Vector
+class Vector
+{
+private:
+  Size; // длина массива
+  Data; // указатель на рабочий массив
+public:
+  Vector();
+  Vector(size);
+  Vector(mas, size);
+
+  // дл€ этого объекта Vector ќЅя«ј“≈Ћ№Ќќ -
+  //  конструктор копировани€, оператор копировани€
+  //  и деструктор
+  Vector(const Vector& obj);
+
+  // A = A;
+  Vector& operator = (const Vector& obj);
+  ~Vector();
+
+  // set/get
+  // аналог vector<>::resize();
+  void SetSize(newSize)
+  void Set(mas, size);
+  GetSize(); // аналог vector<>::size();
+  Get(); // получить указатель на массив
+
+  Add(val); // vector::push_back( val );
+  Pop();    // vector::pop_back( val );
+
+  Insert(val, index);
+  Delete(index);
+
+  Sort();
+
+  // операторы ввода-вывода, отдельно дл€ cout/cin и дл€ файлов
+  operator<<();
+  operator>>();
+
+  // оператор []
+  operator[](index);
+
+  // оператор () - заполнение массив случ. значени€ми [Min;Max]
+  operator()(Min, Max);
+
+  // увеличить/уменьшить длину вектора, массива на 1 элемент
+  operator++();
+  operator--();
+
+  // получить сумму всех элементов
+  operator int();
+
+  // получить средннее арифметическое дл€ элементов массива
+  operator double();
+
+  // перевести массив в строку
+  // {1,2,3,4} ==> "1 2 3 4"
+  operator string();
+
+}; // class Vector
+

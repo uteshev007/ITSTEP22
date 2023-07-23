@@ -1,0 +1,26 @@
+#include <iostream>
+using namespace std;
+/*
+К уже реализованному классу Точка добавьте необходимые
+конструкторы, сделайте ряд функций inline, используйте иници-
+ализаторы.
+*/
+
+class point {
+	int x, y, z;
+public:
+	point(int X, int Y, int Z){}
+	point(int X, int Y) {}
+	point(){}
+	inline void setXYZ(int X, int Y, int Z){}
+	inline void setX(int X){}
+	inline int getX(){}
+	inline void show() {}
+};
+
+int main() {
+	point pt(2,7);
+	pt.setX(5);
+	pt.show();
+	cin.get();
+}

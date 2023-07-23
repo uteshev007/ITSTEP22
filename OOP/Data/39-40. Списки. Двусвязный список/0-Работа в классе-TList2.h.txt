@@ -1,0 +1,259 @@
+/*
+  TList2.h
+*/
+#pragma once
+#include <iostream>
+#include <algorithm> // для std::sort()
+using namespace std;
+
+/*
+ Шаблон двусвязанного списка
+  class TList
+*/
+
+// Шаблон структуры узла двусязного списка
+template <class T>
+struct Node
+{
+  // Область полезных данных
+  T Data;
+  // область ссылок на связанные элементы
+  Node<T>* pNext; // Указатель на следующий элемент
+  Node<T>* pPrev; // Указатель на предыдущий элемент
+
+  // Конструкторы для узла
+  Node() : Data(), pNext(), pPrev() {} // пустой узел списка
+  Node(T data) // узел списка с данными, но без связей
+    : Data(data), pNext(), pPrev() {} 
+
+  // Методы для узла
+  Node<T> * GetNext() { return pNext; }
+  Node<T> * GetPrev() { return pPrev; }
+  void SetNext(Node<T>* next) { pNext = next; }
+  void SetPrev(Node<T>* prev) { pPrev = prev; }
+}; // Node<>
+
+// Шаблон класса двусвязанного списка
+template <class T>
+class TList {
+
+  Node<T>* pHead; // голова списка
+  Node<T>* pTail; // хвост списка
+  int      Cnt;   // кол-во элементов в списке
+
+public:
+  // Конструкторы для списка
+  TList() : pHead(), pTail(), Cnt() {} // пустой список
+
+  TList(const T& Val) : TList() {
+    AddHead(Val);
+  }
+
+  // Копирование списков
+  TList(const TList<T>& V) :TList() {*this = V;}
+  TList<T>& operator=(const TList<T>& V) {
+    if (this == &V) {return *this;}
+    Clear();
+    /*for (int i = 0; i < V.Cnt; i++)
+    {
+      AddTail(V[i]);
+    }*/
+    Node<T>* temp = V.pHead;
+    while (temp)
+    {
+      AddTail(temp->Data);
+      temp = temp->pNext;
+    }
+    return *this;
+  }
+
+  // Деструктор
+  ~TList() { Clear(); }
+
+  // Методы
+  int GetCnt() const { return Cnt; }
+  Node<T>* GetNode(int idx) const 
+  {
+    if (idx < 0 || idx >= Cnt)
+    {
+      cout << "Error, out of range of list(1)" 
+        << endl;
+      return nullptr;
+    }
+    Node<T>* temp = pHead;
+    for (int i = 0; i < idx; i++)
+    {
+      temp = temp->pNext;
+    }
+    return temp;
+  }
+
+  Node<T>* GetHead()const { return pHead; }
+  Node<T>* GetTail()const { return pTail; }
+
+  // Метод для создания нового узла
+  Node<T>* NewNode(const T& data) {
+    Node<T>* temp = new Node<T>;
+    temp->Data = data;
+    temp->pNext = nullptr;
+    temp->pPrev = nullptr;
+    return temp;
+  }
+  // Метод для создания нового узла
+  Node<T>* NewNode
+  (const T& data, Node<T>* next, Node<T>* prev)
+  {
+    Node<T>* temp = new Node<T>;
+    temp->Data = data;
+    temp->pNext = next;
+    temp->pPrev = prev;
+    return temp;
+  }
+
+  // void push_back(const T& data);
+  void AddTail(const T& data) {
+    Node<T>* temp = NewNode(data);
+    temp->pPrev = pTail;
+    if (pTail == nullptr) {pHead = temp;}
+    else {pTail->pNext = temp;}
+    pTail = temp;
+    Cnt++;
+  }
+
+  // void push_front(const T& data);
+  void AddHead(const T& data) {
+    Node<T>* temp = NewNode(data);
+    temp->pNext = pHead;
+    if (pHead == nullptr) { pTail = temp; }
+    else { pHead->pPrev = temp; }
+    pHead = temp;
+    Cnt++;
+  }
+
+  void Insert(const T& data, int idx) {
+    if      (idx == 0)   { AddHead(data); }
+    else if (idx == Cnt) { AddTail(data); }
+    else if (idx > 0 && idx < Cnt) {
+      Node<T>* temp = NewNode(data);
+      Node<T>* prev = GetNode(idx - 1);
+      Node<T>* next = prev->pNext;
+      temp->pNext = next;
+      temp->pPrev = prev;
+      prev->pNext = temp;
+      next->pPrev = temp;
+      Cnt++;
+    }
+    else
+    {
+      cout << "Error out of range of list(2)" 
+        << endl;
+    }
+  }
+  void Delete(int idx) {
+    Node<T>* forDel = GetNode(idx);
+    if (forDel == nullptr) {return;}
+    Node<T>* prev = forDel->pPrev;
+    Node<T>* next = forDel->pNext;
+    if (prev) { prev->pNext = next; }
+    else      { pHead = next; }
+    if (next) { next->pPrev = prev; }
+    else      { pTail = prev; }
+    delete forDel;
+    Cnt--;
+  }
+
+  T  GetAt(int idx) const {
+    Node<T>* temp = GetNode(idx);
+    if (temp == nullptr)
+    {
+      cout << "Error out of range of list(3);"
+        << endl;
+      throw exception("Out of range of list(3)");
+    }
+    return temp->Data;
+  }
+  T& GetAt(int idx) {
+    Node<T>* temp = GetNode(idx);
+    if (temp == nullptr)
+    {
+      cout << "Error out of range of list(4);"
+        << endl;
+      throw exception("Out of range of list(4)");
+    }
+    return temp->Data;
+  }
+  void SetAt(int idx, T data) {
+    Node<T>* temp = GetNode(idx);
+    if (temp == nullptr)
+    {
+      cout << "Error out of range of list (5)"
+        << endl;
+    }
+    else {
+      temp->Data = data;
+    }
+  }
+  T  operator[](int idx) const { return GetAt(idx); }
+  T& operator[](int idx) { return GetAt(idx); }
+
+  // Найти данные в списке
+  // Возвращает индекс найденного узла
+  //  или -1, если таких данных в списке нет
+  int Search(const T& data) {
+    Node<T>* temp = pHead;
+    int idx = 0;
+    while (temp) {
+      if (temp->Data == data)
+      {
+        return idx;
+      }
+      temp = temp->pNext;
+      idx++;
+    }
+    /*while (GetAt(idx) != data)
+    {
+      idx++;
+    }*/
+    return -1;
+  }
+  void Clear() {
+    while (pHead)
+    {
+      Delete(0);
+    }
+  }
+  void Sort() {
+    T* mas = new T[Cnt];
+    Node <T>* temp = pHead;
+    for (int i = 0; i < Cnt; i++)
+    {
+      mas[i] = temp->Data;
+      temp = temp->pNext;
+    }
+    sort(mas, mas + Cnt);
+    temp = pHead;
+    for (int i = 0; i < Cnt; i++)
+    {
+      temp->Data = mas[i];
+      temp = temp->pNext;
+    }
+    delete[]mas;
+  }
+
+  template <class T>
+  friend ostream& operator<<(ostream& os, const TList<T>& obj);
+
+}; // class TList
+
+// Реализация шаблона перегруженного оператора вывода в поток
+//  для шаблонного объекта двусвязный список TList<>
+template <class T>
+ostream& operator<<(ostream& os, const TList<T>& obj)
+{
+  os << "Count = " << obj.Cnt << endl;
+  for (int i = 0; i < obj.Cnt; i++)
+  {
+    os << obj[i] << endl;
+  }
+  return os;
+}

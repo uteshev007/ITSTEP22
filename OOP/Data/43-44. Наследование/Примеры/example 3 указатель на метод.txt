@@ -1,0 +1,35 @@
+#include <iostream>
+using namespace std;
+
+class BASE {
+	int a;
+	void(BASE::*px)();					// Указатель на метод, который ничего не принимает и ничего не возвращает с именем px
+public:
+	BASE() { this->px = &BASE::show; }	// Конструктор по умолчанию сохраняет в указатель адрес метода show
+	int b;
+	void show() {
+		cout << a <<" "<< b << " " << c << endl;
+	}
+	void test() {						// Метод test внутри которого разыменовывая px вызываем функцию show
+		(this->*px)();
+	}
+protected:
+	int c;
+};
+
+class BASE2 :public BASE {
+public:
+	void show() {
+		cout << b << " " << c << endl;
+	}
+};
+
+int main() {
+
+	BASE2 num;
+	num.b = 5;
+	num.show();
+	num.test();
+
+	cin.get();
+}

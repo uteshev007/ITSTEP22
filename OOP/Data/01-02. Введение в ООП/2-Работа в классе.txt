@@ -1,0 +1,66 @@
+#include <iostream>
+#include <string>    // std::string
+using namespace std;
+
+/*
+Задание 1
+Реализуйте класс "Студент".
+Необходимо хранить в переменных-членах класса:
+ ФИО,    "Jon"
+ Группа, "SEP-222-3"
+ Age,    23
+Реализуйте функции-члены класса для ввода данных,
+вывода данных, реализуйте аксессоры для доступа
+к отдельным переменным-членам.
+*/
+
+class Student
+{ // private: - по умолчанию private
+  string FIO;
+  string Group;
+  size_t Age;   // size_t == unsigned long long - 64bit
+                // size_t == unsigned int       - 64bit
+public:
+  // set
+  void SetFIO  (string newFIO)   { FIO   = newFIO; }
+  void SetGroup(string newGroup) { Group = newGroup; }
+  void SetAge  (size_t newAge)   { Age   = newAge; }
+  // get
+  string GetFIO()   { return FIO; }
+  string GetGroup() { return Group; }
+  size_t GetAge()   { return Age; }
+  //
+  void Print() {
+    cout << "FIO:   " << GetFIO() << endl;   // FIO
+    cout << "Group: " << GetGroup() << endl; // Group
+    cout << "Age:   " << GetAge() << endl;   // Age
+  }
+  //
+  void Input() {
+    cout << "Enter FIO: ";
+    //getline(cin, FIO);
+    string temp;
+    getline(cin, temp); // input FIO
+    SetFIO(temp);
+    //
+    cout << "Enter Group: ";
+    //string temp2;
+    getline(cin, temp); // повторное использование
+                        // временной переменной temp
+    SetGroup(temp);
+    //
+    cout << "Enter Age: ";
+    size_t temp2;
+    cin >> temp2; // input Age
+    SetAge(temp2); // в SetAge возможен контроль возраста
+    cin.ignore(); // убрать <ENTER> после cin>>
+  }
+}; // class Student;
+
+
+int main()
+{
+  Student st1;
+  st1.Input();
+  st1.Print();
+}

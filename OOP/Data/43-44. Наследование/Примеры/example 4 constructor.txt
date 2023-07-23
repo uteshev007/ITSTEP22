@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+
+class BASE {
+public:
+	BASE() { cout << "BASE()\n"; }
+	~BASE() { cout << "~BASE()\n"; }
+};
+
+class BASE2 :public BASE {
+public:
+	BASE2() { cout << "BASE2()\n"; }
+	~BASE2() { cout << "~BASE2()\n"; }
+};
+
+class BASE3 :public BASE2 {
+public:
+	BASE3() { cout << "BASE3()\n"; }
+	~BASE3() { cout << "~BASE3()\n"; }
+};
+
+int main() {
+	{
+		BASE3 num;
+	}
+	cin.get();
+}

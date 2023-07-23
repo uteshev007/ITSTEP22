@@ -1,0 +1,40 @@
+#include <iostream>
+using namespace std;
+
+class BASE {
+public:
+	BASE() { cout << "BASE()\n"; }
+	~BASE() { cout << "~BASE()\n"; }
+};
+
+class BASE2 {
+public:
+	BASE2() { cout << "BASE2()\n"; }
+	~BASE2() { cout << "~BASE2()\n"; }
+};
+
+class BASE3 :public BASE2, public BASE {
+public:
+	BASE3() { cout << "BASE3()\n"; }
+	~BASE3() { cout << "~BASE3()\n"; }
+};
+
+class BASE4 :public BASE, public BASE2 {
+public:
+	BASE4() { cout << "BASE4()\n"; }
+	~BASE4() { cout << "~BASE4()\n"; }
+};
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+	{
+		BASE4 num;
+	}
+	cout << "Нажмите ENTER для продлолжения\n";
+	cin.get();
+	system("cls");
+	{
+		BASE3 num;
+	}
+	cin.get();
+}

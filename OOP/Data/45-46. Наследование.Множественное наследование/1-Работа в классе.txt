@@ -1,0 +1,155 @@
+#include <iostream>
+#include <fstream>  // файловые потоки
+#include <iomanip>  // манипуляторы
+#include <string>
+#include <algorithm> // алгоритмические ф-ции STL
+#include <time.h>
+using namespace std;
+
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+  Наследование.Множественное наследование
+
+  Задание 1
+Создать базовый класс "Транспортное средство"
+и производные классы "Автомобиль",
+"Велосипед", "Повозка".
+Подсчитать время и стоимость перевозки
+пассажиров и грузов каждым транспортным средством.
+*/
+class vehicle
+{
+private:
+  string Type;
+protected:
+  double GoodsPrice;
+  double PassPrice;
+  double Velocity;
+public:
+  /*vehicle() : Type(), GoodsPrice(),
+    PassPrice(), Velocity() {}*/
+  vehicle() = delete;
+  vehicle(string type) : Type(type),
+    GoodsPrice(), PassPrice(), Velocity() {}
+  vehicle(string t, double gp, double pp, double v) :
+    Type(t), GoodsPrice(gp),
+    PassPrice(pp), Velocity(v) {}
+
+  string GetType() const { return Type; }
+  
+  void Print() const {
+    cout << typeid(*this).name() << endl;
+    cout << "Object type - " << Type << endl;
+    cout << "Goods price - " << GoodsPrice << endl;
+    cout << "Passangers price - " << PassPrice << endl;
+    cout << "Vehicle Velocity - " << Velocity << endl;
+  }
+  friend ostream& operator <<
+    (ostream& os, const vehicle& obj) {
+    os << typeid(obj).name() << endl;
+    os << "Object type - " << obj.Type << endl;
+    os << "Goods price - " << obj.GoodsPrice << endl;
+    os << "Passangers price - " << obj.PassPrice << endl;
+    os << "Vehicle Velocity - " << obj.Velocity << endl;
+    return os;
+  }
+  void Input() {
+    cout << "Enter info for " << typeid(*this).name() << endl;
+    cout << "Goods price - ";
+    cin >> this->GoodsPrice;
+    cout << "Passangers price - ";
+    cin >> this->PassPrice;
+    cout << "Velocity - ";
+    cin >> this->Velocity;
+    cin.ignore();
+  }
+  double Cost(double mass, int pass, double dist) const
+  {
+    return (mass*GoodsPrice + pass*PassPrice)*dist;
+  }
+  double Time(double dist) const {
+    return dist / Velocity;
+  }
+  void GetCalc() {
+    double mass, dist;
+    int pass;
+    cout << "Enter mass - ";    cin >> mass;
+    cout << "Enter distance - ";cin >> dist;
+    cout << "Enter amount of passangers - ";
+    (cin >> pass).ignore();
+    cout  << "Cost of transfer - " 
+          << Cost(mass, pass, dist) << endl;
+    cout  << "Time of transfer - "
+          << Time(dist) << endl;
+  }
+}; //class vehicle
+
+class bike : public vehicle
+{
+private:
+protected:
+public:
+  bike() : vehicle("Bike") {
+    GoodsPrice = 20;
+    PassPrice = 1200;
+    Velocity = 18;
+  }
+  void Print() const {
+    cout << typeid(*this).name() << endl;
+    vehicle::Print();
+  }
+
+  friend ostream& operator <<
+    (ostream& os, const bike& obj) {
+    os << typeid(obj).name() << endl;
+    os << (vehicle&)obj << endl;
+    return os;
+  }
+  void Input() {
+    cout << "Enter info for " << typeid(*this).name() << endl;
+    vehicle::Input();
+  }
+};//class Bike
+
+class car : public vehicle
+{
+private:
+protected:
+public:
+  car() : vehicle("Car") {
+    GoodsPrice = 10;
+    PassPrice = 900;
+    Velocity = 120;
+  }
+  void Print() const {
+    cout << typeid(*this).name() << endl;
+    vehicle::Print();
+  }
+
+  friend ostream& operator <<
+    (ostream& os, const car& obj) {
+    os << typeid(obj).name() << endl;
+    os << (vehicle&)obj << endl;
+    return os;
+  }
+  void Input() {
+    cout << "Enter info for " << typeid(*this).name() << endl;
+    vehicle::Input();
+  }
+};//class car
+
+
+int main()
+{
+  car A;
+  cout << A << endl;
+  A.GetCalc();
+  //A.Print();
+  cout << "---------" << endl;
+  bike B;
+  B.Input();
+  B.Print();
+  B.GetCalc();
+}

@@ -1,0 +1,74 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+#include <fstream>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/* примеры работы с сылкой и указателем */
+// глобальный прототип ф-ции Power4()
+void Power4(int a, int& a2, int& a3, int& a4);
+int  Power4(int a, int& a3, int& a4);
+void Power4(int a, int res[3]);
+
+int main()
+{
+  int data;
+  cout << "Enter value: ";
+  cin >> data;
+  int d2, d3, d4; // для результата
+
+  // локальный прототип ф-ции Power4()
+  //void Power4(int a, int& a2, int& a3, int& a4);
+
+  Power4(data, d2, d3, d4);
+  cout << data << "**2 = " << d2 << endl;
+  cout << data << "**3 = " << d3 << endl;
+  cout << data << "**4 = " << d4 << endl;
+  cout << "------------" << endl;
+  int t2, t3, t4;
+  t2 = Power4(data, t3, t4);
+  cout << data << "**2 = " << t2 << endl;
+  cout << data << "**3 = " << t3 << endl;
+  cout << data << "**4 = " << t4 << endl;
+  cout << "------------" << endl;
+  int mas[3]; // Shift+F5
+  //int* mas = new int[3];
+  Power4(data, mas);
+  cout << data << "**2 = " << mas[0] << endl;
+  cout << data << "**3 = " << mas[1] << endl;
+  cout << data << "**4 = " << mas[2] << endl;
+  cout << data << "**5 = " << mas[3] << endl; // ???
+  //delete[]mas;
+  // 
+  int* p = &data; // указателье на data
+  // неверное использование указателей на переменную data
+  //  ошибка: выход за границы переменной data
+  *(p + 1) = 0;
+  *(p - 1) = 0; // p[-1] = 0;
+}
+
+void Power4(int a, int & a2, int & a3, int & a4)
+{
+  a2 = a * a;         // a**2
+  a3 = a * a * a;     // a**3
+  a4 = a * a * a * a; // a**4
+}
+
+int Power4(int a, int& a3, int& a4)
+{
+  int a2 = a * a;     // a**2
+  a3 = a * a * a;     // a**3
+  a4 = a * a * a * a; // a**4
+  return a2; // возвращаем квадрат числа
+}
+// вариант с массивом, через указатель на одномерный массив
+//void Power4(int a, int * res)
+void Power4(int a, int res[3])
+{
+  res[0] = a * a;         // *(res+0) = a*a;
+  res[1] = a * a * a;     // *(res+1) = a*a*a;
+  res[2] = a * a * a * a; // *(res+2) = a*a*a*a;
+}

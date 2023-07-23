@@ -1,0 +1,34 @@
+#include <iostream>
+using namespace std;
+
+class BASE {
+	static int a;
+public:
+	static int b;
+	static void show() {
+		cout << a <<" "<< b << " " << c << endl;
+	}
+protected:
+	static int c;
+};
+
+class BASE2 :public BASE {
+public:
+	static void show() {
+		cout << b << " " << c << endl;
+	}
+};
+
+int BASE::a;
+int BASE::b;
+int BASE::c;
+
+int main() {
+
+	BASE2::b = 3;
+	BASE2::BASE::b = 5;
+
+	BASE2::BASE::show();
+	BASE2::show();
+	cin.get();
+}

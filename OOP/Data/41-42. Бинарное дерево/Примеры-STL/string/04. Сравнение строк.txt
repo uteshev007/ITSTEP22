@@ -1,0 +1,23 @@
+#include <string>
+#include <iostream>
+using namespace std;
+int main()
+{
+	//Объявление объектов типа basic_string<char>
+	string str1("testingthree");
+	string str2("testingtwo");
+	string str3("testingtwo");
+	cout << "str1 is = " << str1 << endl;
+	cout << "str2 is = " << str2 << endl;
+	cout << "str3 is = " << str3 << endl;
+
+	//Операторы <, >, <=, >=	
+	cout << "Operation: (str1 < str2) Result: " << boolalpha << (str1 < str2) << endl;
+	cout << "Operation: (str1 > str2) Result: " << boolalpha << (str1 > str2) << endl;
+	cout << "Operation: (str2 > str3) Result: " << boolalpha << (str2 > str3) << endl;
+	cout << "Operation: (str2 < str3) Result: " << boolalpha << (str2 < str3) << endl;
+	cout << "Operation: (str2 >= str3) Result: " << boolalpha << (str2 >= str3) << endl;
+	cout << "Operation: (str2 <= str3) Result: " << boolalpha << (str2 <= str3) << endl;
+
+	cin.get(); cin.get();
+}

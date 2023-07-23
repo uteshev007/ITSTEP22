@@ -1,0 +1,26 @@
+#include <iostream>
+using namespace std;
+
+class base {
+public:
+	base(int, int) {
+		cout << "base(int)\n";
+	}
+};
+
+class base2{
+	base *b;
+public:
+	base2(){
+		b = new base(1, 2);
+	}
+	~base2() {
+		delete[]b;
+	}
+};
+
+int main() {
+	base2 bs;
+
+	cin.get();
+}

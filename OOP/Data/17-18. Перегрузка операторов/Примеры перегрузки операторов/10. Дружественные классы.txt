@@ -1,0 +1,109 @@
+#include <iostream>
+using namespace std;
+#define MAX_OBJECT_INVENTORY 500
+#define MAX_OBJECT_BAG 50
+
+class object {
+	friend class inventory;
+	friend class bag;
+	char obj[500];			// Название вещи
+	int ID;					// ID вещи
+public:
+	object(const char *, int);
+	void showObject();
+};
+
+class inventory {
+	object *things[MAX_OBJECT_INVENTORY];	// В инвентаре максимум 500 вещей
+	bool Things[MAX_OBJECT_INVENTORY];		// Вещь по указанной позиции есть в инвентаре?
+public:
+	inventory();
+	void AddObject(object*);
+	object* GetObject(int);
+};
+
+class bag {
+	object *things[MAX_OBJECT_BAG];	// В сумке максимум 50 вещей
+	bool Things[MAX_OBJECT_BAG];	// Вещь по указанной позиции есть в сумке?
+public:
+	bag();
+	void AddObject(object*);
+	object* GetObject(int);
+};
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+	inventory mainINV;
+	bag mainBAG;
+
+	object *obj=new object("Маркер", 1);
+	mainINV.AddObject(obj);
+
+	mainBAG.AddObject(mainINV.GetObject(1));
+
+	object *tmp = mainBAG.GetObject(1);
+	if (tmp) {
+		tmp->showObject();
+	}
+
+
+	cin.get();
+}
+
+// Методы класса object
+object::object(const char *str, int ID) {
+	strcpy(obj, str);
+	this->ID = ID;
+}
+
+void object::showObject() {
+	cout <<"Объект: "<< obj << endl;
+}
+
+// Методы класса inventory
+inventory::inventory() {
+	for (int i = 0; i < MAX_OBJECT_INVENTORY; i++) {
+		Things[i] = false;
+	}
+}
+void inventory::AddObject(object *tmp) {
+	for (int i = 0; i < MAX_OBJECT_INVENTORY; i++) {
+		if (!Things[i]) {
+			things[i] = tmp;
+			Things[i] = true;
+		}
+	}
+}
+object* inventory::GetObject(int ID) {
+	for (int i = 0; i < MAX_OBJECT_INVENTORY; i++) {
+		if (Things[i] && things[i]->ID==ID) {
+			Things[i] = false;
+			return things[i];
+		}
+	}
+	return nullptr;
+}
+
+// Методы класса bag
+bag::bag() {
+	for (int i = 0; i < MAX_OBJECT_BAG; i++) {
+		Things[i] = false;
+	}
+}
+void bag::AddObject(object *tmp) {
+	for (int i = 0; i < MAX_OBJECT_BAG; i++) {
+		if (!Things[i]) {
+			things[i] = tmp;
+			Things[i] = true;
+		}
+	}
+}
+object* bag::GetObject(int ID) {
+	for (int i = 0; i < MAX_OBJECT_BAG; i++) {
+		if (Things[i] && things[i]->ID == ID) {
+			Things[i] = false;
+			return things[i];
+		}
+	}
+	return nullptr;
+}

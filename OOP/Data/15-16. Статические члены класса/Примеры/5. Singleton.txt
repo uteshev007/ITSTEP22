@@ -1,0 +1,51 @@
+#include <iostream>
+using namespace std;
+
+class Singleton {
+
+private:
+
+	// указатель на единственный экземпл€р класса
+	static Singleton*s;
+	int k;
+
+	//закрытый конструктор
+	Singleton(int i) {
+		k = i;
+	}
+
+public:
+	//функци€ дл€ получени€ указател€ на 
+	//единственный экземпл€р класса
+	static Singleton*getReference() {
+		return s;
+	}
+
+	//получение значени€ нестатического члена класса
+	int getValue() {
+		return k;
+	}
+
+	//перезапись значени€ нестатического члена класса
+	void setValue(int i) {
+		k = i;
+	}
+};
+
+// »нициализаци€ статического члена класса.
+Singleton* Singleton::s = new Singleton(3);
+
+int main() {
+
+	//получение указател€ на 
+	//единственный экземпл€р класса
+	Singleton*p = Singleton::getReference();
+
+	//работа с компонентом объекта
+	cout << p->getValue() << "\n\n";
+	p->setValue(p->getValue() + 5);
+	cout << p->getValue() << "\n\n";
+
+	cin.get();
+}
+

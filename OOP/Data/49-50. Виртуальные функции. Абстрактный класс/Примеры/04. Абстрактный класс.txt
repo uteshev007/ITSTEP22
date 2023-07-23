@@ -1,0 +1,44 @@
+#include <iostream>
+using namespace std;
+
+class abstract {
+protected:
+	int a;
+public:
+	abstract() { a = 0; }
+	abstract(int a):a(a){}
+	virtual void show() = 0;
+	int get() { return a; }
+};
+
+void show(abstract &a) {
+	a.show();
+}
+
+void show2(abstract *a) {
+	a->show();
+}
+
+class TMP :public abstract{
+public:
+	TMP(int a) :abstract(a) {}
+	void show() { cout << a << endl; }
+};
+
+class TMP2 :public abstract{
+public:
+	TMP2(int a) :abstract(a) {}
+	void show() { cout << a; }
+};
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+
+	TMP a(2);
+	show(a);
+	
+	TMP2 b(3);
+	show(b);
+
+	cin.get();
+}

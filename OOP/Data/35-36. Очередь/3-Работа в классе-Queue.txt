@@ -1,0 +1,127 @@
+#include <iostream>
+#include <fstream>
+#include <string>  // STL C++ ==> class string
+#include <stack>   // STL C++ ==> class stack
+#include <time.h>
+using namespace std;
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } }_;
+/*
+Создайте класс Queue обычной очереди для работы
+с целыми значениями.
+Требуется создать реализации для типичных
+операций над элементами:
+ * IsEmpty - проверка очереди на пустоту
+ * IsFull  - проверка очереди на заполнение
+ * Enqueue - добавление элемента в очередь / push()
+ * Dequeue - удаление элемента из очереди  / pop(), top()
+ * Show - отображение всех элементов очереди на экран
+        заменить на перегруженный оператор вывода << в поток
+*/
+
+template <class T>
+class Queue {
+private:
+  T  * Data; // рабочий массив очереди
+  int  Size, Cnt; // максимальный размер очереди, кол-во полезных элементов
+public:
+  Queue() : Data(), Size(), Cnt() {} // создать пустой объект
+  //Queue(int Size); // создать очередь заданного размера
+  //// Конструктор и оператор копирования, деструктор - ОБЯЗАТЕЛЬНО
+  //Queue(const Queue<T>& q);
+  //Queue<T>& operator=(const Queue<T>& q);
+  ~Queue() { delete[]Data; }
+
+  // простые геттеры
+  int GetCount() const { return Cnt; } // вернуть кол-во элементов в очереди
+  int GetSize()  const { return Size; }  // вернуть максимальный размер очереди
+  // вычисляемые геттеры
+  bool IsEmpty() const { return Cnt == 0; }  // очередь пустая?
+  bool IsFull()  const { return Size == Cnt; }   // очередь полная?
+
+  // Задать размер очереди - реализация за классом
+  void SetSize(int newSize)
+  {
+    T* temp = new T[newSize];
+    int minCnt = (newSize < Cnt) ? newSize : Cnt;
+    for (int i = 0; i < minCnt; i++) {
+      temp[i] = Data[i];
+    }
+    delete[]Data;
+    Data = temp;
+    Size = newSize;
+    Cnt  = minCnt;
+  }
+
+  void Clear() { Cnt = 0; } // Очистить очередь
+
+  // постановка в очередь нового элемента - аналог метода push()
+  void EnQueue(T val)
+  {
+    if (IsFull())
+    {
+      cout << "Error: Queue is full!" << endl;
+      SetSize( Size * 1.5 + 1 ); // +50%
+      //return;
+    }
+    //Data[Cnt] = val;
+    //Cnt++;
+    Data[Cnt++] = val;
+  }
+
+  // извлечение из очереди первого элемента (на обработку)
+  //  с удалением из очереди аналог метода pop()
+  T DeQueue();
+
+  // возвращает первый элемент в очереди без удаления, top()
+  T GetFirst();
+
+  // возвращает ссылку на первый элемент в очереди без удаления, top()
+  T& GetFirst();
+
+  friend ostream& operator<<(ostream& os, const Queue<T>& q);
+
+}; // class Queue<>
+
+
+int main()
+{
+  Queue<int> q2(10);
+  // цикл постановки в очередь
+  for (int i = 0; i < 5; i++)
+  {
+    int temp = RAND(1, 20);
+    cout << temp << " ";
+    q2.EnQueue(temp);
+  }
+  cout << q2 << endl; // печать содержимого очереди на экран
+  // цикл извлечения из очереди
+  for (int i = 0; i < 5; i++)
+  {
+    int temp = q2.ВуQueue();
+    cout << temp << " ";
+  }
+  cout << q2 << endl; // печать содержимого очереди на экран
+
+
+  /*
+  Queue<string> q1( 5 );
+  cout << "Input 5 strings:\n";
+  for(int i = 0; i < 5; i++)
+  {
+    string temp;
+    getline( cin, temp );
+    q1.EnQueue( temp );
+  }
+  try {
+    for(int i = 0; i < 6; i++) {
+      cout << q1.DeQueue() << endl;
+    }
+  }
+  catch(const char * err) {
+    cout << "Catch: " << err << endl;
+  }
+  cout << q1 << endl;
+  cout << endl;
+  */
+
+} // int main()

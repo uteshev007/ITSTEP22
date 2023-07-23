@@ -1,0 +1,89 @@
+#include <iostream>
+#include <iomanip>
+#include <string>  // STL C++ ==> class string
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } }_;
+
+/*
+  Множественное наследование
+*/
+// корневой базовый класс класс
+class Base {
+public:
+  string Name;
+public:
+  Base() :Name() {}
+  // void Print(){}
+}; // class Base;
+
+// virtual - для виртуального наследования
+class Base1 : virtual public Base {
+protected:
+  int a;
+public:
+  //string Name;
+public:
+  Base1() : a(1)/*, Name("Base1")*/ {
+    Name = "Base1";
+  }
+  void Print() {
+    cout << "Base1::Name = " << Name << endl;
+    cout << "Base1::a = " << a << endl;
+  }
+}; // class Base1;
+
+class Base2 : virtual public Base {
+protected:
+  int b;
+public:
+  //string Name;
+public:
+  Base2() : b(2)/*, Name("Base2")*/ {
+    Name = "Base2";
+  }
+  void Print() {
+    cout << "Base2::Name = " << Name << endl;
+    cout << "Base2::b = " << b << endl;
+  }
+}; // class Base2;
+
+// дочерний класс - производный от двух классов
+class Chield : virtual public Base1,
+               virtual public Base2,
+               virtual public Base
+{ // Base1 + Base2 - на одном уровне
+protected:
+  string a, b;
+public:
+  Chield() : a("Hello"), b("World") {}
+  void Print() {
+    // вызовы методов родительских классов
+    Base1::Print(); // из Base1
+    Base2::Print(); // из Base2
+    cout << "Chield::a = " << a << endl;
+    cout << "Chield::b = " << b << endl;
+    // явное указание классов для доступа к переменным
+    cout << "Base1::a = " << Base1::a << endl;
+    cout << "Base2::b = " << Base2::b << endl;
+    //
+    //cout << "Base1::Name: " << Base1::Name << endl;
+    //cout << "Base2::Name: " << Base2::Name << endl;
+    cout << "Name: " << Name << endl;
+  }
+}; // class Chield;
+
+int main()
+{
+  Chield A;
+  A.Print();
+  cout << endl;
+  ((Base1&)A).Name = "main";
+  A.Base2::Name    = "chield";
+  A.Print();
+  A.Name = "new value";
+  cout << endl;
+  A.Print();
+}
+

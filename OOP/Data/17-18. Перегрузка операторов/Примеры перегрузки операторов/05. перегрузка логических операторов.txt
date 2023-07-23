@@ -1,0 +1,98 @@
+#include <iostream>
+using namespace std;
+
+enum type {
+	type_none,
+	type_number,
+	type_real,
+	type_string
+};
+
+class var {
+	union
+	{
+		long long number;
+		double real;
+		char *str;
+	};
+	type data;
+	size_t len;
+public:
+	var() { data = type_none; }
+	var(long long num) { number = num; data = type_number; }
+	var(double num) { real = num; data = type_real; }
+	var(char* str){
+		len = strlen(str) + 1;
+		this->str = new char[len];
+		strcpy(this->str, str);
+		data = type_string;
+	}
+
+	var(int num):var((long long)num) {}
+
+	~var(){
+		if(data==type_string)
+			delete[]str;
+	}
+	var(const var& tmp){}
+	operator long long()const { return number; }
+	operator double()const { return real; }
+	operator const char*()const { return str; }
+
+	/*
+	==
+	!=
+	>
+	<
+	>=
+	<=
+	*/
+
+	/*
+		"5"==5
+		"5"==5.0
+		5=="5"
+		5.0=="5"
+		"5"=="5"
+	*/
+
+	bool operator==(const var& tmp) {
+		if (data == type_none || tmp.data == type_none) return false;
+		else if (data == type_number && tmp.data == type_number) return (number==tmp.number);
+		else if (data == type_real && tmp.data == type_real) return (real == tmp.real);
+		else if (data == type_number && tmp.data == type_real) return (number == tmp.real);
+		else if (data == type_real && tmp.data == type_number) return (real == tmp.number);
+
+		return false;// Если дошли до сюда, то решение не полное
+	}
+
+	bool operator==(const char* tmp) {
+
+	}
+	template<typename T1>
+	bool operator == (const T1& tmp) {
+
+	}
+
+};
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+	var x = 5;
+	cout << (long long)x << endl;
+
+	var y = 5.5;
+	cout << (double)y << endl;
+
+	var str = "Строка с текстом";
+	cout << (const char*)str << endl;
+
+	if (x == 5) {
+
+	}
+	if (str == "Строка с текстом") {
+
+	}
+
+	cin.get(); cin.get();
+}

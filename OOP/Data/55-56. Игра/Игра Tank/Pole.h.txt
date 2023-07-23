@@ -1,0 +1,83 @@
+//
+// Pole.h
+//
+#pragma once
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include "Win10.h"
+#include "Image.h"
+using namespace std;
+
+// класс игрового поля - холст игры
+class Pole
+{
+private:
+  vector< string > newCanvas; // новое изображения поля
+  vector< string > oldCanvas; // старое изображения поля
+  int Row, Col; // экранные координаты поля
+  int Height, Width; // ???
+  char symBorder; // символ для бордюра
+public:
+  Pole() : Height(15), Width(30),
+    Row(3), Col(7), symBorder('#')
+  {
+    Create();
+  }
+  Pole(int heigh, int width)
+    : Height(heigh), Width(width),
+      Row(3), Col(7), symBorder('#')
+  {
+    Create();
+  }
+  // Создать холсты для игрового поля
+  void Create()
+  {
+    newCanvas.clear(); // удалить старое поле
+    // создаем новое поле
+    newCanvas.resize(Height); // задаем размер вектора
+                              //  - высота поля
+    for (int i = 0; i < newCanvas.size(); ++i) {
+      // созадаем i-ю строку, задаем ей размер Width
+      //  и заполняем пробелами
+      newCanvas[i].resize(Width, ' ');
+    }
+    // копирование массивов полей
+    oldCanvas = newCanvas;
+  }
+  // для рисования на холсте
+  string& operator[](int row) {
+    return newCanvas[row];
+  }
+  const string& operator[](int row) const {
+    return oldCanvas[row];
+  }
+  int GetHeight() const { return oldCanvas.size(); }
+  int GetWidth()  const { return oldCanvas[0].size(); }
+
+  // метод прорисовки - разностный метод вывода на экран
+  void Draw()
+  {
+    for (int i = 0; i < GetHeight(); ++i) {
+      for (int j = 0; j < GetWidth(); ++j) {
+        if (oldCanvas[i][j] != newCanvas[i][j]) {
+          SetPos(Row + i, Col + j);
+          cout << newCanvas[i][j];
+          oldCanvas[i][j] = newCanvas[i][j];
+        }
+      }
+    }
+    //oldCanvas = newCanvas;
+  }
+  // перепрорисовка всего кадра
+  void ReDraw()
+  {
+    for (int i = 0; i < GetHeight(); ++i) {
+      SetPos(Row + i, Col);
+      cout << newCanvas[i];
+    }
+    oldCanvas = newCanvas; // сохраняем старый кадр
+  }
+}; // class Pole;
+

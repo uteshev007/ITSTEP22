@@ -1,0 +1,61 @@
+//
+// Game.h
+//
+#pragma once
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <list>
+#include <iterator>  // итераторы
+#include <algorithm> // begin(), end()
+
+#include "Win10.h"
+//#include "Pole.h" // class Pole
+#include "BaseTank.h" // классы танчиков
+//#include "BaseBullet.h" // классы для пулек
+using namespace std;
+
+// Основной класс игры BattleCity
+class Game
+{
+private:
+protected:
+  Pole pole; // игровое поле - холст кадра игры
+  int poleRow, poleCol; // экранные координаты игрового поля
+  int poleHeight, poleWidth; // размеры поля
+  // список игроков-участников игры
+  vector< BaseTank* > arrPlayrs;
+  int cntPlayer;  // кол-во игроков-людей
+  // кол-ва танчиков противников
+  int cntEnemyHeavy;  // кол-во тяжелых танков
+  int cntEnemyMiddle; // кол-во средних танков
+  int cntEnemyLight;  // кол-во легких танков
+  // список активных пулек на поле
+  list< BaseBullet* > lstBullet;
+  // координаты главного меню
+  int menuRow, menuCol;
+  // переменные состояния игры
+  bool IsStartGame; // сигнал о начале новой игры
+  bool IsPause;     // сигнал о паузе
+  bool IsGameOver;  // конец игры
+  bool IsWinPlayer; // сигнал о победе игрока
+public:
+  Game() : poleRow(4), poleCol(7),
+    poleHeight(15), poleWidth(30),
+    cntPlayer(1),
+    cntEnemyHeavy(1), cntEnemyMiddle(2),
+    cntEnemyLight(3),
+    menuRow(5), menuCol(12),
+    IsStartGame(false), IsPause(false),
+    IsGameOver(false), IsWinPlayer(false)
+  {}
+
+  virtual void Start();
+  // для игрового процесса
+  virtual void Init();
+  virtual void StartNewGame();
+  virtual void ContinueGame();
+
+}; // class Game;
+

@@ -1,0 +1,32 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+#include <fstream>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/* примеры работы с сылкой и указателем */
+
+int main()
+{
+  int a = 100, b = 200;
+  // разница между указателем и ссылкой 
+  int *pa;
+  pa = &a;
+  pa = nullptr;
+  pa = &b;
+  pa = (int*)123464687; // указатель pa ссылается на
+           // ячейку памяти с адресом 123464687
+  //cout << *pa << endl; - тут ошибка доспупа по адресу 123464687
+
+  //int& sa;
+  int& sa  = a; // ссылка на переменную a
+  int& sa2 = a; // вторая ссылка на переменную a
+  sa = b; // sa всеравно ссылка на a, 
+          // sa = b  ==>  a = b;
+  //sa = nullptr; // ERROR
+  // заменить адрес внутри ссылки
+  //*((int*)&sa) = (int)nullptr;
+}

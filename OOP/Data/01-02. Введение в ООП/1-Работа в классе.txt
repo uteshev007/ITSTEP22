@@ -1,0 +1,132 @@
+#include <iostream>
+#include <string>    // std::string
+using namespace std;
+
+/*
+Задание 2
+Реализуйте класс "Точка".
+Необходимо хранить координаты x, y, z в переменных
+- членах класса.
+Реализуйте функции - члены класса для ввода данных,
+вывода данных, реализуйте аксессоры для доступа
+к переменным - членам, реализуйте сохранение
+в файл и загрузку данных из файла
+*/
+
+// класс Точка - объект Point
+class Point
+{
+  // спецификаторы доступа
+private:   // частная собственность класса
+            // закрытая область
+  int x, y, z; // координаты
+protected: // защищенная область класса
+  string Name; // имя точки
+public:  // публичная облсать класса
+  // публичные методы класса
+  // методы аксессоры (access), методы доступа
+  //   к переменным класса
+  // методы модификаторы, сет-методы, сеттеры
+  //  setter
+  void SetX(int newX) { x = newX; } // сеттер для X
+  void SetY(int newY) { y = newY; } // сеттер для Y
+  void SetZ(int newZ) // сеттер для Z
+  {
+    if (newZ >= 0) {
+      z = newZ;
+    }
+    else {
+      cout << "Ошибка: z должен быть > 0!" << endl;
+    }
+  }
+  //void setZ(int newZ) { z = newZ; } // сеттер для Z
+  //void set_z(int newZ) { z = newZ; } // сеттер для Z
+  // универсальный сеттер
+  void SetXYZ(int newX, int newY, int newZ)
+  {
+    SetX(newX);   // x = newX;
+    SetY(newY);   // y = newY;
+    SetZ(newZ);   // z = newZ;
+  }
+  // методы инспекторы, гет-методы, геттеры, getters
+  int GetX() { return x; }
+  int GetY() { return y; }
+  int GetZ() { return z; }
+
+  // Универсальный сеттер
+  // 1 вариант
+  //int * GetXYZ()
+  //{
+  //  int mas[3]; - локальная переменная
+  //  mas[0] = x, mas[1] = y, mas[2] = z;
+  //  return mas; - возвращаем указатель на локальную переменную
+  //}
+  // 
+  // 2 вариант
+  //int * GetXYZ()
+  //{
+  //  int* mas = new int[3];
+  //  mas[0] = x, mas[1] = y, mas[2] = z;
+  //  return mas;
+  //}
+  // 
+  // 3 вариант - с помощью ссылок
+  void GetXYZ(int& RetX, int& RetY, int& RetZ)
+  {
+    RetX = GetX(); // RetX = x;
+    RetY = GetY(); // RetY = y;
+    RetZ = GetZ(); // RetZ = z;
+  }
+  // get/set-методы для Name
+  void SetName(string newName) { Name = newName; }
+  string GetName() { return Name; }
+  // Print/Input
+  // A(1;2;3) ==> Name(x;y;z)
+  void Print()
+  {
+    cout << Name << "("
+         << x    << ";"
+         << y    << ";"
+         << z    << ")"
+         << endl;
+  }
+  void Input()
+  {
+    cout << "Введите имя точки: ";
+    //cin >> Name; // "Моя первая точка"
+    getline(cin, Name); // <ENTER>
+    //
+    cout << "Введите x,y,z: ";
+    cin >> x >> y >> z; // 1 2 3<ENTER>
+    cin.ignore(); // убрать последний <ENTER> из
+    // клавиатурного буфера после cin>>
+  }
+
+}; // class Point;
+
+
+int main()
+{
+  //setlocale(LC_ALL, "RUSSIAN");
+  // chcp - CHange Code Page
+  system( "chcp 1251 > nul" );
+
+  //int a;
+  // A - переменная типа Point
+  Point A; // A - экземпляр класса Point
+  //A.SetX(10);  // A.x = 10;
+  A.Input();
+  A.Print();
+  //
+  Point B;
+  B.SetXYZ(10, 20, 30);
+  B.SetName("B");
+  B.Print();
+  cout << "B.x = " << B.GetX() << endl;
+  cout << "B.y = " << B.GetY() << endl;
+  cout << "B.z = " << B.GetZ() << endl;
+
+  B.Input();
+  B.Print();
+
+}

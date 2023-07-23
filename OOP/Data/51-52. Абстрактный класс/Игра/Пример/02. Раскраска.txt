@@ -1,0 +1,55 @@
+#include <iostream>
+#include <Windows.h>
+#include <time.h>
+#include "win10.h"
+using namespace std;
+
+const int row = 15, column=36;
+
+char pole[row][column]
+{
+  "###################################",
+  "#   #*##      @          @        #",
+  "# # @  #@############## ######### #",
+  "# ###### #   #*#3  @  # ##@##   # #",
+  "#  @       # # ###### # #@4   #@# #",
+  "###### # ### #      # # ##@##   # #",
+  "##  @# # # # #### # #   ##### # # #",
+  "#* #   # # @    # ##*######*#   # #",
+  "######## # ####         #   # # #@#",
+  "#  2#    #      ####### # # #   # #",
+  "# ### #### ######       # #   #   #",
+  "#  @       #      ####### #########",
+  "############ ######   #1# # @ #   #",
+  "#&                  #   #   #@  #B#",
+  "#################################?#"
+};
+
+int main()
+{
+  //system("chcp 866 > nul");  //setlocale(LC_ALL, "C");
+  start();
+
+  for(int i = 0; i < row; i++) {
+    for(int j = 0; j < column; j++) {
+
+      if(pole[i][j] == '#') { SetColor(0x0A); cout << char(177); }
+
+      else if(pole[i][j] == '?') { SetColor(0x0E); cout << char(178); }
+      else if(pole[i][j] == '1') { SetColor(0x0D); cout << '/'; }
+      else if(pole[i][j] == '2') { SetColor(0x0D); cout << '!'; }
+      else if(pole[i][j] == '3') { SetColor(0x0D); cout << char(24); }
+      else if(pole[i][j] == '4') { SetColor(0x0D); cout << 'l'; }
+      else if(pole[i][j] == '@') { SetColor(0x0B); cout << char(2); }
+      else if(pole[i][j] == 'B') { SetColor(0x0F); cout << char(1); }
+      else if(pole[i][j] == '*') { SetColor(0x0C); cout << char(3); }
+      else if(pole[i][j] == ' ')	cout << ' ';
+
+      else if(pole[i][j] == '&') { SetColor(0x0E); cout << char(2); }
+      else cout << pole[i][j];
+    }
+    cout << endl;
+  }
+
+  cin.get(); cin.get();
+}

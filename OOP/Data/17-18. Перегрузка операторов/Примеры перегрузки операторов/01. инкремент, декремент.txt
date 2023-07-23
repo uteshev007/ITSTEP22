@@ -1,0 +1,161 @@
+#include <iostream>
+using namespace std;
+
+// Перечисление для определение хранимых данных в классе var
+enum type {
+	type_none,
+	type_number,
+	type_real,
+	type_string
+};
+
+class var {
+	// объединение позволяет хранить только один вариант из 3х
+	union
+	{
+		long long number;
+		double real;
+		char *str;
+	};
+	type data;	// Тип хранимых данных
+	size_t len;	// Размер массива для строки
+public:
+	// Конструктор по умолчанию (тип данных не выбран)
+	var() {
+		data = type_none;
+	}
+	// Конструктор принимающий long long (тип данных - целое число)
+	var(long long num) {
+		number = num;
+		data = type_number;
+	}
+	// Конструктор принимающий double (тип данных - вещественное число)
+	var(double num) {
+		real = num;
+		data = type_real;
+	}
+	// Конструкторы для других типов данных и делегирование одному из 2х предыдущих
+	var(int t) :var((long long)t) {}
+	var(unsigned t) :var((long long)t) {}
+	var(short t) :var((long long)t) {}
+	var(unsigned short t) :var((long long)t) {}
+	// unsigned long long не поддерживается!!!!!!!!!!!!!!!!!!!!!
+	var(float t) :var((double)t) {}
+
+	// Преобразование из абстракного к базовому целому
+	operator long long() {
+		return number;
+	}
+
+	// Преобразование из абстракного к базовому вещественному
+	operator double() {
+		return real;
+	}
+
+	/* Логические операторы */
+	bool operator==(const var &tmp)const {
+		if (data == type_none || tmp.data == type_none)
+			return false;
+		else if (data == type_number && tmp.data == type_number)
+			return (number == tmp.number);
+		else if (data == type_real && tmp.data == type_real)
+			return (real == tmp.real);
+		else if (data == type_number && tmp.data == type_real)
+			return (number == tmp.real);
+		else if (data == type_real && tmp.data == type_number)
+			return (real == tmp.number);
+		// Если мы дошли до сюда, то ошибка в следствии того, что не обработаны все варианты
+		return false;
+	}
+
+	bool operator!=(const var &tmp)const {
+		return false;
+	}
+	bool operator>(const var &tmp)const {
+		return false;
+	}
+	bool operator<(const var &tmp)const {
+		return false;
+	}
+	bool operator<(const int &tmp)const {
+		return false;
+	}
+	bool operator>=(const var &tmp)const {
+		return false;
+	}
+	bool operator<=(const var &tmp)const {
+		return false;
+	}
+	// Префиксные формы			--a;		++a;
+	var& operator -- () {				// Префиксная форма декремента	--a;
+		if (data == type_number)
+			--number;
+		else if (data == type_real)
+			--real;
+		return *this;
+	}
+	var& operator ++ () {				// Префиксная форма инкремента	++a;
+		if (data == type_number)
+			++number;
+		else if (data == type_real)
+			++real;
+		return *this;
+	}
+	// Постфиксные формы			a--;		a++;
+	var operator -- (int) {				// Постфиксная форма декремента	a--;
+
+		var res = *this;
+
+		if (data == type_number)
+			--number;
+		else if (data == type_real)
+			--real;
+		return res;
+	}
+	var operator ++ (int) {				// Постфиксная форма инкремента	a++;
+		var res = *this;
+		if (data == type_number)
+			++number;
+		else if (data == type_real)
+			++real;
+		return res;
+	}
+
+	/*
+	Доделать
+	+	-	*	/
+	+=	-=	*=	/=
+	*/
+
+	// Конструктор копирования
+	// Деструктор
+
+	// Оператор =
+};
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+	cout << "Размер класса var=" << sizeof(var) << " Б\n";
+
+	{
+		var tmp = 7;
+		var t1 = tmp++;
+		cout << "tmp=" << (long long)tmp << "\t\tt1=" << (long long)t1 << endl;
+
+		var tmp2 = 7.5;
+		var t2 = ++tmp2;
+		cout << "tmp2=" << (double)tmp2 << "\tt2=" << (double)t2 << endl;
+	}
+	cout << endl;
+	{
+		var tmp = 7;
+		var t1 = tmp--;
+		cout << "tmp=" << (long long)tmp << "\t\tt1=" << (long long)t1 << endl;
+
+		var tmp2 = 7.5;
+		var t2 = --tmp2;
+		cout << "tmp2=" << (double)tmp2 << "\tt2=" << (double)t2 << endl;
+	}
+
+	cin.get();
+}

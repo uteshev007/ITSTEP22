@@ -1,0 +1,150 @@
+//
+// BaseTank.h
+//
+#pragma once
+#include <iostream>
+#include <string>
+#include "Win10.h"
+#include "Image.h"        // class Image;
+#include "Pole.h"         // class Pole;
+#include "BaseBullet.h"   // class BaseBullet;
+using namespace std;
+
+
+// абстрактный базовый класс для танчиков
+class BaseTank
+{
+private:
+protected:
+  // Dir, Height, Width, tankRow, tankCol
+  Image Img;    //  изображение танчика
+  float Speed;  // скорость, 1.0 - максимум
+  int   Health; // здоровье, %
+  // оружие
+  int   TypeBullet; // тип оружия
+  bool  IsShoot;    // команда к выстрелу
+public:
+  BaseTank() : Img(defTankImage),
+    Speed(1.0f), Health(100),
+    TypeBullet(0), IsShoot(false) {}
+  //BaseTank(Image& img) : BaseTank() { Img = img; }
+  BaseTank(Image& img) : BaseTank() { SetImage(img); }
+
+  virtual const Image& GetImage() const { return Img; }
+  virtual void         SetImage(const Image& img) { Img = img; }
+
+  virtual void SetImage(        
+    char img[MaxDirect][TANK_HEIGHT][TANK_WIDTH+1] );
+
+  virtual float GetSpeed() const { return Speed; }
+  virtual void  SetSpeed(float speed) { Speed = speed; }
+
+  virtual int  GetHealth() const     { return Health; }
+  virtual void SetHealth(int health) { Health = health; }
+  virtual bool IsAlive()   const     { return Health > 0; }
+
+  virtual int  GetTypeBullet() const { return TypeBullet; }
+  virtual void SetTypeBullet(int tb) { TypeBullet = tb; }
+
+  // выстрел танчика
+  virtual BaseBullet* Shoot(Pole& pole);  // BaseTank.cpp
+  // Движение на поле
+  virtual void Move(Pole& pole);    // BaseTank.cpp
+  virtual bool IsMove(Pole& pole);  // BaseTank.cpp
+  virtual void OneStep(Pole& pole); // BaseTank.cpp
+  // Прорисовка на поле
+  virtual void Draw(Pole& pole);    // BaseTank.cpp
+
+  // Для паузы
+  virtual bool IsPause() const { return false; }
+  virtual void ResetPause() {}
+
+  // Чисто виртуальный деструктор - прием для
+  //  указания, что класс абстрактный
+  virtual ~BaseTank() = 0;
+}; // class BaseTank
+
+// Реализация деструктора за телом класса
+inline BaseTank::~BaseTank() {}
+
+
+//------------------------------
+class TankLight : virtual public BaseTank
+{
+protected:
+public:
+  TankLight() // : BaseTank()
+  {
+    Health = 75;
+    Speed  = 0.9;
+    TypeBullet = 1; // тип оружия для легкого танчика
+    // задаем изображение для этого типа танчика
+    Img[Up]    [1][1] = 'L';
+    Img[Bottom][1][1] = 'L';
+    Img[Left]  [1][1] = 'L';
+    Img[Right] [1][1] = 'L';
+  }
+  virtual ~TankLight() {}
+}; // class TankLight
+
+class TankMiddle : virtual public BaseTank
+{
+public:
+  TankMiddle()
+  {
+    Health = 100;
+    Speed  = 0.75;
+    TypeBullet = 2; // тип оружия для легкого танчика
+    // задаем изображение для этого типа танчика
+    Img[Up]    [1][1] = 'M';
+    Img[Bottom][1][1] = 'M';
+    Img[Left]  [1][1] = 'M';
+    Img[Right] [1][1] = 'M';
+  }
+  virtual ~TankMiddle() {}
+}; // class TankMiddle
+
+class TankHeavy : virtual public BaseTank
+{
+public:
+  TankHeavy()
+  {
+    Health = 200;
+    Speed  = 0.50;
+    TypeBullet = 3; // тип оружия для легкого танчика
+    // задаем изображение для этого типа танчика
+    Img[Up]    [1][1] = 'H';
+    Img[Bottom][1][1] = 'H';
+    Img[Left]  [1][1] = 'H';
+    Img[Right] [1][1] = 'H';
+  }
+  virtual ~TankHeavy() {}
+}; // class TankHeavy;
+
+//----------------------------
+class TankPlayer : virtual public TankMiddle
+{
+protected:
+  bool bIsPause; // для команды на паузу от игрока
+public:
+  TankPlayer() : bIsPause(false)
+  {
+    // задаем изображение для этого типа танчика
+    Img[Up]    [1][1] = 'P';
+    Img[Bottom][1][1] = 'P';
+    Img[Left]  [1][1] = 'P';
+    Img[Right] [1][1] = 'P';
+  }
+  virtual ~TankPlayer() {}
+
+  virtual void Move(Pole& pole) override;
+
+  // возвращаем состояние паузы от игрока
+  virtual bool IsPause() const override {
+    return bIsPause;
+  }
+  // сбрасываем паузу - когда возвращаемся в игру
+  virtual void ResetPause() override {
+    bIsPause = false;
+  }
+}; // class TankPlayer;

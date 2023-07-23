@@ -1,0 +1,167 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+ Перегрузка операторов
+ Класс эмуляции для типа int - Integer
+*/
+
+class CInt {
+private:
+  int Data; // рабочая переменная класса
+public:
+  CInt() : Data(/*0*/) {}
+  CInt(int val) : Data(val) { /*Data = val;*/ }
+  CInt(string str)
+  { // string str = "123"
+    // CInt A = str, B = string("123")
+    // const char * std::string::c_str();
+    // геттер для строки из std::string;
+    // чтение числа типа int из строки string
+    Data = stoi( str ); // int stoi( std::string s );
+    // Data = stoi(str, nullptr, 10);
+  }
+  CInt(const char * str) {
+    // CInt A = "123";
+    // чтение числа типа int из строки char * / const char*
+    Data = atoi( str ); // int atoi( const char * s );
+  }
+  // конструктор копирования - здесь не обязателен
+  CInt(const CInt& obj)
+  { // CInt B = A;
+    cout << "CInt::CInt(const CInt& obj);\n";
+    // obj  = copy =>  this
+    this->Data = obj.Data;
+  }
+  // геттеры/сеттеры
+  // геттеры - константные методы
+  int  GetData()  const { return Data; }
+  void SetData(int val) { Data = val; }
+
+  // перегруженные операторы
+  // res = a + b  ==>  this + right
+  CInt operator + (const CInt& right) const
+  {
+    //right.SetData(0); - ошибка, т.к. оператор+ константный
+    CInt result; // переменная для хранения результата
+    //this->Data = 0; - ошибка, т.к. оператор+ константный
+    result.Data = this->Data + right.Data;
+    return result; // возвращаем результат сложения
+                   // по значению - копию result
+  } // result.~CInt()
+  // a - b
+  CInt operator - (const CInt& right) const
+  {
+    CInt result = Data - right.Data;
+    //CInt result = this->Data - right.Data;
+    return result; // возвращаем результат вычитания
+  }
+  // метод печати переменных класса в консоль
+  //  метод константный
+  const CInt& Print() const {
+    cout << "Data = " << this->Data << endl;
+    return *this;
+  }
+  // c = CInt + int: c = A + 100
+  CInt operator + (int right) const
+  {
+    //CInt res;
+    //res.Data = this->Data + right;
+    //return res;
+    return CInt(this->Data + right);
+  }
+  // -c
+  CInt operator - () const {
+    CInt result;
+    result.Data = - this->Data;
+    return Data;
+  }
+
+}; // class CInt;
+
+//// A = -C;
+//CInt operator - (const CInt& obj)
+//{
+//  CInt result;
+//  result.SetData( - obj.GetData() );
+//  return result; // -obj
+//}
+
+// глобальная перегрузка операторов
+// глобальный оператор * - глобальная функция, не метод класса
+// a * b  ==>  left * right
+CInt operator * (const CInt& left, const CInt& right)
+{
+  CInt res; // для результата
+  // ошибка, т.к. Data - в приватной части класса
+  //res.Data = left.Data * right.Data;
+  int temp = left.GetData() * right.GetData();
+  res.SetData( temp );
+  return res; // возвращаем результат по значению
+}
+
+// перегруженный глобальный оператор вывода в поток
+//  cout << A  ==>  operator<<(cout, A);
+ostream& operator << (ostream& os, const CInt& obj)
+{
+  os << obj.GetData();// << endl;
+  return os; // возвращаем текущий поток
+}
+
+// cin >> A;
+istream& operator >> (istream& is, CInt& obj)
+{
+  //cout << "Enter value: ";
+  //is >> obj.Data; - нет доступа к CInt::Data
+  int temp;
+  is >> temp;  // cin >> temp;
+  is.ignore(); // cin.ignore();
+  obj.SetData(temp);
+  return is; // возвращаем текущий поток
+}
+
+// глобальный перегруженный оператор сложения
+//  для ситуации суммы int + CInt
+CInt operator + (int left, const CInt& right)
+{
+  return right + left; // CInt + int
+}
+
+int main()
+{
+  //int t1;
+  //cout << t1; // ошибка - не иниц-ная переменная
+
+  CInt t2;    // t2.Data = 0
+  cout << t2 << endl; // ошибки не будет
+
+  t2 = 10;    // t2.Data = 10
+  cout << t2 << endl; // ошибки не будет
+
+  CInt a = 123, b;
+  b = "456"; // b = CInt("456");
+  //CInt c = (a + b).Print();  // CInt c.Data = a.Data + b.Data;
+  CInt c = a + b;  // CInt c.Data = a.Data + b.Data;
+  //c = a.operator+(b); // прямой вызов метода оператора +
+
+  cout << a << " + " << b << " = " << c << endl;
+  c = a - b; // c.operator=(a-b);
+  cout << a << " - " << b << " = " << c << endl;
+
+  cout << "Enter value: ";
+  cin >> a;
+  cout << "a = " << a << endl;
+  // CInt + int:
+  cout << "a+100 = " << a + 100 << endl;
+  cout << "a+100 = " << a.operator+(100) << endl;
+
+  // int + CInt
+  cout << "100+a = " << 100 + a << endl;
+
+  cout << -c << endl;
+}

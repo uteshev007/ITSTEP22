@@ -1,0 +1,202 @@
+//
+// BaseTank.cpp
+//
+#include "BaseTank.h"
+
+// внешний вид танка по умолчанию
+char defTankImage[MaxDirect][TANK_HEIGHT][TANK_WIDTH+1]=
+{
+  { // Direct = 0 - up
+    " | ", //+'\0'
+    "###",
+    "#@#",
+  },
+  { // Direct = 1 - right
+    "## ",
+    "@#-",
+    "## ",
+  },
+  { // Direct = 2 - down
+    "#@#",
+    "###",
+    " | ",
+  },
+  { // Direct = 3 - left
+    " ##", //+ '\0'
+    "-#@",
+    " ##",
+  },
+}; // char defTankImage[][][];
+
+// задать изображение для танчика
+void BaseTank::SetImage(
+  char img[MaxDirect][TANK_HEIGHT][TANK_WIDTH + 1] )
+{
+  Img.SetImage(img);
+} // void BaseTank::SetImage(char img[][][]);
+
+//
+BaseBullet* BaseTank::Shoot(Pole& pole)
+{
+  if (IsShoot == true)
+  { // выстрел танчика
+    IsShoot = false; // чтобы не стрелять бесконечно
+    switch (TypeBullet)
+    {
+      case 0: return new BulletLight(*this);  // простая пулька
+      case 1: return new BulletMiddle(*this); // простая средней силы
+      case 2: return new BulletHeavy(*this);  // тяжелое оружие
+      case 3: return new BulletRocket(*this); // ракета
+    }
+  }
+  return nullptr;
+} // BaseBullet* BaseTank::Shoot(Pole& pole)
+
+// метод для перемещения танчика - для противников-ботов
+void BaseTank::Move(Pole& pole)
+{
+  // случ. выбор направления
+  Direction dir;
+  dir = Direction(rand() % MaxDirect); // rand() % 4 => [0; 3]
+  Img.SetDir(dir); // задать текущее направление
+  // собственно движение танчика
+  if (IsMove(pole) == true) {
+    OneStep(pole); // сделать один шаг на игровом поле
+  }
+  // выстрел случайный с вероятностью 10% - 1/10
+  if (RAND(1, 10) == 6) { IsShoot = true; }// выстрел
+  // 3 из 20
+  //int t = RAND(1, 20);
+  //if (t == 3 || t == 7 || t == 15) { IsShoot = true; }
+} // void BaseTank::Move(Pole& pole)
+
+// проверка на отсутсвие препятствия перед танчиком
+bool BaseTank::IsMove(Pole& pole)
+{
+  Direction dir = Img.GetDir(); // получить текущее направление
+  // координаты танчика
+  int row = Img.GetRow();
+  int col = Img.GetCol();
+  switch (dir) {
+    case Up:     row--; break;
+    case Right:  col++; break;
+    case Bottom: row++; break;
+    case Left:   col--; break;
+  }
+  // 1) проверка на выход за границы поля
+  switch (dir)
+  {
+    case Up: // вверх
+      if (row < 0) { return false; }
+      break;
+    case Bottom: // вниз
+      if (row >= pole.GetHeight()) { return false; }
+      break;
+    case Right: // вправо
+      if (col >= pole.GetWidth()) { return false; }
+      break;
+    case Left: // влево
+      if (col < 0) { return false; }
+      break;
+  }
+  int h = Img.GetHeight(); // высота танчика
+  int w = Img.GetWidth();  // ширина танчика
+  // проверка на препятсвия
+  if (dir == Up) {
+    for (int i = 0; i < w; i++) { // по ширине танчика
+      if (pole[row][col + i] != ' ') {
+        return false; // есть препятствие
+      }
+    }
+  }
+  else if (dir == Bottom) {
+    for (int i = 0; i < w; i++) { // по ширине танчика
+      if (pole[row + h - 1][col + i] != ' ') {
+        return false; // есть препятствие
+      }
+    }
+  }
+  else if (dir == Left) {
+    for (int i = 0; i < h; i++) {
+      if (pole[row + i][col] != ' ') {
+        return false; // есть препятствие
+      }
+    }
+  }
+  else if (dir == Right) {
+    for (int i = 0; i < h; i++) {
+      if (pole[row + i][col + w - 1] != ' ') {
+        return false; // есть препятствие
+      }
+    }
+  }
+  return true; // танчик может двигаться
+
+} // bool BaseTank::IsMove(Pole& pole)
+
+// сделать один шаг на игровом поле
+void BaseTank::OneStep(Pole& pole)
+{
+  Direction dir = Img.GetDir(); // получить текущее направление
+  // координаты танчика
+  int row = Img.GetRow();
+  int col = Img.GetCol();
+  switch (dir) {
+    case Up:     row--; break;
+    case Right:  col++; break;
+    case Bottom: row++; break;
+    case Left:   col--; break;
+  }
+  // задать новые координаты танчика
+  Img.SetRowCol(row, col);
+} // void BaseTank::OneStep(Pole& pole)
+
+// прорисовка танчика на поле
+void BaseTank::Draw(Pole& pole)
+{
+} // void BaseTank::Draw(Pole& pole)
+
+
+// перопределение метода Move() в дочернем классе TankPlayer
+void TankPlayer::Move(Pole& pole)
+{
+  // выбор направления от игрока и выстрел
+  if (_kbhit()) // проверка на нажатие клавиши
+  { // игрок нажал клавишу
+    int key = _getch(); // получить код нажатой клавиши
+    if (key == CURSOR1 || key == CURSOR2) {
+      // для кнопок управления курсором
+      key = _getch();
+    }
+    // защита от defender-ов
+    while (_kbhit()) { _getch(); } // очистка буфера клавиатуры
+
+    // задать текущее направление
+    switch (key)
+    {
+      case _KEY::UP: // клавиша вверх
+        Img.SetDir( Direction::Up );
+        break;
+      case _KEY::DOWN: // клавиша вниз
+        Img.SetDir( Direction::Bottom );
+        break;
+      case _KEY::LEFT: // клавиша влево
+        Img.SetDir( Direction::Left );
+        break;
+      case _KEY::RIGHT: // клавиша вправо
+        Img.SetDir( Direction::Right );
+        break;
+      case _KEY::SPACE: // выстрел
+      case _KEY::ENTER: // выстрел (альтернативный выстрел)
+        IsShoot = true; // команда на выстрел
+        break;
+      case _KEY::ESC: // пауза
+        bIsPause = true;
+        break;
+    } // switch(key)
+  } // if(_kbhit())
+  // собственно движение танчика
+  if (IsMove(pole) == true) {
+    OneStep(pole); // сделать один шаг на игровом поле
+  }
+} // Move()

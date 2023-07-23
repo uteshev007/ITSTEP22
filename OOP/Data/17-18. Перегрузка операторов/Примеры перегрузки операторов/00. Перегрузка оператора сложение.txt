@@ -1,0 +1,36 @@
+#include <iostream>
+using namespace std;
+
+class a{};
+
+class b{
+	int num;
+public:
+	b() { num = 0; }
+	b(int x) {num = x;}//Базовый->Абстрактный
+	b operator+(const b& tmp)const {
+		b res=num + tmp.num;
+		return res;
+	}
+	void show() { cout << num << endl; }
+};
+/*
+	Явные->Неявные
+
+	Базового->Базовый
+	Абстрактный->Абстрактный
+	Базовый->Абстрактный
+	Абстрактный->Базовый
+*/
+
+int main() {
+	setlocale(LC_ALL, "RUSSIAN");
+
+	b q = 1;
+
+	b res = q + 5.5;
+
+	res.show();
+
+	cin.get(); cin.get();
+}

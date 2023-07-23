@@ -1,0 +1,234 @@
+/*
+Tree.h
+template<class T>
+class tree;
+*/
+#pragma once
+
+template<class T>
+struct node {
+  T key;    // Полезные данные
+            // Указатели на родителя, левого и правого потомков
+  int cnt;  // кол-во повторов
+  node<T> * parent;
+  node<T> * left, *right;
+
+  node(T Key) : parent(), left(), right(),
+    key(Key), cnt(1) {};
+  void SetParent(node<T> *par) { parent = par; }
+  void SetLeft(node<T> * p) { left = p; }
+  void SetRight(node<T> * p) { right = p; }
+  node<T> * GetParent() { return parent; }
+  node<T> * GetLeft() { return left; }
+  node<T> * GetRight() { return right; }
+  T GetKey() { return key; }
+};
+
+template<class T>
+class tree {
+  node<T> *root;  // Корень
+public:
+  // Конструктор по умолчанию
+  tree() : root(nullptr) {}
+  tree(node<T> *mas) {}
+  // Конструктор принимающий массив элементов
+  // node<int> *mas = new node<int>[20];
+  // tree<int> t(mas, 20);
+  // delete[]mas;
+  tree(node<T> *mas, size_t size) {
+    for (int i = 0; i < size; i++) {
+      //Insert(mas[i]);
+      push(mas[i].key);
+    }
+  }
+  // Получить корень дерева
+  node<T>* GetROOT() { return root; }
+  // Добавление элемента ++
+  void push(const T& val);
+
+  // Отображение узла
+  void print(node<T> *NODE);
+  // Отображение всего дерева
+  void print();
+
+  // Поиск данных в узле ++
+  node<T> * Search(node<T>* Node, const T& key);
+
+  // Поиск минимума ++
+  node<T>* Min(node<T>* Node);
+  // Поиск максимума ++
+  node<T>* Max(node<T>* Node);
+
+  // Переход к следующему узлу 
+  node<T>* NextLeft(node<T>* Node) {
+    if (Node) return Node->GetLeft();
+    return nullptr;
+  }
+  node<T>* NextRight(node<T>* Node) {
+    //if (Node) return Node->GetRight();
+    //return nullptr;
+    return (Node) ? Node->GetRight() : nullptr;
+  }
+  // Переход к родительскому узлу
+  node<T>* Previous(node<T>* Node) {
+    return (Node) ? Node->GetParent() : nullptr;
+  }
+  void Insert(node<T>* Node);	// Вставка узла
+  
+  // Удаление узла/ветки 
+  //  (nullptr удаление всего дерева)
+  //void Del(node<T> * Node = nullptr);
+
+  // удаление всего дерева
+  void Del() { Del(root); root = nullptr; };
+  // Удаление узла/ветки 
+  void Del(node<T> * Node);
+
+  ~tree() { Del(); /*Del(root);*/ }
+};
+
+// Search
+template<class T>
+node<T>* tree<T>::Search(node<T>* Node, const T& key) {
+  if (!Node) return nullptr;
+  node<T> * temp = Node;
+  while (temp) {
+    if (temp->key == key) return temp; // break;
+    if (temp->key > key) temp = temp->GetLeft();
+    else temp = temp->GetRight();
+  }
+  return nullptr; //return temp;
+}
+
+// Min(root)
+template<class T>
+node<T>* tree<T>::Min(node<T>* Node) {
+  if (!Node) return nullptr;
+  node<T> * temp = Node;
+  while (temp->GetLeft()) temp = temp->GetLeft();
+  return temp;
+}
+
+// Max(root)
+template<class T>
+node<T>* tree<T>::Max(node<T>* Node) {
+  if (!Node) return nullptr;
+  node<T> * temp = Node;
+  while (temp->GetRight() != nullptr)
+    temp = temp->GetRight();
+  return temp;
+}
+
+template<class T>
+void tree<T>::Insert(node<T>* Node) {
+
+}
+
+// Удаление узла/ветки
+template<class T>
+void tree<T>::Del(node<T>* Node) {
+  if (!Node) return;
+  node<T> * temp = Node->GetLeft();
+  Del(temp); /*if (temp) Del(temp); */
+  temp = Node->GetRight();
+  Del(temp); /*if (temp) Del(temp); */
+  delete Node;
+}
+
+template<class T>
+void tree<T>::push(const T& val) {
+  if (!root) { root = new node<T>(val); return; }
+  node<T> *temp = root;
+  node<T> *temp2;
+  while (temp) {
+    temp2 = temp;
+    if (temp->key > val)      temp = temp->GetLeft();
+    else if (temp->key < val) temp = temp->GetRight();
+    else { /* temp->key == val */
+      temp->cnt++;
+      //return;
+      //temp = temp2 = nullptr;
+      temp2 = nullptr;
+      break;
+    }
+  }
+  if (temp2) {
+    temp = new node<T>(val);
+    if (temp2->key > val) temp2->SetLeft(temp);
+    else                  temp2->SetRight(temp);
+    temp->SetParent(temp2);
+  }
+}
+
+template<class T>
+void tree<T>::print(node<T> *Node) {
+  if (!Node) return;
+  node<T> * temp = Node->GetLeft();
+  print(temp);              /* if (temp) print(temp); */
+  cout << Node->key << " (" << Node->cnt << ")" << endl;
+  temp = Node->GetRight();
+  print(temp);              /*if (temp) print(temp); */
+}
+
+template<class T>
+void tree<T>::print() {
+  print(root);
+}
+
+
+
+
+
+
+
+#define _CRT_SECURE_NO_WARNINGS // disable deprecation
+#include <iostream>
+
+// Шаблонные классы STL (Standart Template Library)
+#include <string>   // string;
+#include <stack>    // stack<T>;
+#include <queue>    // queue<T>
+#include <array>    // array<T>
+#include <vector>   // vector<T>
+#include <map>      // map<TKey, T>
+#include <time.h>
+#include "Tree.h" // tree<T>
+
+using namespace std;
+#pragma warning(disable:4996) // отключение warning C4996
+class LC { public: LC() { setlocale(LC_ALL, "Rus");srand(time(0)); }~LC() { cin.get(); cin.get(); } }l;
+
+
+
+int main()
+{
+  tree<int> a;
+  a.push(3);
+  a.push(3);
+  a.push(1);
+  a.push(2);
+  a.push(3);
+  a.print();
+  a.Del();
+  a.push(rand() % 10 + 10);
+  a.push(rand() % 10 + 10);
+  a.push(rand() % 10 + 10);
+  a.push(rand() % 10 + 10);
+  a.push(rand() % 10 + 10);
+  a.push(rand() % 10 + 10);
+  a.push(rand() % 10 + 10);
+  a.push(rand() % 10 + 10);
+  a.print();
+  tree<string> ts;
+  for (int i = 0; i < 2000; i++) {
+    string str = "i=";
+    char buf[20];
+    //_itoa(rand()%20, buf, 10);
+    sprintf(buf, "%2d", rand() % 20);
+    str += buf;
+    ts.push(str);
+  }
+  ts.print();
+  ts.Del();
+  return 0;
+}

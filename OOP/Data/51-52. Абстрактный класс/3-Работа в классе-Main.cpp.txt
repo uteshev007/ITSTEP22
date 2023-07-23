@@ -1,0 +1,47 @@
+#include <iostream>
+#include <string>
+#include <time.h>
+#include "DataBase.h"
+
+using namespace std;
+
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+
+// выбор СУБД и возврат указателя экземпляра БД
+DataBase * SelectDB()
+{
+  return nullptr;
+}
+
+// rand()
+string CreateReqSQL() {
+  return "Самостоятельно снегерировать строку SQL-запроса";
+}
+
+int main()
+{
+  DataBase *pDB = nullptr;
+  pDB = SelectDB();
+  if (pDB) { // OK
+    string user = "Admin";
+    string pass = "123456";
+    pDB->init();
+    pDB->open(user, pass);
+    if ( pDB->IsOpen() ) { // OK
+      for (int i = 0; i < 5; i++) {
+        string reqSQL;
+        // создание SQL-запроса
+        reqSQL = CreateReqSQL();
+        pDB->Execute( reqSQL );
+        string result = pDB->Result();
+        cout << result << endl;
+      }
+      pDB->close();
+    }
+    else {
+      cout << "Неверное имя пользователя\n";
+    }
+  }
+}

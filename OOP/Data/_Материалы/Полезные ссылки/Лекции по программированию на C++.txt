@@ -1,0 +1,46 @@
+[Pluralsight] C++ | Path [2020, ENG]
+C++ is an object-oriented programming language that was first developed by Bjarne Stroustrup. It was originally created to be an extension of the C language, which is a middle-level language, and these roots are still present today. C++ can be developed in the object-oriented style, or in the C-style, making it a truly hybrid language. This path will take you from the very basics of programming using C++ and will vault you forward into creating rich applications for the Windows operating system. You can also create platform independent desktop applications in C++ using either the Qt or Cinder frameworks. Those courses are in our library but not listed on this path.
+https://drive.google.com/drive/folders/1Z21nJJzpgs4dz1f9kKApHdZwhkqVtu8W?usp=sharing
+
+
+[Udemy] Mastering Data Structures and Algorithms using C and C++ [2019-06, ENG, LQ]
+You may be new to Data Structure or you have already Studied and Implemented Data Structures but still you feel you need to learn more about Data Structure in detail so that it helps you solve challenging problems and used Data Structure efficiently.
+This 53 hours of course covers each topic in greater details, every topic is covered on Whiteboard which will improve your Problem Solving and Analytical Skills. Every Data Structure is discussed, analysed and implemented with a Practical line-by-line coding.
+https://drive.google.com/drive/folders/1XnozM52AMBmsinpz2Wx3J4R5nbfkFR5r?usp=sharing
+
+
+[Udemy] Complete C++ Scientific Programming Bundle [2021, ENG, LQ]
+The 'Scientific Programming with C++' is easiest and the most innovative and complete hands-on practical C++ course on the Udemy Platform for learning scientific and research data programming! While languages like Python and R are increasingly popular for Scientific Programming or Data sciences, C/ C++ can be a stronger choice for efficient and effective data and scientific computing. In this course, we hands-on the latest C++17 for Scientific Programming. The focus of this course lies on learning beginner to advanced programming on high-performance computers, object-oriented software design, generic or template-based programming, and the efficient implementation of numerical algorithms.
+This course will cover the basics of C++ to the advanced and useful libraries like STL, BOOST, OpenMP and MPI
+https://drive.google.com/drive/folders/1S9t4BOJt1b5mMHZPblSbcYTMrdLi7XrM?usp=sharing
+
+
+[МФТИ] Базовый курс C++ [2022, RUS, LQ]
+Лекции по программированию на C++ в бакалавриате МФТИ.
+Автор курса и лектор Константин Владимиров, ведущий инженер в отделе компиляторов корпорации Интел.
+Курс рассчитан на начинающих. Предполагается некий базовый уровень знания C и ассемблера.
+Каждая лекция завершается списком литературы, которая может помочь при самостоятельном освоении курса.
+https://drive.google.com/drive/folders/1jFMPEjuZCtfw7h3DOzwrVmVaBKsIDjTx?usp=sharing
+
+
+[LinkedIn Learning / Lynda.com / Richard Wells] Test-Driven Development in C++ [2018, ENG]
+Every software developer wants to ship high-quality applications. Test-driven development (TDD) is a key discipline that can help you enhance your development process-and, in turn, your code base-by ensuring that crashes and bugs are addressed early on. In this course, join Richard Wells as he covers unit testing and TDD for C++ projects. Richard provides an overview of both unit testing and TDD, explaining why both are crucial for developers. He also shows how to set up your development environment for TDD and goes over the Google Test C++ unit-testing framework. Throughout the course, he shares best practices and provides examples and test cases that can help you gain a practical understanding of TTD in C++.
+https://drive.google.com/drive/folders/1-QlZ8Uy7cwhoV--LM43j-HuoF861965_?usp=sharing
+
+
+[Udemy] Learn Advanced C++ Programming [2017, ENG]
+This course will take you from a basic knowledge of C++ to using more advanced features of the language. This course is for you if you want to deepen your basic knowledge of C++, you want to learn C++ 11 features, or you've taken my free beginners' C++ course and you're looking for the next step.
+We'll start with a look at C++ file handling and move through STL, template classes, operator overloading, lambda expressions, move constructors and much more besides.
+At the end of the course I'll show you how to create a program that generates fractal images, using a a few of the language features we've seen in the course and giving you a great work out with smart pointers and arrays.
+I'll give you exercises throughout the course, ranging from easy near the start, to quite tricky (but optional!) near the end of the course.
+https://drive.google.com/drive/folders/1SUDtXU74_dM1VsUHGmMC1SSL-JYytbZp?usp=sharing
+
+
+[O'Reilly Media / Infinite Skills / Jason Turner] Learning C++ Best Practices Training Video [2016, ENG]
+In this Learning C++ Best Practices training course, expert author Jason Turner will teach you how to write code that is more maintainable, simpler, and faster. This course is designed for users that already have a basic working knowledge of C++.
+You will start by learning about expressions and statements, such as variable scopes and initialization. From there, Jason will teach you about resource management, including using raw pointers, managing resources automatically using resources handles and RAII, and using standard containers when interacting with C APIs. Finally, this video tutorial will leave you with a refresher on expressions and statements and resource management, as well as next steps.
+Once you have completed this computer based training course, you will have learned how to write simpler, faster, and more maintainable code. Working files are included, allowing you to follow along with the author throughout the lessons.
+В этом изучении с++ лучшей практики учебного курса, эксперт Автор Джейсон Тернер научу вас, как писать код, более ремонтопригодна, проще, и быстрее. Этот курс предназначен для пользователей, уже имеющих базовые знания с++.
+https://drive.google.com/drive/folders/1wwPp_tadAx2d9PR_yH_WH_TBQaGyEmAI?usp=sharing
+
+

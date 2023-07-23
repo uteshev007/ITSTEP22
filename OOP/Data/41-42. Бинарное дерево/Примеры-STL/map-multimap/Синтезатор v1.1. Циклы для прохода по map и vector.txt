@@ -1,0 +1,20 @@
+#include <iostream>
+#include <string>
+#include <map>
+#include <vector>
+#include <Windows.h>
+using namespace std;
+
+int main()
+{
+	map<string, vector<int>> Tones;
+	Tones["C"] = { 0,33,65,131,262,523,1047,2093,4186 };
+	Tones["C#"] = { 0,35,69,139,277,554,1109,2217,4435 };
+	for (auto it = Tones.begin(); it != Tones.end(); it++)
+	{
+		for (auto pb = it->second.begin(); pb != it->second.end(); pb++)
+			cout << it->first << " " << *pb << endl;
+			//Beep(*pb, 200);
+	}
+	cin.get(); cin.get();
+}

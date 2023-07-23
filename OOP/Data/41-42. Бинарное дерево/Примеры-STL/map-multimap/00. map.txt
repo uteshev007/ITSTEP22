@@ -1,0 +1,29 @@
+#include <iostream>
+#include <string>
+#include <map>
+using namespace std;
+
+//дл€ сокращени€ записи вводим обозначение:
+typedef map<int,string> MyMap;
+typedef MyMap::iterator Iter;
+int main()
+{
+	//начальна€ инициализаци€ map
+	MyMap m;
+	//использование value_type дл€ форимрование пары "ключ - значение"
+	m.insert(MyMap::value_type(3,"Ivanov"));
+	//можно непосредственно использовать тип pair
+	m.insert(pair<int,string>(2,"Petrov"));
+	//использование функции make_pair
+	m.insert(make_pair(3,"Sidorov"));
+
+	for(Iter it = m.begin(); it != m.end(); it++)
+	{
+		//использование свойств итератора:
+		//first дл€ обращени€ к ключу,
+		//second дл€ обращение к значению
+		cout << it->first << " " << it->second << endl;
+	}
+	
+	cin.get();cin.get();
+}

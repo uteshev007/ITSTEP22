@@ -1,0 +1,122 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+// —писки
+//  ќдносв€занный список
+
+// Ўаблон структуры одного узла списка
+template <class T>
+struct Element
+{
+  Element * pNext;   // указатель на следующий элемент
+  T         Data;    // полезные данные
+  // ћетоды узла
+  Element();
+  Element(T data, Element* next = nullptr);
+
+  Element * GetNext();
+  void      SetNext(Element* next);
+
+  T    GetData();
+  void SetData(T val);
+};
+
+// std::list<>
+// Ўаблон класса односв€зного списка
+template <class T>
+class List
+{
+private:
+  Element<T> * pHead, * pTail; // указатели на головной и хвостой элементы списка
+  int Cnt; // текущее количество узлов в списке
+public:
+  List(); // пустой список
+  List(const T& val); // иниц-ци€ одним элементом
+  List(const T* mas, int size); // иниц-ци€ массивом
+
+  // конструктор копировани€
+  List(const List& obj);
+
+  // оператор копировани€, присваивани€ копированием
+  List& operator = (const List& obj);
+
+  // оператор присваивани€
+  List& operator = (const T& obj);
+
+  // ƒеструктор - удалени всех элементов списка
+  ~List();
+
+  // ќчистка узла - удалени всех элементов списка
+  void Clear();
+
+  // ƒобавить новый элемент в начало списка
+  //  јналог метода list<T>::push_front();
+  void AddHead(const T& val);
+
+  // ƒобавить новый элемент в конец списка
+  //  јналог метода list<T>::push_back();
+  void AddTail(const T& val);
+
+  // ”далить головной элемент
+  //  јналог метода list<T>::pop_front();
+  void DeleteHead();
+
+  // ”далить хвостовой элемент
+  //  јналог метода list<T>::pop_back();
+  void DeleteTail();
+
+  // ¬ставить элемент в список в указанную позицию index
+  void Insert(const T& val, int index);
+
+  // ѕолучить текущее кол-во узлов в списке
+  int GetCnt() const;
+
+  // ѕолучить значение узла по указанной позиции
+  // cout << A.Get(i) << endl;
+  T Get(int index = 0) const;
+
+  // перегруженные операторы индексации []
+  // int a = list[i];
+  T operator[](int index) const; // дл€ чтени€
+
+  // list[i] = 123;
+  T& operator[](int index); // дл€ записи (изменени€)
+
+  // ѕоиск узла с заданным значением
+  // ¬озвращает индекс найденного узла или -1 в противном случае
+  int Search(const T& val);
+
+  // полный прототип перегруженного оператора вывода в поток
+  template <class T>
+  friend ostream& operator << (ostream& os, const List<T>& obj);
+
+}; // class List<>;
+
+// сам перегруженный оператор вывода в поток
+template <class T>
+ostream& operator<<(ostream& os, const List<T>& obj)
+{
+}
+
+
+int main()
+{
+  List< string > A("First value");
+  string s = "Second value";
+  A.AddHead(s);
+  s = "Third value";
+  A.AddTail(s);
+  s = "Fourth value";
+  A.Insert(s, 1);
+  cout << A << endl;
+  cout << endl;
+  for (int i = 0; i < A.GetCnt(); i++) {
+    cout << i + 1 << ") " << A.Get(i) << endl;
+    //cout << i+1 << ") " << A[i] << endl;
+  }
+}

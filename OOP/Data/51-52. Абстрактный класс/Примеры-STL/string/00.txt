@@ -1,0 +1,22 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+void show(const char *str) {
+	cout << str;
+}
+
+int main() {
+
+	string str("jslkdfjglkdsjflkgjdslfgj");
+	string str2 = "sdf";
+
+	str.size();		// Количество символов в строке
+
+	str.c_str();	// Возвращает адрес строки
+	str.data();		// Возвращает адрес массива символов
+
+	show(str.c_str());
+
+	cin.get();
+}

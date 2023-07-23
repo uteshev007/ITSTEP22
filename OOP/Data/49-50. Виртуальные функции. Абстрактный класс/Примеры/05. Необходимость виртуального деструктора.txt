@@ -1,0 +1,37 @@
+#include <iostream>
+
+using namespace std;
+
+// Вспомогательный класс
+class Object
+{
+public:
+	Object() { cout << "Object()" << endl; }
+	~Object() { cout << "~Object()" << endl; }
+};
+
+// Базовый класс
+class Base
+{
+public:
+	Base() { cout << "Base()" << endl; }
+	~Base() { cout << "~Base()" << endl; }
+	virtual void print() = 0;
+};
+
+// Производный класс
+class Derived : public Base
+{
+public:
+	Derived() { cout << "Derived()" << endl; }
+	~Derived() { cout << "~Derived()" << endl; }
+	void print() {}
+	Object  obj;
+};
+
+int main()
+{
+	Base * p = new Derived;
+	delete p;
+	cin.get();
+}

@@ -1,0 +1,44 @@
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+#include <time.h>
+using namespace std;
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); } ~LC() { cin.get(); cin.get(); } } _;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+
+/*
+  Шаблоны классов. Класса Стек
+*/
+
+template <class T>
+class Stack
+{
+private:
+  Data;
+  Size, Depth;
+public:
+  Stack();
+  Stack(int depth);
+  Stack(const Stack& obj);
+  Stack& operator=(const Stack& obj);
+  ~Stack();
+
+  int GetSize();
+  int GetDepth();
+
+  void SetDepth(int newDepth);
+
+  void push(T val);
+  T pop();
+  T top();
+  T& top();
+
+  friend ostream& operator << (ostream& os, const Stack<T>& obj);
+}; // class Stack<>;
+
+
+int main()
+{
+  Stack<int> A;
+}

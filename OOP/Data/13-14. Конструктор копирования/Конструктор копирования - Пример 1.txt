@@ -1,0 +1,61 @@
+#include <iostream>
+#include <string>
+#include <time.h>
+using namespace std;
+
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { system("pause > nul"); } } _;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+
+class Test {
+private:
+  int   size;
+  int * mas; // указатель на динамический массив
+public:
+  Test() : size(10), mas(new int[size]) {
+    for (int i = 0; i < size; i++) {
+      mas[i] = RAND(1, 10);
+    }
+  }
+
+  //~Test() { delete[]mas; } // деструктор - ќЅя«ј“≈Ћ№Ќќ!
+
+  void SetAt(int index, int val) { mas[index] = val; }
+
+  void Print(string Title = "") {
+    cout << Title << " : "; // заголовок
+    cout << mas << " : "; // адрес массива
+    for (int i = 0; i < size; i++) {
+      cout << mas[i] << " ";
+    }
+    cout << endl;
+  }
+}; // class Test
+
+int main()
+{
+  Test A;
+  A.Print("A");
+
+  Test B(A); // работает конструктор копировани€
+  B.Print("B");
+
+  Test C = A; // работает конструктор копировани€
+  C.Print("C");
+
+  cout << "-----------\n";
+  A.SetAt(1, 123);
+
+  A.Print("A");
+  B.Print("B");
+  C.Print("C");
+
+  cout << "-----------\n";
+  Test D;
+  D = A; // работает оператор копировани€
+  //D.operator=(A); // можно и так вызвать оператор копировани€
+
+  A.SetAt(2, 123);
+
+  A.Print("A");
+  D.Print("D");
+}

@@ -1,0 +1,158 @@
+#include <iostream>
+#include <iomanip>  // манипуляторы
+#include <string>
+#include <time.h>
+using namespace std;
+#define RAND(Min,Max)  (rand()%((Max)-(Min)+1)+(Min))
+struct LC { LC() { system("chcp 1251 > nul"); srand(time(0)); }~LC() { cin.get(); cin.get(); } } _;
+
+/*
+  Наследование
+
+ Задание 1
+Создайте класс Student, который будет содержать
+информацию о студенте.
+С помощью механизма наследования, реализуйте
+класс Aspirant (аспирант - студент, который
+готовится к защите кандидатской работы)
+производный от Student.
+*/
+
+class Student
+{
+private:
+  string Name;   // ФИО
+protected:
+  string Diplom; // название темы дипломной работы
+  int    Year;   // год защиты
+public:
+  Student() : Name(), Diplom(), Year() {}
+  Student(string name)
+    : Name(name), Diplom(), Year() {}
+  Student(string name, string diplom, int year)
+    : Name(name), Diplom(diplom), Year(year) {}
+  void   SetName(string name) { Name = name; }
+  string GetName()const       { return Name; }
+  void Print()const {
+    cout << "About Student:\n";
+    cout << "Name:   " << Name << endl;
+    cout << "Diplom: " << Diplom << endl;
+    cout << "Year:   " << Year << endl;
+  }
+  friend ostream& operator << (ostream& os,
+    const Student& obj)
+  {
+    os << "About Student:\n";
+    os << "Name:   " << obj.Name << endl;
+    os << "Diplom: " << obj.Diplom << endl;
+    os << "Year:   " << obj.Year << endl;
+    return os;
+  }
+  void Input() {
+    cout << "Enter info for Student:\n";
+    cout << "Name: ";    getline(cin, Name);
+    cout << "Diplom: ";  getline(cin, Diplom);
+    cout << "Year: ";    cin >> Year;
+    cin.ignore();
+  }
+  friend istream& operator >> (istream& is,
+    Student& obj)
+  {
+    cout << "Enter info for Student:\n";
+    cout << "Name: ";    getline(is, obj.Name);
+    cout << "Diplom: ";  getline(is, obj.Diplom);
+    cout << "Year: ";    is >> obj.Year;
+    return is.ignore();
+  }
+
+}; // class Student;
+
+// Производный, дочерний класс Aspirant
+//   порожденный от Student класс
+class Aspirant : public Student
+{ // + body of Student
+private:
+  string Diser; // диссертационная работа аспиранта
+protected:
+  int Year;     // год защиты диссертации
+public:
+  Aspirant() : Student(), Diser(), Year()
+  {
+    //Name = "Vasya"; - нет доступа
+    //Diplom = ""; - OK
+  }
+  Aspirant(string name)
+    : Student(name), Diser(), Year() {}
+  Aspirant(string name, string diser, int year)
+    : Student(name), Diser(diser), Year(year) {}
+  // конструктор для полного построения класса
+  // [Student + Aspirant]
+  Aspirant(string name,
+    string st_diplom, int st_year,
+    string as_diser, int as_year)
+    : Student(name, st_diplom, st_year),
+      Diser(as_diser), Year(as_year) {}
+  //
+  void Print()const {
+    cout << "About Aspirant:\n";
+    Student::Print(); // вызов метода базового класса
+                      // Student:: - уточнение области объекта
+    // с уточнением для переменных их местоположения
+    //   в объекте - из области Aspirant
+    cout << "Diser: " << Aspirant::Diser << endl;
+    cout << "Year:  " << Aspirant::Year  << endl;
+    // из области Student
+    cout << "Diplom of Student: "
+      << Student::Diplom << endl;
+    cout << "Year of Stident:  "
+      << Student::Year << endl;
+  }
+  friend ostream& operator << (ostream& os,
+    const Aspirant& obj)
+  {
+    os << "About Aspirant:\n";
+    // приведение obj к типу Student и вызов
+    //  соответствующего оператора << для класса Student
+    os << (Student&)obj << endl;
+    os << "Diser: " << obj.Diser << endl;
+    os << "Year:  " << obj.Year << endl;
+    return os;
+  }
+  // метод и оператор для ввода данных в класс Aspirant
+  void Input()
+  {
+    cout << "Enter info for Aspirant:\n";
+    Student::Input(); // прямой вызов метода из базового класса
+    //cin >> (Student&)(*this);
+    cout << "Diser: ";   getline(cin, Diser);
+    cout << "Year:  ";   cin >> Year;
+    cin.ignore();
+  }
+  friend istream& operator >> (istream& is,
+    Aspirant& obj)
+  {
+    cout << "Enter info for Aspirant:\n";
+    is >> (Student&)obj;
+    cout << "Diser: ";   getline(is, obj.Diser);
+    cout << "Year:  ";   is >> obj.Year;
+    return is.ignore();
+    //return is;
+  }
+
+}; // class Aspirant;
+
+int main()
+{
+  Student St("Vasya", "Односвязные списки", 2020);
+  cout << St << endl;  cout << "---------\n";
+  cin >> St;           cout << "---------\n";
+  cout << St << endl;  cout << "---------\n";
+
+  Aspirant As("Dima", "Наследование", 2021);
+  cout << As << endl;  cout << "---------\n";
+  cin >> As;           cout << "---------\n";
+  cout << As << endl;  cout << "---------\n";
+
+  (Student&)As = St; // Студент из As = Студент St
+  cout << As << endl;  cout << "---------\n";
+}

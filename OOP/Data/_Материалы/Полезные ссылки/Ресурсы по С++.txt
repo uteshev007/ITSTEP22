@@ -1,0 +1,35 @@
+Справка по C/C++
+https://ru.cppreference.com/w/
+http://www.cplusplus.com/
+
+Хабрахабр
+https://habr.com/ru/
+https://habrahabr.ru/
+
+
+Каталог API (Microsoft) и справочных материалов
+https://docs.microsoft.com/ru-ru/
+http://msdn.microsoft.com/library/ru-ru
+
+
+RSDN.RU
+сайт, посвященный разработке программного обеспечения
+https://rsdn.org/
+
+
+
+Главный вопрос программирования, рефакторинга и всего такого
+https://www.viva64.com/ru/b/0391/
+
+
+Логические выражения в C/C++. Как ошибаются профессионалы
+https://www.viva64.com/ru/b/0390/
+
+
+Головная боль от использования математического софта
+https://www.viva64.com/ru/b/0515/
+
+
+Большой Калькулятор выходит из под контроля
+https://www.viva64.com/ru/b/0212/
+
