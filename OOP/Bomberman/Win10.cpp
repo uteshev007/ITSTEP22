@@ -5,7 +5,6 @@
 #include <iostream>
 #include "Win10.h"    // из текущего каталога, папки проекта
 
-
 // перегруженные функции для смена цвета
 void SetColor(int colBkgr, int colSym)
 {

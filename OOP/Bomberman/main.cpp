@@ -1,8 +1,4 @@
-﻿﻿//
-// main.cpp
-//
-
-#include <iostream>
+﻿#include <iostream>
 #include <string>       // для строк std::string
 #include <time.h>
 #include <vector>
@@ -11,3 +7,5 @@
 #include "BasePlayer.h"
 
 using namespace std;
+
+

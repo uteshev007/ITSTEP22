@@ -1,9 +1,4 @@
-﻿//
-// Файл заголовка, Header file
-//  Win10.h
-//
-#pragma once
-
+﻿#pragma once
 #include <Windows.h>
 #include <stdlib.h>
 #include <stdio.h>
