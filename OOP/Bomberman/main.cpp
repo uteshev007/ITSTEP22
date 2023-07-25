@@ -54,11 +54,12 @@ int cntLost = 0;
 void StartGame();       // ф-ция для запуска новой игры
 //GetCoordHero();       // Функция для получения координаты главного игрока
 //GetCoordEnemys();     // Функция для получения координат противников
+void Menu();
 void DrawPole();         // функция вывода игрового поля на экран
 void InitNewGame();
 int main()
 {
-	system("chcp 866 > nul"); //setlocale(LC_ALL, "RUSSIAN");
+	system("chcp 65001 > nul"); //setlocale(LC_ALL, "RUSSIAN");
 	//system("chcp 866 > nul"); //setlocale(LC_ALL, "C");
 
 	// вычисление высоты игрового поля:
@@ -66,8 +67,8 @@ int main()
 	PoleHeight = sizeof(Pole) / sizeof(Pole[0]);
 	PoleWidth = Pole[0].size(); // ширина строки поля
 	// MainMenu(); // Главное меню игры
-	HomePage();
 	InitNewGame();
+	Menu();
 	StartGame();     // ф-ция для запуска новой игры
 	// ContinueGame();  // ф-ция для продолжения игры после паузы
 	// Settings();      // настройки
@@ -194,4 +195,147 @@ void DrawPole()
 	} // for (i : PoleHeight)
 } // void DrawPole()
 
+void Menu()
+{
+    system("chcp 1251 > nul");
+    cout << endl << endl;
+    cout << " ▀█████████▄   ▄██████▄    ▄▄▄▄███▄▄▄▄   ▀█████████▄     ▄████████    ▄████████   ▄▄▄▄███▄▄▄▄      ▄████████ ███▄▄▄▄   " << endl;
+    cout << "   ███    ███ ███    ███ ▄██▀▀▀███▀▀▀██▄   ███    ███   ███    ███   ███    ███ ▄██▀▀▀███▀▀▀██▄   ███    ███ ███▀▀▀██▄ " << endl;
+    cout << "   ███    ███ ███    ███ ███   ███   ███   ███    ███   ███    █▀    ███    ███ ███   ███   ███   ███    ███ ███   ███ " << endl;
+    cout << "  ▄███▄▄▄██▀  ███    ███ ███   ███   ███  ▄███▄▄▄██▀   ▄███▄▄▄      ▄███▄▄▄▄██▀ ███   ███   ███   ███    ███ ███   ███ " << endl;
+    cout << " ▀▀███▀▀▀██▄  ███    ███ ███   ███   ███ ▀▀███▀▀▀██▄  ▀▀███▀▀▀     ▀▀███▀▀▀▀▀   ███   ███   ███ ▀███████████ ███   ███ " << endl;
+    cout << "   ███    ██▄ ███    ███ ███   ███   ███   ███    ██▄   ███    █▄  ▀███████████ ███   ███   ███   ███    ███ ███   ███ " << endl;
+    cout << "   ███    ███ ███    ███ ███   ███   ███   ███    ███   ███    ███   ███    ███ ███   ███   ███   ███    ███ ███   ███ " << endl;
+    cout << " ▄█████████▀   ▀██████▀   ▀█   ███   █▀  ▄█████████▀    ██████████   ███    ███  ▀█   ███   █▀    ███    █▀   ▀█   █▀  " << endl;
+    cout << "                                                                     ███    ███                                        " << endl;
+    cout << endl;
+    cout << "////////////////////////////////////////////////////////" << endl;
+    cout << "////////////////////////////////////////////////////////" << endl;
+    cout << "//////////////////////////////******////////////////////" << endl;
+    cout << "/(///(/////////////////////, .@@@@@&  //////////////////" << endl;
+    cout << "///(///(/////(/////////////, .@#         .//////////////" << endl;
+    cout << "/////(///%%(///////////////,      @@@@@@@%    //////////" << endl;
+    cout << "/////%%%%@@&%(///////////,   .@@@@@@@@@@@@@@@&  ////////" << endl;
+    cout << "///(/%%@@. ////(///////, .@@@&%%%%%%%%%%%%%%@@@%  //////" << endl;
+    cout << "/(///(/%%//. ./////////, .@&%%%#  %%%%%&  %%%%@%  //////" << endl;
+    cout << "/////(/////. ,/////////, .@&%%%#  %%%%%&  %%%%@%  //////" << endl;
+    cout << "///(/////        */////, .@&%%%#  %%%%%%  %%%%@%  //////" << endl;
+    cout << "/////. @@@@@@        ,///, .@@@@@@@@@@@@@@@@@&  ////////" << endl;
+    cout << "/////    #@          ./, .@/                  @%  //////" << endl;
+    cout << "/////                  ,@@@/ ./////////////*  @@@&  ////" << endl;
+    cout << "/////                  ,@  *//////////////////  @&  ////" << endl;
+    cout << "///////..          **....  ......,%%%%%#......  ....  //" << endl;
+    cout << "/////////////////////      (@@@#/////////(@@@&        //" << endl;
+    cout << "/////////////////////////. (@@@@@*     .@@@@@&  ////////" << endl;
+    cout << "/////////////////////////.         ./,          ////////" << endl;
+    cout << "/////////////////////////. */////* ./, ,//////  ////////" << endl;
+    cout << "////////////////////////////////////////////////////////" << endl;
+    cout << "////////////////////////////////////////////////////////" << endl;
+    cout << "" << endl;
+    int mRow = 16, mCol = 80;
+    int Select = 0;
+    int selColorFon = COLOR::white;
+    int selColorSym = COLOR::blue;
+    int defColorFon = COLOR::black;
+    int defColorSym = light_yellow;
+
+    for (;;) {
+        int i = 0;
+
+        if (Select == i) SetColor(selColorFon, selColorSym);
+        else            SetColor(defColorFon, defColorSym);
+        SetPos(mRow + i++, mCol);
+        cout << "   Начать игру   ";
+
+        if (Select == i) SetColor(selColorFon, selColorSym);
+        else            SetColor(defColorFon, defColorSym);
+        SetPos(mRow + i++, mCol);
+        cout << " Статистика игры ";
+
+        if (Select == i) SetColor(selColorFon, selColorSym);
+        else            SetColor(defColorFon, defColorSym);
+        SetPos(mRow + i++, mCol);
+        cout << "   Об Авторе  ";
+
+        if (Select == i) SetColor(selColorFon, selColorSym);
+        else            SetColor(defColorFon, defColorSym);
+        SetPos(mRow + i++, mCol);
+        cout << "      Выход       ";
+
+        SetColor(black, white);
+
+        int MaxSelect = i - 1;
+
+        int key = _getch();
+        if (key == _KEY::CURSOR1 || key == _KEY::CURSOR2) { key = _getch(); }
+        while (_kbhit()) { _getch(); }
+        switch (key)
+        {
+        case _KEY::UP:
+        case _KEY::LEFT:
+            if (Select > 0) Select--;
+            else Select = MaxSelect;
+            break;
+
+        case _KEY::DOWN:
+        case _KEY::RIGHT:
+            if (Select < MaxSelect) Select++;
+            else Select = 0;
+            break;
+
+        case _KEY::ENTER:
+        {
+            switch (Select)
+            {
+            case 0:
+                system("cls");
+                StartGame();
+            case 1:
+                system("cls");
+                SetPos(1, 2); cout << "Рекорд :";
+                SetPos(2, 2);
+                cout << "Нажмите ENTER, чтобы вернуться назад" << endl;
+                do
+                {
+                    key = _getch();
+                } while (key != _KEY::ENTER);
+                while (_kbhit()) { _getch(); }
+                system("cls");
+                Menu();
+
+            case 2:
+            {
+
+                system("cls");
+                SetPos(1, 2);
+                cout << "Утешев Асхат. Экзаменационное задание " << endl;
+                cout << "Нажмите ENTER, чтобы вернуться назад" << endl;
+                do {
+                    key = _getch();
+                } while (key != _KEY::ENTER);
+                while (_kbhit()) { _getch(); }
+                system("cls");
+                Menu();
+                SetPos(8, 8);
+                system("pause");
+                system("cls");
+                break;
+            }
+            case 5: cout << "Выход";
+                exit(0);
+                system("pause > nul");
+
+                break;
+            }
+
+        }
+
+        case _KEY::ESC:
+            system("cls");
+            exit(0);
+            break;
+
+        }
+    }
+};
 
